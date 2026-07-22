@@ -4626,6 +4626,71 @@
       }
     }
 
+    /* Lightweight motion profile: keep the atmosphere while avoiding
+       continuous pointer painting and unnecessary compositing layers. */
+    .pointer-aura,
+    .mesh-blob:nth-child(3) {
+      display: none;
+    }
+
+    .timer-card,
+    .phase-card {
+      will-change: auto;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .security-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--text);
+      background: var(--surface);
+      font-size: 12px;
+      font-weight: 620;
+      text-decoration: none;
+      transition:
+        background-color .2s ease,
+        border-color .2s ease,
+        transform .2s var(--ease);
+    }
+
+    .security-link:hover {
+      border-color: rgba(var(--accent-rgb), .34);
+      background: var(--surface-raised);
+    }
+
+    .security-link:active {
+      transform: scale(.96);
+    }
+
+    .security-link:focus-visible {
+      outline: 3px solid rgba(var(--accent-rgb), .34);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 560px) {
+      .nav-date {
+        display: none;
+      }
+
+      .nav-inner {
+        gap: 10px;
+      }
+
+      .mode-switch {
+        width: 190px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -4646,7 +4711,10 @@
 
   <nav class="site-nav" aria-label="Primary navigation">
     <div class="nav-inner">
-      <time class="nav-date" id="nav-date"></time>
+      <div class="nav-left">
+        <time class="nav-date" id="nav-date"></time>
+        <a class="security-link" href="security.html">Security</a>
+      </div>
       <div class="mode-switch" role="group" aria-label="Choose your routine">
         <span class="switch-pill" aria-hidden="true"></span>
         <button class="mode-button" type="button" data-set-mode="morning" aria-pressed="true">Morning</button>
@@ -5072,7 +5140,7 @@
         const narrowScreen = window.matchMedia(
           '(max-width: 760px)'
         ).matches;
-        const particleCount = narrowScreen ? 24 : 64;
+        const particleCount = narrowScreen ? 10 : 28;
         const fragment = document.createDocumentFragment();
 
         for (let index = 0; index < particleCount; index += 1) {
@@ -5403,7 +5471,7 @@
         if (!motionAllowed()) return;
 
         const colors = sparkPalette();
-        const count = amount || 16;
+        const count = Math.min(amount || 10, 12);
 
         for (let index = 0; index < count; index += 1) {
           const spark = document.createElement('i');
@@ -5707,7 +5775,7 @@
 
         window.setTimeout(() => {
           if (curtain) curtain.remove();
-        }, 1650);
+        }, 1100);
       }
 
       function initializeExperience() {
@@ -5715,7 +5783,6 @@
         initializeViewportRendering();
         initializeSmoothNavigation();
         observeReveals();
-        initializeTilt();
         initializeRipples();
         initializeTaskCelebrations();
         initializeModePortal();
@@ -5723,7 +5790,6 @@
         observeSaveState();
         initializeKeyboardShortcuts();
         renderScrollState();
-        renderPointerPosition();
         cleanBootCurtain();
 
         window.addEventListener(
@@ -5738,13 +5804,6 @@
           { passive: true }
         );
 
-        if (precisePointerQuery.matches && motionAllowed()) {
-          window.addEventListener(
-            'pointermove',
-            trackPointer,
-            { passive: true }
-          );
-        }
       }
 
       initializeExperience();
