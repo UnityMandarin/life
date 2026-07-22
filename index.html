@@ -1,11 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" data-mode="morning">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="description" content="Life — a quiet twenty-minute ritual for intentional mornings and reflective nights.">
-  <title>Life — Morning & Night</title>
+  <title>Life — Morning &amp; Night</title>
   <style>
     :root {
       color-scheme: light;
@@ -363,14 +363,4230 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     }
+
+    /* ─────────────────────────────────────────────────────────────
+       CINEMATIC EXPERIENCE LAYER
+       Every effect is CSS- or DOM-native: no libraries, no assets.
+       ───────────────────────────────────────────────────────────── */
+
+    :root {
+      --cursor-x: 50vw;
+      --cursor-y: 35vh;
+      --scroll-progress: 0;
+      --nav-blur: 32px;
+      --glass-highlight: rgba(255, 255, 255, .84);
+      --glass-shadow:
+        0 1px 0 rgba(255, 255, 255, .85) inset,
+        0 -1px 0 rgba(0, 0, 0, .025) inset,
+        0 24px 80px rgba(13, 39, 80, .09);
+      --card-edge: rgba(255, 255, 255, .68);
+      --card-glow: rgba(0, 113, 227, .16);
+      --mesh-one: rgba(84, 173, 255, .28);
+      --mesh-two: rgba(108, 225, 255, .20);
+      --mesh-three: rgba(164, 116, 255, .13);
+      --dust-color: 42, 112, 190;
+      --hero-sheen:
+        linear-gradient(
+          105deg,
+          #1d1d1f 0%,
+          #1d1d1f 36%,
+          #6e6e73 49%,
+          #1d1d1f 62%,
+          #1d1d1f 100%
+        );
+      --mode-wash: rgba(255, 255, 255, .96);
+      --spring: cubic-bezier(.16, 1, .3, 1);
+      --spring-bounce: cubic-bezier(.34, 1.56, .64, 1);
+      --cinematic: cubic-bezier(.76, 0, .24, 1);
+    }
+
+    html[data-mode="night"] {
+      --glass-highlight: rgba(255, 255, 255, .15);
+      --glass-shadow:
+        0 1px 0 rgba(255, 255, 255, .12) inset,
+        0 -1px 0 rgba(255, 255, 255, .025) inset,
+        0 30px 100px rgba(0, 0, 0, .58);
+      --card-edge: rgba(255, 255, 255, .13);
+      --card-glow: rgba(191, 140, 255, .20);
+      --mesh-one: rgba(93, 43, 173, .34);
+      --mesh-two: rgba(36, 80, 155, .22);
+      --mesh-three: rgba(255, 115, 76, .13);
+      --dust-color: 224, 215, 255;
+      --hero-sheen:
+        linear-gradient(
+          105deg,
+          #f5f5f7 0%,
+          #f5f5f7 34%,
+          #bf8cff 48%,
+          #f5f5f7 63%,
+          #f5f5f7 100%
+        );
+      --mode-wash: rgba(0, 0, 0, .97);
+    }
+
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(var(--accent-rgb), .45) transparent;
+    }
+
+    html::-webkit-scrollbar {
+      width: 9px;
+    }
+
+    html::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    html::-webkit-scrollbar-thumb {
+      border: 3px solid transparent;
+      border-radius: 999px;
+      background:
+        linear-gradient(
+          rgba(var(--accent-rgb), .48),
+          rgba(var(--accent-rgb), .48)
+        )
+        padding-box;
+    }
+
+    body {
+      isolation: isolate;
+      background: var(--bg);
+    }
+
+    body.is-switching {
+      overflow: hidden;
+    }
+
+    ::selection {
+      color: white;
+      background: rgba(var(--accent-rgb), .88);
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 200;
+      padding: 11px 17px;
+      border-radius: 999px;
+      color: white;
+      background: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transform: translateY(-160%);
+      transition: transform .35s var(--spring);
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .boot-curtain {
+      position: fixed;
+      inset: 0;
+      z-index: 180;
+      display: grid;
+      place-items: center;
+      background: var(--bg);
+      pointer-events: none;
+      animation:
+        curtainAway 1.15s var(--cinematic) .18s both;
+    }
+
+    .boot-curtain::before {
+      content: "";
+      width: 38px;
+      height: 38px;
+      border: 2px solid var(--line);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation:
+        bootSpin .8s linear infinite,
+        bootFade .35s ease .55s both;
+    }
+
+    @keyframes curtainAway {
+      0% {
+        clip-path: inset(0 0 0 0 round 0);
+      }
+      58% {
+        clip-path: inset(0 0 0 0 round 0);
+      }
+      100% {
+        clip-path: inset(0 0 100% 0 round 0 0 48% 48%);
+      }
+    }
+
+    @keyframes bootSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes bootFade {
+      to {
+        opacity: 0;
+        transform: scale(.7);
+      }
+    }
+
+    .scroll-meter {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 90;
+      width: calc(var(--scroll-progress) * 1%);
+      height: 2px;
+      background:
+        linear-gradient(
+          90deg,
+          #64d2ff,
+          var(--accent),
+          #bf8cff
+        );
+      box-shadow:
+        0 0 14px rgba(var(--accent-rgb), .65);
+      transform-origin: left center;
+      transition:
+        width .08s linear,
+        background .65s ease;
+    }
+
+    .ambient {
+      z-index: -3;
+      contain: strict;
+    }
+
+    .ambient::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      opacity: .023;
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.88'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+    }
+
+    .mesh {
+      position: absolute;
+      inset: -18%;
+      z-index: 0;
+      opacity: .8;
+      filter: blur(65px) saturate(125%);
+      transform: translate3d(0, 0, 0);
+    }
+
+    .mesh-blob {
+      position: absolute;
+      border-radius:
+        55% 45% 62% 38%
+        /
+        48% 62% 38% 52%;
+      will-change: transform;
+      transition:
+        background 1.2s ease,
+        opacity 1.2s ease;
+    }
+
+    .mesh-blob:nth-child(1) {
+      top: -8%;
+      left: -4%;
+      width: 54vw;
+      height: 52vw;
+      background: var(--mesh-one);
+      animation:
+        meshFloatOne 21s ease-in-out infinite alternate;
+    }
+
+    .mesh-blob:nth-child(2) {
+      top: 11%;
+      right: -12%;
+      width: 49vw;
+      height: 58vw;
+      background: var(--mesh-two);
+      animation:
+        meshFloatTwo 27s ease-in-out -7s infinite alternate;
+    }
+
+    .mesh-blob:nth-child(3) {
+      bottom: -18%;
+      left: 29%;
+      width: 46vw;
+      height: 44vw;
+      background: var(--mesh-three);
+      animation:
+        meshFloatThree 24s ease-in-out -12s infinite alternate;
+    }
+
+    @keyframes meshFloatOne {
+      0% {
+        transform:
+          translate3d(-3%, -4%, 0)
+          rotate(-8deg)
+          scale(.92);
+      }
+      45% {
+        transform:
+          translate3d(14%, 9%, 0)
+          rotate(11deg)
+          scale(1.08);
+      }
+      100% {
+        transform:
+          translate3d(5%, 18%, 0)
+          rotate(-3deg)
+          scale(1.16);
+      }
+    }
+
+    @keyframes meshFloatTwo {
+      0% {
+        transform:
+          translate3d(8%, -2%, 0)
+          rotate(9deg)
+          scale(1.06);
+      }
+      52% {
+        transform:
+          translate3d(-16%, 14%, 0)
+          rotate(-12deg)
+          scale(.91);
+      }
+      100% {
+        transform:
+          translate3d(-5%, -9%, 0)
+          rotate(4deg)
+          scale(1.12);
+      }
+    }
+
+    @keyframes meshFloatThree {
+      0% {
+        transform:
+          translate3d(-13%, 9%, 0)
+          rotate(-4deg)
+          scale(.94);
+      }
+      50% {
+        transform:
+          translate3d(11%, -16%, 0)
+          rotate(15deg)
+          scale(1.12);
+      }
+      100% {
+        transform:
+          translate3d(18%, 3%, 0)
+          rotate(-9deg)
+          scale(1.02);
+      }
+    }
+
+    .pointer-aura {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      opacity: .16;
+      background:
+        radial-gradient(
+          circle,
+          rgba(var(--accent-rgb), .6) 0%,
+          rgba(var(--accent-rgb), .2) 28%,
+          transparent 70%
+        );
+      filter: blur(20px);
+      pointer-events: none;
+      transform:
+        translate3d(
+          calc(var(--cursor-x) - 260px),
+          calc(var(--cursor-y) - 260px),
+          0
+        );
+      transition:
+        opacity .5s ease,
+        background .8s ease;
+      will-change: transform;
+    }
+
+    .dust-field {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      overflow: hidden;
+      pointer-events: none;
+      -webkit-mask-image:
+        linear-gradient(
+          to bottom,
+          black 0,
+          black 82%,
+          transparent 100%
+        );
+      mask-image:
+        linear-gradient(
+          to bottom,
+          black 0,
+          black 82%,
+          transparent 100%
+        );
+    }
+
+    .dust-particle {
+      position: absolute;
+      top: var(--dust-y);
+      left: var(--dust-x);
+      width: var(--dust-size);
+      height: var(--dust-size);
+      border-radius: 50%;
+      opacity: 0;
+      background:
+        rgba(
+          var(--dust-color),
+          var(--dust-alpha)
+        );
+      box-shadow:
+        0 0 calc(var(--dust-size) * 4)
+        rgba(
+          var(--dust-color),
+          calc(var(--dust-alpha) * .75)
+        );
+      filter:
+        blur(var(--dust-blur));
+      animation:
+        dustJourney
+        var(--dust-duration)
+        linear
+        var(--dust-delay)
+        infinite;
+      will-change:
+        transform,
+        opacity;
+    }
+
+    @keyframes dustJourney {
+      0% {
+        opacity: 0;
+        transform:
+          translate3d(0, 22px, 0)
+          scale(.7);
+      }
+      12% {
+        opacity: var(--dust-alpha);
+      }
+      68% {
+        opacity: calc(var(--dust-alpha) * .75);
+      }
+      100% {
+        opacity: 0;
+        transform:
+          translate3d(
+            var(--dust-drift-x),
+            var(--dust-drift-y),
+            0
+          )
+          scale(1.3);
+      }
+    }
+
+    .dust-particle:nth-child(1) {
+      --dust-x: 47vw;
+      --dust-y: 73vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.145;
+      --dust-duration: 15.7s;
+      --dust-delay: -1.37s;
+      --dust-drift-x: -31px;
+      --dust-drift-y: -71px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(2) {
+      --dust-x: 94vw;
+      --dust-y: 43vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.190;
+      --dust-duration: 17.4s;
+      --dust-delay: -2.74s;
+      --dust-drift-x: -2px;
+      --dust-drift-y: -102px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(3) {
+      --dust-x: 40vw;
+      --dust-y: 13vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.235;
+      --dust-duration: 19.1s;
+      --dust-delay: -4.11s;
+      --dust-drift-x: 27px;
+      --dust-drift-y: -133px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(4) {
+      --dust-x: 87vw;
+      --dust-y: 86vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.280;
+      --dust-duration: 20.8s;
+      --dust-delay: -5.48s;
+      --dust-drift-x: 56px;
+      --dust-drift-y: -164px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(5) {
+      --dust-x: 33vw;
+      --dust-y: 56vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.325;
+      --dust-duration: 22.5s;
+      --dust-delay: -6.85s;
+      --dust-drift-x: -35px;
+      --dust-drift-y: -45px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(6) {
+      --dust-x: 80vw;
+      --dust-y: 26vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.370;
+      --dust-duration: 24.2s;
+      --dust-delay: -8.22s;
+      --dust-drift-x: -6px;
+      --dust-drift-y: -76px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(7) {
+      --dust-x: 26vw;
+      --dust-y: 99vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.100;
+      --dust-duration: 25.9s;
+      --dust-delay: -9.59s;
+      --dust-drift-x: 23px;
+      --dust-drift-y: -107px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(8) {
+      --dust-x: 73vw;
+      --dust-y: 69vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.145;
+      --dust-duration: 27.6s;
+      --dust-delay: -10.96s;
+      --dust-drift-x: 52px;
+      --dust-drift-y: -138px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(9) {
+      --dust-x: 19vw;
+      --dust-y: 39vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.190;
+      --dust-duration: 29.3s;
+      --dust-delay: -12.33s;
+      --dust-drift-x: -39px;
+      --dust-drift-y: -169px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(10) {
+      --dust-x: 66vw;
+      --dust-y: 9vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.235;
+      --dust-duration: 31.0s;
+      --dust-delay: -13.7s;
+      --dust-drift-x: -10px;
+      --dust-drift-y: -50px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(11) {
+      --dust-x: 12vw;
+      --dust-y: 82vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.280;
+      --dust-duration: 32.7s;
+      --dust-delay: -15.07s;
+      --dust-drift-x: 19px;
+      --dust-drift-y: -81px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(12) {
+      --dust-x: 59vw;
+      --dust-y: 52vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.325;
+      --dust-duration: 34.4s;
+      --dust-delay: -16.44s;
+      --dust-drift-x: 48px;
+      --dust-drift-y: -112px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(13) {
+      --dust-x: 5vw;
+      --dust-y: 22vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.370;
+      --dust-duration: 14.0s;
+      --dust-delay: -17.81s;
+      --dust-drift-x: -43px;
+      --dust-drift-y: -143px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(14) {
+      --dust-x: 52vw;
+      --dust-y: 95vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.100;
+      --dust-duration: 15.7s;
+      --dust-delay: -19.18s;
+      --dust-drift-x: -14px;
+      --dust-drift-y: -174px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(15) {
+      --dust-x: 99vw;
+      --dust-y: 65vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.145;
+      --dust-duration: 17.4s;
+      --dust-delay: -20.55s;
+      --dust-drift-x: 15px;
+      --dust-drift-y: -55px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(16) {
+      --dust-x: 45vw;
+      --dust-y: 35vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.190;
+      --dust-duration: 19.1s;
+      --dust-delay: -21.92s;
+      --dust-drift-x: 44px;
+      --dust-drift-y: -86px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(17) {
+      --dust-x: 92vw;
+      --dust-y: 5vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.235;
+      --dust-duration: 20.8s;
+      --dust-delay: -23.29s;
+      --dust-drift-x: -47px;
+      --dust-drift-y: -117px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(18) {
+      --dust-x: 38vw;
+      --dust-y: 78vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.280;
+      --dust-duration: 22.5s;
+      --dust-delay: -24.66s;
+      --dust-drift-x: -18px;
+      --dust-drift-y: -148px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(19) {
+      --dust-x: 85vw;
+      --dust-y: 48vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.325;
+      --dust-duration: 24.2s;
+      --dust-delay: -26.03s;
+      --dust-drift-x: 11px;
+      --dust-drift-y: -179px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(20) {
+      --dust-x: 31vw;
+      --dust-y: 18vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.370;
+      --dust-duration: 25.9s;
+      --dust-delay: -27.4s;
+      --dust-drift-x: 40px;
+      --dust-drift-y: -60px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(21) {
+      --dust-x: 78vw;
+      --dust-y: 91vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.100;
+      --dust-duration: 27.6s;
+      --dust-delay: -0.77s;
+      --dust-drift-x: -51px;
+      --dust-drift-y: -91px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(22) {
+      --dust-x: 24vw;
+      --dust-y: 61vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.145;
+      --dust-duration: 29.3s;
+      --dust-delay: -2.14s;
+      --dust-drift-x: -22px;
+      --dust-drift-y: -122px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(23) {
+      --dust-x: 71vw;
+      --dust-y: 31vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.190;
+      --dust-duration: 31.0s;
+      --dust-delay: -3.51s;
+      --dust-drift-x: 7px;
+      --dust-drift-y: -153px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(24) {
+      --dust-x: 17vw;
+      --dust-y: 1vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.235;
+      --dust-duration: 32.7s;
+      --dust-delay: -4.88s;
+      --dust-drift-x: 36px;
+      --dust-drift-y: -184px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(25) {
+      --dust-x: 64vw;
+      --dust-y: 74vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.280;
+      --dust-duration: 34.4s;
+      --dust-delay: -6.25s;
+      --dust-drift-x: -55px;
+      --dust-drift-y: -65px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(26) {
+      --dust-x: 10vw;
+      --dust-y: 44vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.325;
+      --dust-duration: 14.0s;
+      --dust-delay: -7.62s;
+      --dust-drift-x: -26px;
+      --dust-drift-y: -96px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(27) {
+      --dust-x: 57vw;
+      --dust-y: 14vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.370;
+      --dust-duration: 15.7s;
+      --dust-delay: -8.99s;
+      --dust-drift-x: 3px;
+      --dust-drift-y: -127px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(28) {
+      --dust-x: 3vw;
+      --dust-y: 87vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.100;
+      --dust-duration: 17.4s;
+      --dust-delay: -10.36s;
+      --dust-drift-x: 32px;
+      --dust-drift-y: -158px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(29) {
+      --dust-x: 50vw;
+      --dust-y: 57vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.145;
+      --dust-duration: 19.1s;
+      --dust-delay: -11.73s;
+      --dust-drift-x: -59px;
+      --dust-drift-y: -189px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(30) {
+      --dust-x: 97vw;
+      --dust-y: 27vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.190;
+      --dust-duration: 20.8s;
+      --dust-delay: -13.1s;
+      --dust-drift-x: -30px;
+      --dust-drift-y: -70px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(31) {
+      --dust-x: 43vw;
+      --dust-y: 100vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.235;
+      --dust-duration: 22.5s;
+      --dust-delay: -14.47s;
+      --dust-drift-x: -1px;
+      --dust-drift-y: -101px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(32) {
+      --dust-x: 90vw;
+      --dust-y: 70vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.280;
+      --dust-duration: 24.2s;
+      --dust-delay: -15.84s;
+      --dust-drift-x: 28px;
+      --dust-drift-y: -132px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(33) {
+      --dust-x: 36vw;
+      --dust-y: 40vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.325;
+      --dust-duration: 25.9s;
+      --dust-delay: -17.21s;
+      --dust-drift-x: 57px;
+      --dust-drift-y: -163px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(34) {
+      --dust-x: 83vw;
+      --dust-y: 10vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.370;
+      --dust-duration: 27.6s;
+      --dust-delay: -18.58s;
+      --dust-drift-x: -34px;
+      --dust-drift-y: -44px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(35) {
+      --dust-x: 29vw;
+      --dust-y: 83vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.100;
+      --dust-duration: 29.3s;
+      --dust-delay: -19.95s;
+      --dust-drift-x: -5px;
+      --dust-drift-y: -75px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(36) {
+      --dust-x: 76vw;
+      --dust-y: 53vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.145;
+      --dust-duration: 31.0s;
+      --dust-delay: -21.32s;
+      --dust-drift-x: 24px;
+      --dust-drift-y: -106px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(37) {
+      --dust-x: 22vw;
+      --dust-y: 23vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.190;
+      --dust-duration: 32.7s;
+      --dust-delay: -22.69s;
+      --dust-drift-x: 53px;
+      --dust-drift-y: -137px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(38) {
+      --dust-x: 69vw;
+      --dust-y: 96vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.235;
+      --dust-duration: 34.4s;
+      --dust-delay: -24.06s;
+      --dust-drift-x: -38px;
+      --dust-drift-y: -168px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(39) {
+      --dust-x: 15vw;
+      --dust-y: 66vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.280;
+      --dust-duration: 14.0s;
+      --dust-delay: -25.43s;
+      --dust-drift-x: -9px;
+      --dust-drift-y: -49px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(40) {
+      --dust-x: 62vw;
+      --dust-y: 36vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.325;
+      --dust-duration: 15.7s;
+      --dust-delay: -26.8s;
+      --dust-drift-x: 20px;
+      --dust-drift-y: -80px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(41) {
+      --dust-x: 8vw;
+      --dust-y: 6vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.370;
+      --dust-duration: 17.4s;
+      --dust-delay: -0.17s;
+      --dust-drift-x: 49px;
+      --dust-drift-y: -111px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(42) {
+      --dust-x: 55vw;
+      --dust-y: 79vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.100;
+      --dust-duration: 19.1s;
+      --dust-delay: -1.54s;
+      --dust-drift-x: -42px;
+      --dust-drift-y: -142px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(43) {
+      --dust-x: 1vw;
+      --dust-y: 49vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.145;
+      --dust-duration: 20.8s;
+      --dust-delay: -2.91s;
+      --dust-drift-x: -13px;
+      --dust-drift-y: -173px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(44) {
+      --dust-x: 48vw;
+      --dust-y: 19vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.190;
+      --dust-duration: 22.5s;
+      --dust-delay: -4.28s;
+      --dust-drift-x: 16px;
+      --dust-drift-y: -54px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(45) {
+      --dust-x: 95vw;
+      --dust-y: 92vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.235;
+      --dust-duration: 24.2s;
+      --dust-delay: -5.65s;
+      --dust-drift-x: 45px;
+      --dust-drift-y: -85px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(46) {
+      --dust-x: 41vw;
+      --dust-y: 62vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.280;
+      --dust-duration: 25.9s;
+      --dust-delay: -7.02s;
+      --dust-drift-x: -46px;
+      --dust-drift-y: -116px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(47) {
+      --dust-x: 88vw;
+      --dust-y: 32vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.325;
+      --dust-duration: 27.6s;
+      --dust-delay: -8.39s;
+      --dust-drift-x: -17px;
+      --dust-drift-y: -147px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(48) {
+      --dust-x: 34vw;
+      --dust-y: 2vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.370;
+      --dust-duration: 29.3s;
+      --dust-delay: -9.76s;
+      --dust-drift-x: 12px;
+      --dust-drift-y: -178px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(49) {
+      --dust-x: 81vw;
+      --dust-y: 75vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.100;
+      --dust-duration: 31.0s;
+      --dust-delay: -11.13s;
+      --dust-drift-x: 41px;
+      --dust-drift-y: -59px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(50) {
+      --dust-x: 27vw;
+      --dust-y: 45vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.145;
+      --dust-duration: 32.7s;
+      --dust-delay: -12.5s;
+      --dust-drift-x: -50px;
+      --dust-drift-y: -90px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(51) {
+      --dust-x: 74vw;
+      --dust-y: 15vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.190;
+      --dust-duration: 34.4s;
+      --dust-delay: -13.87s;
+      --dust-drift-x: -21px;
+      --dust-drift-y: -121px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(52) {
+      --dust-x: 20vw;
+      --dust-y: 88vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.235;
+      --dust-duration: 14.0s;
+      --dust-delay: -15.24s;
+      --dust-drift-x: 8px;
+      --dust-drift-y: -152px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(53) {
+      --dust-x: 67vw;
+      --dust-y: 58vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.280;
+      --dust-duration: 15.7s;
+      --dust-delay: -16.61s;
+      --dust-drift-x: 37px;
+      --dust-drift-y: -183px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(54) {
+      --dust-x: 13vw;
+      --dust-y: 28vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.325;
+      --dust-duration: 17.4s;
+      --dust-delay: -17.98s;
+      --dust-drift-x: -54px;
+      --dust-drift-y: -64px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(55) {
+      --dust-x: 60vw;
+      --dust-y: 101vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.370;
+      --dust-duration: 19.1s;
+      --dust-delay: -19.35s;
+      --dust-drift-x: -25px;
+      --dust-drift-y: -95px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(56) {
+      --dust-x: 6vw;
+      --dust-y: 71vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.100;
+      --dust-duration: 20.8s;
+      --dust-delay: -20.72s;
+      --dust-drift-x: 4px;
+      --dust-drift-y: -126px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(57) {
+      --dust-x: 53vw;
+      --dust-y: 41vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.145;
+      --dust-duration: 22.5s;
+      --dust-delay: -22.09s;
+      --dust-drift-x: 33px;
+      --dust-drift-y: -157px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(58) {
+      --dust-x: 100vw;
+      --dust-y: 11vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.190;
+      --dust-duration: 24.2s;
+      --dust-delay: -23.46s;
+      --dust-drift-x: -58px;
+      --dust-drift-y: -188px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(59) {
+      --dust-x: 46vw;
+      --dust-y: 84vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.235;
+      --dust-duration: 25.9s;
+      --dust-delay: -24.83s;
+      --dust-drift-x: -29px;
+      --dust-drift-y: -69px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(60) {
+      --dust-x: 93vw;
+      --dust-y: 54vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.280;
+      --dust-duration: 27.6s;
+      --dust-delay: -26.2s;
+      --dust-drift-x: 0px;
+      --dust-drift-y: -100px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(61) {
+      --dust-x: 39vw;
+      --dust-y: 24vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.325;
+      --dust-duration: 29.3s;
+      --dust-delay: -27.57s;
+      --dust-drift-x: 29px;
+      --dust-drift-y: -131px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(62) {
+      --dust-x: 86vw;
+      --dust-y: 97vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.370;
+      --dust-duration: 31.0s;
+      --dust-delay: -0.94s;
+      --dust-drift-x: 58px;
+      --dust-drift-y: -162px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(63) {
+      --dust-x: 32vw;
+      --dust-y: 67vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.100;
+      --dust-duration: 32.7s;
+      --dust-delay: -2.31s;
+      --dust-drift-x: -33px;
+      --dust-drift-y: -43px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(64) {
+      --dust-x: 79vw;
+      --dust-y: 37vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.145;
+      --dust-duration: 34.4s;
+      --dust-delay: -3.68s;
+      --dust-drift-x: -4px;
+      --dust-drift-y: -74px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(65) {
+      --dust-x: 25vw;
+      --dust-y: 7vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.190;
+      --dust-duration: 14.0s;
+      --dust-delay: -5.05s;
+      --dust-drift-x: 25px;
+      --dust-drift-y: -105px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(66) {
+      --dust-x: 72vw;
+      --dust-y: 80vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.235;
+      --dust-duration: 15.7s;
+      --dust-delay: -6.42s;
+      --dust-drift-x: 54px;
+      --dust-drift-y: -136px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(67) {
+      --dust-x: 18vw;
+      --dust-y: 50vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.280;
+      --dust-duration: 17.4s;
+      --dust-delay: -7.79s;
+      --dust-drift-x: -37px;
+      --dust-drift-y: -167px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(68) {
+      --dust-x: 65vw;
+      --dust-y: 20vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.325;
+      --dust-duration: 19.1s;
+      --dust-delay: -9.16s;
+      --dust-drift-x: -8px;
+      --dust-drift-y: -48px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(69) {
+      --dust-x: 11vw;
+      --dust-y: 93vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.370;
+      --dust-duration: 20.8s;
+      --dust-delay: -10.53s;
+      --dust-drift-x: 21px;
+      --dust-drift-y: -79px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(70) {
+      --dust-x: 58vw;
+      --dust-y: 63vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.100;
+      --dust-duration: 22.5s;
+      --dust-delay: -11.9s;
+      --dust-drift-x: 50px;
+      --dust-drift-y: -110px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(71) {
+      --dust-x: 4vw;
+      --dust-y: 33vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.145;
+      --dust-duration: 24.2s;
+      --dust-delay: -13.27s;
+      --dust-drift-x: -41px;
+      --dust-drift-y: -141px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(72) {
+      --dust-x: 51vw;
+      --dust-y: 3vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.190;
+      --dust-duration: 25.9s;
+      --dust-delay: -14.64s;
+      --dust-drift-x: -12px;
+      --dust-drift-y: -172px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(73) {
+      --dust-x: 98vw;
+      --dust-y: 76vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.235;
+      --dust-duration: 27.6s;
+      --dust-delay: -16.01s;
+      --dust-drift-x: 17px;
+      --dust-drift-y: -53px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(74) {
+      --dust-x: 44vw;
+      --dust-y: 46vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.280;
+      --dust-duration: 29.3s;
+      --dust-delay: -17.38s;
+      --dust-drift-x: 46px;
+      --dust-drift-y: -84px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(75) {
+      --dust-x: 91vw;
+      --dust-y: 16vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.325;
+      --dust-duration: 31.0s;
+      --dust-delay: -18.75s;
+      --dust-drift-x: -45px;
+      --dust-drift-y: -115px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(76) {
+      --dust-x: 37vw;
+      --dust-y: 89vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.370;
+      --dust-duration: 32.7s;
+      --dust-delay: -20.12s;
+      --dust-drift-x: -16px;
+      --dust-drift-y: -146px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(77) {
+      --dust-x: 84vw;
+      --dust-y: 59vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.100;
+      --dust-duration: 34.4s;
+      --dust-delay: -21.49s;
+      --dust-drift-x: 13px;
+      --dust-drift-y: -177px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(78) {
+      --dust-x: 30vw;
+      --dust-y: 29vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.145;
+      --dust-duration: 14.0s;
+      --dust-delay: -22.86s;
+      --dust-drift-x: 42px;
+      --dust-drift-y: -58px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(79) {
+      --dust-x: 77vw;
+      --dust-y: 102vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.190;
+      --dust-duration: 15.7s;
+      --dust-delay: -24.23s;
+      --dust-drift-x: -49px;
+      --dust-drift-y: -89px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(80) {
+      --dust-x: 23vw;
+      --dust-y: 72vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.235;
+      --dust-duration: 17.4s;
+      --dust-delay: -25.6s;
+      --dust-drift-x: -20px;
+      --dust-drift-y: -120px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(81) {
+      --dust-x: 70vw;
+      --dust-y: 42vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.280;
+      --dust-duration: 19.1s;
+      --dust-delay: -26.97s;
+      --dust-drift-x: 9px;
+      --dust-drift-y: -151px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(82) {
+      --dust-x: 16vw;
+      --dust-y: 12vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.325;
+      --dust-duration: 20.8s;
+      --dust-delay: -0.34s;
+      --dust-drift-x: 38px;
+      --dust-drift-y: -182px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(83) {
+      --dust-x: 63vw;
+      --dust-y: 85vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.370;
+      --dust-duration: 22.5s;
+      --dust-delay: -1.71s;
+      --dust-drift-x: -53px;
+      --dust-drift-y: -63px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(84) {
+      --dust-x: 9vw;
+      --dust-y: 55vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.100;
+      --dust-duration: 24.2s;
+      --dust-delay: -3.08s;
+      --dust-drift-x: -24px;
+      --dust-drift-y: -94px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(85) {
+      --dust-x: 56vw;
+      --dust-y: 25vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.145;
+      --dust-duration: 25.9s;
+      --dust-delay: -4.45s;
+      --dust-drift-x: 5px;
+      --dust-drift-y: -125px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(86) {
+      --dust-x: 2vw;
+      --dust-y: 98vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.190;
+      --dust-duration: 27.6s;
+      --dust-delay: -5.82s;
+      --dust-drift-x: 34px;
+      --dust-drift-y: -156px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(87) {
+      --dust-x: 49vw;
+      --dust-y: 68vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.235;
+      --dust-duration: 29.3s;
+      --dust-delay: -7.19s;
+      --dust-drift-x: -57px;
+      --dust-drift-y: -187px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(88) {
+      --dust-x: 96vw;
+      --dust-y: 38vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.280;
+      --dust-duration: 31.0s;
+      --dust-delay: -8.56s;
+      --dust-drift-x: -28px;
+      --dust-drift-y: -68px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(89) {
+      --dust-x: 42vw;
+      --dust-y: 8vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.325;
+      --dust-duration: 32.7s;
+      --dust-delay: -9.93s;
+      --dust-drift-x: 1px;
+      --dust-drift-y: -99px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(90) {
+      --dust-x: 89vw;
+      --dust-y: 81vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.370;
+      --dust-duration: 34.4s;
+      --dust-delay: -11.3s;
+      --dust-drift-x: 30px;
+      --dust-drift-y: -130px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(91) {
+      --dust-x: 35vw;
+      --dust-y: 51vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.100;
+      --dust-duration: 14.0s;
+      --dust-delay: -12.67s;
+      --dust-drift-x: 59px;
+      --dust-drift-y: -161px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(92) {
+      --dust-x: 82vw;
+      --dust-y: 21vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.145;
+      --dust-duration: 15.7s;
+      --dust-delay: -14.04s;
+      --dust-drift-x: -32px;
+      --dust-drift-y: -42px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(93) {
+      --dust-x: 28vw;
+      --dust-y: 94vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.190;
+      --dust-duration: 17.4s;
+      --dust-delay: -15.41s;
+      --dust-drift-x: -3px;
+      --dust-drift-y: -73px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(94) {
+      --dust-x: 75vw;
+      --dust-y: 64vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.235;
+      --dust-duration: 19.1s;
+      --dust-delay: -16.78s;
+      --dust-drift-x: 26px;
+      --dust-drift-y: -104px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(95) {
+      --dust-x: 21vw;
+      --dust-y: 34vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.280;
+      --dust-duration: 20.8s;
+      --dust-delay: -18.15s;
+      --dust-drift-x: 55px;
+      --dust-drift-y: -135px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(96) {
+      --dust-x: 68vw;
+      --dust-y: 4vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.325;
+      --dust-duration: 22.5s;
+      --dust-delay: -19.52s;
+      --dust-drift-x: -36px;
+      --dust-drift-y: -166px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(97) {
+      --dust-x: 14vw;
+      --dust-y: 77vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.370;
+      --dust-duration: 24.2s;
+      --dust-delay: -20.89s;
+      --dust-drift-x: -7px;
+      --dust-drift-y: -47px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(98) {
+      --dust-x: 61vw;
+      --dust-y: 47vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.100;
+      --dust-duration: 25.9s;
+      --dust-delay: -22.26s;
+      --dust-drift-x: 22px;
+      --dust-drift-y: -78px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(99) {
+      --dust-x: 7vw;
+      --dust-y: 17vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.145;
+      --dust-duration: 27.6s;
+      --dust-delay: -23.63s;
+      --dust-drift-x: 51px;
+      --dust-drift-y: -109px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(100) {
+      --dust-x: 54vw;
+      --dust-y: 90vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.190;
+      --dust-duration: 29.3s;
+      --dust-delay: -25s;
+      --dust-drift-x: -40px;
+      --dust-drift-y: -140px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(101) {
+      --dust-x: 0vw;
+      --dust-y: 60vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.235;
+      --dust-duration: 31.0s;
+      --dust-delay: -26.37s;
+      --dust-drift-x: -11px;
+      --dust-drift-y: -171px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(102) {
+      --dust-x: 47vw;
+      --dust-y: 30vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.280;
+      --dust-duration: 32.7s;
+      --dust-delay: -27.74s;
+      --dust-drift-x: 18px;
+      --dust-drift-y: -52px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(103) {
+      --dust-x: 94vw;
+      --dust-y: 0vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.325;
+      --dust-duration: 34.4s;
+      --dust-delay: -1.11s;
+      --dust-drift-x: 47px;
+      --dust-drift-y: -83px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(104) {
+      --dust-x: 40vw;
+      --dust-y: 73vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.370;
+      --dust-duration: 14.0s;
+      --dust-delay: -2.48s;
+      --dust-drift-x: -44px;
+      --dust-drift-y: -114px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(105) {
+      --dust-x: 87vw;
+      --dust-y: 43vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.100;
+      --dust-duration: 15.7s;
+      --dust-delay: -3.85s;
+      --dust-drift-x: -15px;
+      --dust-drift-y: -145px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(106) {
+      --dust-x: 33vw;
+      --dust-y: 13vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.145;
+      --dust-duration: 17.4s;
+      --dust-delay: -5.22s;
+      --dust-drift-x: 14px;
+      --dust-drift-y: -176px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(107) {
+      --dust-x: 80vw;
+      --dust-y: 86vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.190;
+      --dust-duration: 19.1s;
+      --dust-delay: -6.59s;
+      --dust-drift-x: 43px;
+      --dust-drift-y: -57px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(108) {
+      --dust-x: 26vw;
+      --dust-y: 56vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.235;
+      --dust-duration: 20.8s;
+      --dust-delay: -7.96s;
+      --dust-drift-x: -48px;
+      --dust-drift-y: -88px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(109) {
+      --dust-x: 73vw;
+      --dust-y: 26vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.280;
+      --dust-duration: 22.5s;
+      --dust-delay: -9.33s;
+      --dust-drift-x: -19px;
+      --dust-drift-y: -119px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(110) {
+      --dust-x: 19vw;
+      --dust-y: 99vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.325;
+      --dust-duration: 24.2s;
+      --dust-delay: -10.7s;
+      --dust-drift-x: 10px;
+      --dust-drift-y: -150px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(111) {
+      --dust-x: 66vw;
+      --dust-y: 69vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.370;
+      --dust-duration: 25.9s;
+      --dust-delay: -12.07s;
+      --dust-drift-x: 39px;
+      --dust-drift-y: -181px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(112) {
+      --dust-x: 12vw;
+      --dust-y: 39vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.100;
+      --dust-duration: 27.6s;
+      --dust-delay: -13.44s;
+      --dust-drift-x: -52px;
+      --dust-drift-y: -62px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(113) {
+      --dust-x: 59vw;
+      --dust-y: 9vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.145;
+      --dust-duration: 29.3s;
+      --dust-delay: -14.81s;
+      --dust-drift-x: -23px;
+      --dust-drift-y: -93px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(114) {
+      --dust-x: 5vw;
+      --dust-y: 82vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.190;
+      --dust-duration: 31.0s;
+      --dust-delay: -16.18s;
+      --dust-drift-x: 6px;
+      --dust-drift-y: -124px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(115) {
+      --dust-x: 52vw;
+      --dust-y: 52vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.235;
+      --dust-duration: 32.7s;
+      --dust-delay: -17.55s;
+      --dust-drift-x: 35px;
+      --dust-drift-y: -155px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(116) {
+      --dust-x: 99vw;
+      --dust-y: 22vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.280;
+      --dust-duration: 34.4s;
+      --dust-delay: -18.92s;
+      --dust-drift-x: -56px;
+      --dust-drift-y: -186px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(117) {
+      --dust-x: 45vw;
+      --dust-y: 95vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.325;
+      --dust-duration: 14.0s;
+      --dust-delay: -20.29s;
+      --dust-drift-x: -27px;
+      --dust-drift-y: -67px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(118) {
+      --dust-x: 92vw;
+      --dust-y: 65vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.370;
+      --dust-duration: 15.7s;
+      --dust-delay: -21.66s;
+      --dust-drift-x: 2px;
+      --dust-drift-y: -98px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(119) {
+      --dust-x: 38vw;
+      --dust-y: 35vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.100;
+      --dust-duration: 17.4s;
+      --dust-delay: -23.03s;
+      --dust-drift-x: 31px;
+      --dust-drift-y: -129px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(120) {
+      --dust-x: 85vw;
+      --dust-y: 5vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.145;
+      --dust-duration: 19.1s;
+      --dust-delay: -24.4s;
+      --dust-drift-x: -60px;
+      --dust-drift-y: -160px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(121) {
+      --dust-x: 31vw;
+      --dust-y: 78vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.190;
+      --dust-duration: 20.8s;
+      --dust-delay: -25.77s;
+      --dust-drift-x: -31px;
+      --dust-drift-y: -41px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(122) {
+      --dust-x: 78vw;
+      --dust-y: 48vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.235;
+      --dust-duration: 22.5s;
+      --dust-delay: -27.14s;
+      --dust-drift-x: -2px;
+      --dust-drift-y: -72px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(123) {
+      --dust-x: 24vw;
+      --dust-y: 18vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.280;
+      --dust-duration: 24.2s;
+      --dust-delay: -0.51s;
+      --dust-drift-x: 27px;
+      --dust-drift-y: -103px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(124) {
+      --dust-x: 71vw;
+      --dust-y: 91vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.325;
+      --dust-duration: 25.9s;
+      --dust-delay: -1.88s;
+      --dust-drift-x: 56px;
+      --dust-drift-y: -134px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(125) {
+      --dust-x: 17vw;
+      --dust-y: 61vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.370;
+      --dust-duration: 27.6s;
+      --dust-delay: -3.25s;
+      --dust-drift-x: -35px;
+      --dust-drift-y: -165px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(126) {
+      --dust-x: 64vw;
+      --dust-y: 31vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.100;
+      --dust-duration: 29.3s;
+      --dust-delay: -4.62s;
+      --dust-drift-x: -6px;
+      --dust-drift-y: -46px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(127) {
+      --dust-x: 10vw;
+      --dust-y: 1vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.145;
+      --dust-duration: 31.0s;
+      --dust-delay: -5.99s;
+      --dust-drift-x: 23px;
+      --dust-drift-y: -77px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(128) {
+      --dust-x: 57vw;
+      --dust-y: 74vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.190;
+      --dust-duration: 32.7s;
+      --dust-delay: -7.36s;
+      --dust-drift-x: 52px;
+      --dust-drift-y: -108px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(129) {
+      --dust-x: 3vw;
+      --dust-y: 44vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.235;
+      --dust-duration: 34.4s;
+      --dust-delay: -8.73s;
+      --dust-drift-x: -39px;
+      --dust-drift-y: -139px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(130) {
+      --dust-x: 50vw;
+      --dust-y: 14vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.280;
+      --dust-duration: 14.0s;
+      --dust-delay: -10.1s;
+      --dust-drift-x: -10px;
+      --dust-drift-y: -170px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(131) {
+      --dust-x: 97vw;
+      --dust-y: 87vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.325;
+      --dust-duration: 15.7s;
+      --dust-delay: -11.47s;
+      --dust-drift-x: 19px;
+      --dust-drift-y: -51px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(132) {
+      --dust-x: 43vw;
+      --dust-y: 57vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.370;
+      --dust-duration: 17.4s;
+      --dust-delay: -12.84s;
+      --dust-drift-x: 48px;
+      --dust-drift-y: -82px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(133) {
+      --dust-x: 90vw;
+      --dust-y: 27vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.100;
+      --dust-duration: 19.1s;
+      --dust-delay: -14.21s;
+      --dust-drift-x: -43px;
+      --dust-drift-y: -113px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(134) {
+      --dust-x: 36vw;
+      --dust-y: 100vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.145;
+      --dust-duration: 20.8s;
+      --dust-delay: -15.58s;
+      --dust-drift-x: -14px;
+      --dust-drift-y: -144px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(135) {
+      --dust-x: 83vw;
+      --dust-y: 70vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.190;
+      --dust-duration: 22.5s;
+      --dust-delay: -16.95s;
+      --dust-drift-x: 15px;
+      --dust-drift-y: -175px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(136) {
+      --dust-x: 29vw;
+      --dust-y: 40vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.235;
+      --dust-duration: 24.2s;
+      --dust-delay: -18.32s;
+      --dust-drift-x: 44px;
+      --dust-drift-y: -56px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(137) {
+      --dust-x: 76vw;
+      --dust-y: 10vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.280;
+      --dust-duration: 25.9s;
+      --dust-delay: -19.69s;
+      --dust-drift-x: -47px;
+      --dust-drift-y: -87px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(138) {
+      --dust-x: 22vw;
+      --dust-y: 83vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.325;
+      --dust-duration: 27.6s;
+      --dust-delay: -21.06s;
+      --dust-drift-x: -18px;
+      --dust-drift-y: -118px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(139) {
+      --dust-x: 69vw;
+      --dust-y: 53vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.370;
+      --dust-duration: 29.3s;
+      --dust-delay: -22.43s;
+      --dust-drift-x: 11px;
+      --dust-drift-y: -149px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(140) {
+      --dust-x: 15vw;
+      --dust-y: 23vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.100;
+      --dust-duration: 31.0s;
+      --dust-delay: -23.8s;
+      --dust-drift-x: 40px;
+      --dust-drift-y: -180px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(141) {
+      --dust-x: 62vw;
+      --dust-y: 96vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.145;
+      --dust-duration: 32.7s;
+      --dust-delay: -25.17s;
+      --dust-drift-x: -51px;
+      --dust-drift-y: -61px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(142) {
+      --dust-x: 8vw;
+      --dust-y: 66vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.190;
+      --dust-duration: 34.4s;
+      --dust-delay: -26.54s;
+      --dust-drift-x: -22px;
+      --dust-drift-y: -92px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(143) {
+      --dust-x: 55vw;
+      --dust-y: 36vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.235;
+      --dust-duration: 14.0s;
+      --dust-delay: -27.91s;
+      --dust-drift-x: 7px;
+      --dust-drift-y: -123px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(144) {
+      --dust-x: 1vw;
+      --dust-y: 6vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.280;
+      --dust-duration: 15.7s;
+      --dust-delay: -1.28s;
+      --dust-drift-x: 36px;
+      --dust-drift-y: -154px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(145) {
+      --dust-x: 48vw;
+      --dust-y: 79vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.325;
+      --dust-duration: 17.4s;
+      --dust-delay: -2.65s;
+      --dust-drift-x: -55px;
+      --dust-drift-y: -185px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(146) {
+      --dust-x: 95vw;
+      --dust-y: 49vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.370;
+      --dust-duration: 19.1s;
+      --dust-delay: -4.02s;
+      --dust-drift-x: -26px;
+      --dust-drift-y: -66px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(147) {
+      --dust-x: 41vw;
+      --dust-y: 19vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.100;
+      --dust-duration: 20.8s;
+      --dust-delay: -5.39s;
+      --dust-drift-x: 3px;
+      --dust-drift-y: -97px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(148) {
+      --dust-x: 88vw;
+      --dust-y: 92vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.145;
+      --dust-duration: 22.5s;
+      --dust-delay: -6.76s;
+      --dust-drift-x: 32px;
+      --dust-drift-y: -128px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(149) {
+      --dust-x: 34vw;
+      --dust-y: 62vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.190;
+      --dust-duration: 24.2s;
+      --dust-delay: -8.13s;
+      --dust-drift-x: -59px;
+      --dust-drift-y: -159px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(150) {
+      --dust-x: 81vw;
+      --dust-y: 32vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.235;
+      --dust-duration: 25.9s;
+      --dust-delay: -9.5s;
+      --dust-drift-x: -30px;
+      --dust-drift-y: -40px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(151) {
+      --dust-x: 27vw;
+      --dust-y: 2vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.280;
+      --dust-duration: 27.6s;
+      --dust-delay: -10.87s;
+      --dust-drift-x: -1px;
+      --dust-drift-y: -71px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(152) {
+      --dust-x: 74vw;
+      --dust-y: 75vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.325;
+      --dust-duration: 29.3s;
+      --dust-delay: -12.24s;
+      --dust-drift-x: 28px;
+      --dust-drift-y: -102px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(153) {
+      --dust-x: 20vw;
+      --dust-y: 45vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.370;
+      --dust-duration: 31.0s;
+      --dust-delay: -13.61s;
+      --dust-drift-x: 57px;
+      --dust-drift-y: -133px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(154) {
+      --dust-x: 67vw;
+      --dust-y: 15vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.100;
+      --dust-duration: 32.7s;
+      --dust-delay: -14.98s;
+      --dust-drift-x: -34px;
+      --dust-drift-y: -164px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(155) {
+      --dust-x: 13vw;
+      --dust-y: 88vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.145;
+      --dust-duration: 34.4s;
+      --dust-delay: -16.35s;
+      --dust-drift-x: -5px;
+      --dust-drift-y: -45px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(156) {
+      --dust-x: 60vw;
+      --dust-y: 58vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.190;
+      --dust-duration: 14.0s;
+      --dust-delay: -17.72s;
+      --dust-drift-x: 24px;
+      --dust-drift-y: -76px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(157) {
+      --dust-x: 6vw;
+      --dust-y: 28vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.235;
+      --dust-duration: 15.7s;
+      --dust-delay: -19.09s;
+      --dust-drift-x: 53px;
+      --dust-drift-y: -107px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(158) {
+      --dust-x: 53vw;
+      --dust-y: 101vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.280;
+      --dust-duration: 17.4s;
+      --dust-delay: -20.46s;
+      --dust-drift-x: -38px;
+      --dust-drift-y: -138px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(159) {
+      --dust-x: 100vw;
+      --dust-y: 71vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.325;
+      --dust-duration: 19.1s;
+      --dust-delay: -21.83s;
+      --dust-drift-x: -9px;
+      --dust-drift-y: -169px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(160) {
+      --dust-x: 46vw;
+      --dust-y: 41vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.370;
+      --dust-duration: 20.8s;
+      --dust-delay: -23.2s;
+      --dust-drift-x: 20px;
+      --dust-drift-y: -50px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(161) {
+      --dust-x: 93vw;
+      --dust-y: 11vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.100;
+      --dust-duration: 22.5s;
+      --dust-delay: -24.57s;
+      --dust-drift-x: 49px;
+      --dust-drift-y: -81px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(162) {
+      --dust-x: 39vw;
+      --dust-y: 84vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.145;
+      --dust-duration: 24.2s;
+      --dust-delay: -25.94s;
+      --dust-drift-x: -42px;
+      --dust-drift-y: -112px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(163) {
+      --dust-x: 86vw;
+      --dust-y: 54vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.190;
+      --dust-duration: 25.9s;
+      --dust-delay: -27.31s;
+      --dust-drift-x: -13px;
+      --dust-drift-y: -143px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(164) {
+      --dust-x: 32vw;
+      --dust-y: 24vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.235;
+      --dust-duration: 27.6s;
+      --dust-delay: -0.68s;
+      --dust-drift-x: 16px;
+      --dust-drift-y: -174px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(165) {
+      --dust-x: 79vw;
+      --dust-y: 97vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.280;
+      --dust-duration: 29.3s;
+      --dust-delay: -2.05s;
+      --dust-drift-x: 45px;
+      --dust-drift-y: -55px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(166) {
+      --dust-x: 25vw;
+      --dust-y: 67vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.325;
+      --dust-duration: 31.0s;
+      --dust-delay: -3.42s;
+      --dust-drift-x: -46px;
+      --dust-drift-y: -86px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(167) {
+      --dust-x: 72vw;
+      --dust-y: 37vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.370;
+      --dust-duration: 32.7s;
+      --dust-delay: -4.79s;
+      --dust-drift-x: -17px;
+      --dust-drift-y: -117px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(168) {
+      --dust-x: 18vw;
+      --dust-y: 7vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.100;
+      --dust-duration: 34.4s;
+      --dust-delay: -6.16s;
+      --dust-drift-x: 12px;
+      --dust-drift-y: -148px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(169) {
+      --dust-x: 65vw;
+      --dust-y: 80vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.145;
+      --dust-duration: 14.0s;
+      --dust-delay: -7.53s;
+      --dust-drift-x: 41px;
+      --dust-drift-y: -179px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(170) {
+      --dust-x: 11vw;
+      --dust-y: 50vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.190;
+      --dust-duration: 15.7s;
+      --dust-delay: -8.9s;
+      --dust-drift-x: -50px;
+      --dust-drift-y: -60px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(171) {
+      --dust-x: 58vw;
+      --dust-y: 20vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.235;
+      --dust-duration: 17.4s;
+      --dust-delay: -10.27s;
+      --dust-drift-x: -21px;
+      --dust-drift-y: -91px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(172) {
+      --dust-x: 4vw;
+      --dust-y: 93vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.280;
+      --dust-duration: 19.1s;
+      --dust-delay: -11.64s;
+      --dust-drift-x: 8px;
+      --dust-drift-y: -122px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(173) {
+      --dust-x: 51vw;
+      --dust-y: 63vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.325;
+      --dust-duration: 20.8s;
+      --dust-delay: -13.01s;
+      --dust-drift-x: 37px;
+      --dust-drift-y: -153px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(174) {
+      --dust-x: 98vw;
+      --dust-y: 33vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.370;
+      --dust-duration: 22.5s;
+      --dust-delay: -14.38s;
+      --dust-drift-x: -54px;
+      --dust-drift-y: -184px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(175) {
+      --dust-x: 44vw;
+      --dust-y: 3vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.100;
+      --dust-duration: 24.2s;
+      --dust-delay: -15.75s;
+      --dust-drift-x: -25px;
+      --dust-drift-y: -65px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(176) {
+      --dust-x: 91vw;
+      --dust-y: 76vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.145;
+      --dust-duration: 25.9s;
+      --dust-delay: -17.12s;
+      --dust-drift-x: 4px;
+      --dust-drift-y: -96px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(177) {
+      --dust-x: 37vw;
+      --dust-y: 46vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.190;
+      --dust-duration: 27.6s;
+      --dust-delay: -18.49s;
+      --dust-drift-x: 33px;
+      --dust-drift-y: -127px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(178) {
+      --dust-x: 84vw;
+      --dust-y: 16vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.235;
+      --dust-duration: 29.3s;
+      --dust-delay: -19.86s;
+      --dust-drift-x: -58px;
+      --dust-drift-y: -158px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(179) {
+      --dust-x: 30vw;
+      --dust-y: 89vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.280;
+      --dust-duration: 31.0s;
+      --dust-delay: -21.23s;
+      --dust-drift-x: -29px;
+      --dust-drift-y: -189px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(180) {
+      --dust-x: 77vw;
+      --dust-y: 59vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.325;
+      --dust-duration: 32.7s;
+      --dust-delay: -22.6s;
+      --dust-drift-x: 0px;
+      --dust-drift-y: -70px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(181) {
+      --dust-x: 23vw;
+      --dust-y: 29vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.370;
+      --dust-duration: 34.4s;
+      --dust-delay: -23.97s;
+      --dust-drift-x: 29px;
+      --dust-drift-y: -101px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(182) {
+      --dust-x: 70vw;
+      --dust-y: 102vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.100;
+      --dust-duration: 14.0s;
+      --dust-delay: -25.34s;
+      --dust-drift-x: 58px;
+      --dust-drift-y: -132px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(183) {
+      --dust-x: 16vw;
+      --dust-y: 72vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.145;
+      --dust-duration: 15.7s;
+      --dust-delay: -26.71s;
+      --dust-drift-x: -33px;
+      --dust-drift-y: -163px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(184) {
+      --dust-x: 63vw;
+      --dust-y: 42vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.190;
+      --dust-duration: 17.4s;
+      --dust-delay: -0.08s;
+      --dust-drift-x: -4px;
+      --dust-drift-y: -44px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(185) {
+      --dust-x: 9vw;
+      --dust-y: 12vh;
+      --dust-size: 1.55px;
+      --dust-alpha: 0.235;
+      --dust-duration: 19.1s;
+      --dust-delay: -1.45s;
+      --dust-drift-x: 25px;
+      --dust-drift-y: -75px;
+      --dust-blur: 1.2px;
+    }
+
+    .dust-particle:nth-child(186) {
+      --dust-x: 56vw;
+      --dust-y: 85vh;
+      --dust-size: 2.10px;
+      --dust-alpha: 0.280;
+      --dust-duration: 20.8s;
+      --dust-delay: -2.82s;
+      --dust-drift-x: 54px;
+      --dust-drift-y: -106px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(187) {
+      --dust-x: 2vw;
+      --dust-y: 55vh;
+      --dust-size: 2.65px;
+      --dust-alpha: 0.325;
+      --dust-duration: 22.5s;
+      --dust-delay: -4.19s;
+      --dust-drift-x: -37px;
+      --dust-drift-y: -137px;
+      --dust-blur: 0.0px;
+    }
+
+    .dust-particle:nth-child(188) {
+      --dust-x: 49vw;
+      --dust-y: 25vh;
+      --dust-size: 1.00px;
+      --dust-alpha: 0.370;
+      --dust-duration: 24.2s;
+      --dust-delay: -5.56s;
+      --dust-drift-x: -8px;
+      --dust-drift-y: -168px;
+      --dust-blur: 0.0px;
+    }
+
+    .mode-transition {
+      position: fixed;
+      z-index: 160;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: var(--mode-wash);
+      pointer-events: none;
+      transform:
+        translate(-50%, -50%)
+        scale(0);
+      will-change: transform;
+    }
+
+    .mode-transition.is-active {
+      width: 220vmax;
+      height: 220vmax;
+      animation:
+        modePortal .92s var(--cinematic) both;
+    }
+
+    @keyframes modePortal {
+      0% {
+        transform:
+          translate(-50%, -50%)
+          scale(0);
+      }
+      49% {
+        transform:
+          translate(-50%, -50%)
+          scale(1);
+      }
+      51% {
+        transform:
+          translate(-50%, -50%)
+          scale(1);
+      }
+      100% {
+        transform:
+          translate(-50%, -50%)
+          scale(0);
+      }
+    }
+
+    .site-nav {
+      z-index: 70;
+      height: 72px;
+      border-bottom:
+        1px solid
+        color-mix(in srgb, var(--line) 76%, transparent);
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(var(--bg-rgb), .80),
+          rgba(var(--bg-rgb), .62)
+        );
+      -webkit-backdrop-filter:
+        saturate(185%)
+        blur(var(--nav-blur));
+      backdrop-filter:
+        saturate(185%)
+        blur(var(--nav-blur));
+      animation:
+        navArrival .9s var(--spring) .72s both;
+    }
+
+    @keyframes navArrival {
+      from {
+        opacity: 0;
+        transform: translateY(-110%);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .nav-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+    }
+
+    .nav-date {
+      display: inline-flex;
+      align-items: center;
+      width: max-content;
+      padding: 7px 0;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -.012em;
+    }
+
+    .nav-date::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      margin-right: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow:
+        0 0 0 5px
+        rgba(var(--accent-rgb), .10);
+      animation:
+        statusBreathe 2.8s ease-in-out infinite;
+    }
+
+    @keyframes statusBreathe {
+      0%,
+      100% {
+        box-shadow:
+          0 0 0 4px
+          rgba(var(--accent-rgb), .08);
+      }
+      50% {
+        box-shadow:
+          0 0 0 8px
+          rgba(var(--accent-rgb), 0);
+      }
+    }
+
+    .mode-switch {
+      width: 218px;
+      border-color: var(--card-edge);
+      background:
+        rgba(var(--bg-rgb), .52);
+      box-shadow:
+        0 1px 0 var(--glass-highlight) inset,
+        0 8px 24px rgba(0, 0, 0, .055);
+      -webkit-backdrop-filter:
+        blur(18px)
+        saturate(150%);
+      backdrop-filter:
+        blur(18px)
+        saturate(150%);
+      transition:
+        border-color .65s ease,
+        background .65s ease,
+        box-shadow .65s ease;
+    }
+
+    .switch-pill {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255, 255, 255, .98),
+          rgba(255, 255, 255, .77)
+        );
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, .92) inset,
+        0 5px 14px rgba(0, 0, 0, .13);
+      transition:
+        transform .72s var(--spring-bounce),
+        background .65s ease,
+        box-shadow .65s ease;
+    }
+
+    html[data-mode="night"] .switch-pill {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(62, 62, 68, .98),
+          rgba(38, 38, 42, .96)
+        );
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, .13) inset,
+        0 7px 20px rgba(0, 0, 0, .48);
+    }
+
+    .mode-button {
+      min-height: 36px;
+      letter-spacing: -.01em;
+      transition:
+        color .32s ease,
+        transform .25s var(--spring);
+    }
+
+    .mode-button:hover {
+      transform: scale(1.025);
+    }
+
+    .hero {
+      position: relative;
+      min-height:
+        calc(100svh - var(--nav-height));
+      padding-top:
+        clamp(88px, 11vh, 132px);
+      padding-bottom:
+        clamp(82px, 11vh, 128px);
+      isolation: isolate;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 7%;
+      left: 43%;
+      z-index: -1;
+      width: 40vw;
+      height: 40vw;
+      border: 1px solid rgba(var(--accent-rgb), .07);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 7vw rgba(var(--accent-rgb), .025),
+        0 0 0 14vw rgba(var(--accent-rgb), .018);
+      pointer-events: none;
+      animation:
+        haloBreathe 8s ease-in-out infinite;
+    }
+
+    @keyframes haloBreathe {
+      0%,
+      100% {
+        opacity: .7;
+        transform: scale(.92);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.04);
+      }
+    }
+
+    .hero-text {
+      position: relative;
+      z-index: 2;
+      animation:
+        heroTextArrival 1.15s var(--spring) .86s both;
+    }
+
+    @keyframes heroTextArrival {
+      from {
+        opacity: 0;
+        transform:
+          translate3d(0, 54px, 0)
+          scale(.975);
+        filter: blur(10px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+        filter: blur(0);
+      }
+    }
+
+    .eyebrow {
+      padding: 8px 13px;
+      border: 1px solid rgba(var(--accent-rgb), .14);
+      border-radius: 999px;
+      background:
+        rgba(var(--bg-rgb), .38);
+      box-shadow:
+        0 1px 0 var(--glass-highlight) inset;
+      -webkit-backdrop-filter:
+        blur(16px)
+        saturate(145%);
+      backdrop-filter:
+        blur(16px)
+        saturate(145%);
+    }
+
+    .eyebrow-dot {
+      animation:
+        eyebrowPulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes eyebrowPulse {
+      0%,
+      100% {
+        transform: scale(.9);
+        opacity: .65;
+      }
+      50% {
+        transform: scale(1.18);
+        opacity: 1;
+      }
+    }
+
+    h1 {
+      position: relative;
+      max-width: 760px;
+      font-size:
+        clamp(58px, 7.8vw, 112px);
+      font-weight: 730;
+      letter-spacing: -.072em;
+      text-wrap: balance;
+    }
+
+    h1::after {
+      content: "";
+      position: absolute;
+      right: 4%;
+      bottom: -9%;
+      left: 2%;
+      height: 1px;
+      opacity: .28;
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          var(--accent),
+          transparent
+        );
+      transform-origin: left center;
+      animation:
+        titleLine 1.35s var(--spring) 1.15s both;
+    }
+
+    @keyframes titleLine {
+      from {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+      to {
+        opacity: .28;
+        transform: scaleX(1);
+      }
+    }
+
+    .gradient-word {
+      position: relative;
+      padding-right: .06em;
+      background-size: 220% 100%;
+      animation:
+        gradientGlide 7s ease-in-out infinite;
+    }
+
+    @keyframes gradientGlide {
+      0%,
+      100% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+
+    .hero-copy {
+      text-wrap: pretty;
+    }
+
+    .hero-copy,
+    .hero-meta {
+      animation:
+        softRise .9s var(--spring) both;
+    }
+
+    .hero-copy {
+      animation-delay: 1.03s;
+    }
+
+    .hero-meta {
+      animation-delay: 1.14s;
+    }
+
+    @keyframes softRise {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .meta-chip {
+      position: relative;
+      overflow: hidden;
+      border-color: var(--card-edge);
+      box-shadow:
+        0 1px 0 var(--glass-highlight) inset;
+      transition:
+        transform .32s var(--spring),
+        border-color .32s ease,
+        color .32s ease;
+    }
+
+    .meta-chip::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          105deg,
+          transparent 22%,
+          rgba(255, 255, 255, .48) 48%,
+          transparent 74%
+        );
+      transform: translateX(-120%);
+      transition:
+        transform .78s var(--spring);
+    }
+
+    .meta-chip:hover {
+      color: var(--text);
+      border-color:
+        rgba(var(--accent-rgb), .30);
+      transform: translateY(-2px);
+    }
+
+    .meta-chip:hover::before {
+      transform: translateX(120%);
+    }
+
+    .timer-card {
+      transform-style: preserve-3d;
+      transform:
+        perspective(1100px)
+        rotateX(var(--tilt-x, 0deg))
+        rotateY(var(--tilt-y, 0deg))
+        translate3d(0, 0, 0);
+      border-color: var(--card-edge);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255, 255, 255, .72),
+          rgba(255, 255, 255, .38)
+        );
+      box-shadow: var(--glass-shadow);
+      transition:
+        transform .22s ease-out,
+        border-color .65s ease,
+        background .65s ease,
+        box-shadow .65s ease;
+      animation:
+        timerArrival 1.18s var(--spring) 1.02s both;
+    }
+
+    html[data-mode="night"] .timer-card {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(41, 41, 47, .74),
+          rgba(18, 18, 22, .50)
+        );
+    }
+
+    @keyframes timerArrival {
+      from {
+        opacity: 0;
+        transform:
+          perspective(1100px)
+          translate3d(0, 68px, 0)
+          rotateX(9deg)
+          scale(.94);
+        filter: blur(13px);
+      }
+      to {
+        opacity: 1;
+        transform:
+          perspective(1100px)
+          translate3d(0, 0, 0)
+          rotateX(0)
+          scale(1);
+        filter: blur(0);
+      }
+    }
+
+    .timer-card::before {
+      z-index: 2;
+      height: 40%;
+      opacity: .75;
+      background:
+        radial-gradient(
+          circle at var(--card-light-x, 50%) 0%,
+          rgba(255, 255, 255, .92),
+          transparent 62%
+        );
+      pointer-events: none;
+    }
+
+    .timer-card::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      z-index: -1;
+      border-radius: inherit;
+      opacity: .42;
+      background:
+        conic-gradient(
+          from var(--ring-angle, 0deg),
+          transparent,
+          rgba(var(--accent-rgb), .42),
+          transparent 28%,
+          transparent 75%,
+          rgba(var(--accent-rgb), .22),
+          transparent
+        );
+      filter: blur(18px);
+      animation:
+        cardOrbit 9s linear infinite;
+    }
+
+    @property --ring-angle {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    @keyframes cardOrbit {
+      to {
+        --ring-angle: 360deg;
+      }
+    }
+
+    .timer-label {
+      position: relative;
+      z-index: 3;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background:
+        rgba(var(--bg-rgb), .35);
+      letter-spacing: .14em;
+    }
+
+    .timer-ring {
+      z-index: 3;
+      border-radius: 50%;
+      transform:
+        translateZ(34px);
+    }
+
+    .timer-ring::before,
+    .timer-ring::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .timer-ring::before {
+      inset: 17px;
+      border:
+        1px solid
+        rgba(var(--accent-rgb), .11);
+      box-shadow:
+        0 0 45px
+        rgba(var(--accent-rgb), .08) inset;
+      animation:
+        timerInnerPulse 4s ease-in-out infinite;
+    }
+
+    .timer-ring::after {
+      inset: -14px;
+      border:
+        1px dashed
+        rgba(var(--accent-rgb), .10);
+      animation:
+        timerOrbit 36s linear infinite;
+    }
+
+    @keyframes timerInnerPulse {
+      0%,
+      100% {
+        transform: scale(.96);
+        opacity: .45;
+      }
+      50% {
+        transform: scale(1.035);
+        opacity: 1;
+      }
+    }
+
+    @keyframes timerOrbit {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .timer-card.is-running .timer-value {
+      animation:
+        timerValueBreathe 1s ease-in-out infinite;
+    }
+
+    .timer-card.is-running .timer-ring::before {
+      animation-duration: 1.4s;
+    }
+
+    @keyframes timerValueBreathe {
+      0%,
+      100% {
+        opacity: .82;
+        transform: scale(.992);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.008);
+      }
+    }
+
+    .ring-progress {
+      filter:
+        drop-shadow(
+          0 0 10px
+          rgba(var(--accent-rgb), .48)
+        );
+      transition:
+        stroke-dashoffset .28s linear,
+        stroke .75s ease;
+    }
+
+    .timer-actions {
+      position: relative;
+      z-index: 4;
+      transform: translateZ(25px);
+    }
+
+    .primary-button,
+    .quiet-button {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      transition:
+        transform .35s var(--spring-bounce),
+        opacity .25s ease,
+        background .45s ease,
+        box-shadow .45s ease;
+    }
+
+    .primary-button::before,
+    .quiet-button::before {
+      content: "";
+      position: absolute;
+      top: var(--ripple-y, 50%);
+      left: var(--ripple-x, 50%);
+      z-index: -1;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      opacity: 0;
+      background:
+        rgba(255, 255, 255, .5);
+      transform:
+        translate(-50%, -50%)
+        scale(0);
+    }
+
+    .primary-button.is-rippling::before,
+    .quiet-button.is-rippling::before {
+      animation:
+        controlRipple .62s ease-out;
+    }
+
+    @keyframes controlRipple {
+      0% {
+        opacity: .65;
+        transform:
+          translate(-50%, -50%)
+          scale(0);
+      }
+      100% {
+        opacity: 0;
+        transform:
+          translate(-50%, -50%)
+          scale(24);
+      }
+    }
+
+    .primary-button {
+      background:
+        linear-gradient(
+          180deg,
+          color-mix(in srgb, var(--accent) 82%, white),
+          var(--accent)
+        );
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, .3) inset,
+        0 10px 26px rgba(var(--accent-rgb), .26);
+    }
+
+    .primary-button:hover {
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, .4) inset,
+        0 14px 34px rgba(var(--accent-rgb), .34);
+    }
+
+    .section {
+      position: relative;
+      z-index: 2;
+      padding:
+        clamp(104px, 14vw, 172px)
+        0;
+    }
+
+    .section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: min(80vw, 900px);
+      height: 1px;
+      opacity: .52;
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          var(--line),
+          transparent
+        );
+      transform: translateX(-50%);
+    }
+
+    .section-heading {
+      perspective: 900px;
+    }
+
+    .section-kicker,
+    .section-heading h2,
+    .section-intro {
+      transition:
+        opacity .95s var(--spring),
+        transform .95s var(--spring),
+        filter .95s var(--spring);
+    }
+
+    .section-heading:not(.is-visible) .section-kicker,
+    .section-heading:not(.is-visible) h2,
+    .section-heading:not(.is-visible) .section-intro {
+      opacity: 0;
+      filter: blur(8px);
+      transform:
+        translateY(45px)
+        rotateX(4deg);
+    }
+
+    .section-heading h2 {
+      transition-delay: .09s;
+    }
+
+    .section-intro {
+      transition-delay: .18s;
+    }
+
+    h2 {
+      text-wrap: balance;
+    }
+
+    .progress-panel {
+      position: sticky;
+      top: 88px;
+      z-index: 14;
+      overflow: hidden;
+      border-color: var(--card-edge);
+      background:
+        rgba(var(--bg-rgb), .67);
+      box-shadow:
+        0 1px 0 var(--glass-highlight) inset,
+        0 14px 46px rgba(0, 0, 0, .055);
+      -webkit-backdrop-filter:
+        blur(28px)
+        saturate(175%);
+      backdrop-filter:
+        blur(28px)
+        saturate(175%);
+      transition:
+        transform .4s var(--spring),
+        box-shadow .4s ease,
+        background .65s ease;
+    }
+
+    .progress-panel.is-condensed {
+      transform: scale(.985);
+      box-shadow:
+        0 1px 0 var(--glass-highlight) inset,
+        0 20px 60px rgba(0, 0, 0, .11);
+    }
+
+    .progress-track {
+      position: relative;
+      height: 8px;
+      background:
+        rgba(var(--accent-rgb), .08);
+    }
+
+    .progress-track::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .55;
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, .76),
+          transparent
+        );
+      transform: translateX(-100%);
+      animation:
+        progressSheen 2.8s ease-in-out infinite;
+    }
+
+    @keyframes progressSheen {
+      55%,
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .progress-fill {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(
+          90deg,
+          var(--accent),
+          #64d2ff
+        );
+      box-shadow:
+        0 0 18px
+        rgba(var(--accent-rgb), .4);
+    }
+
+    html[data-mode="night"] .progress-fill {
+      background:
+        linear-gradient(
+          90deg,
+          #9d6cff,
+          #ff9f6e
+        );
+    }
+
+    .progress-fill::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, .72),
+          transparent
+        );
+      transform: translateX(-110%);
+      animation:
+        fillLight 2.2s ease-in-out infinite;
+    }
+
+    @keyframes fillLight {
+      60%,
+      100% {
+        transform: translateX(110%);
+      }
+    }
+
+    .routine-grid {
+      perspective: 1400px;
+    }
+
+    .phase-card {
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      border-color: var(--card-edge);
+      background:
+        linear-gradient(
+          148deg,
+          rgba(255, 255, 255, .68),
+          rgba(255, 255, 255, .38)
+        );
+      box-shadow:
+        0 1px 0 var(--glass-highlight) inset,
+        0 18px 58px rgba(30, 57, 96, .065);
+      opacity: 1;
+      transform:
+        perspective(1200px)
+        translate3d(0, 0, 0)
+        rotateX(var(--card-tilt-x, 0deg))
+        rotateY(var(--card-tilt-y, 0deg));
+      transition:
+        opacity .9s var(--spring),
+        transform .42s var(--spring),
+        filter .9s var(--spring),
+        border-color .35s ease,
+        background .65s ease,
+        box-shadow .45s ease;
+      transition-delay:
+        calc(var(--reveal-order, 0) * 55ms);
+    }
+
+    html[data-mode="night"] .phase-card {
+      background:
+        linear-gradient(
+          148deg,
+          rgba(38, 38, 43, .70),
+          rgba(18, 18, 22, .48)
+        );
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, .10) inset,
+        0 24px 72px rgba(0, 0, 0, .34);
+    }
+
+    .phase-card:not(.is-visible) {
+      opacity: 0;
+      filter: blur(9px);
+      transform:
+        perspective(1200px)
+        translate3d(0, 70px, 0)
+        rotateX(7deg)
+        scale(.965);
+    }
+
+    .phase-card::before {
+      content: "";
+      position: absolute;
+      top: -45%;
+      left: -70%;
+      width: 85%;
+      height: 190%;
+      opacity: 0;
+      background:
+        linear-gradient(
+          100deg,
+          transparent,
+          rgba(255, 255, 255, .42),
+          transparent
+        );
+      transform: rotate(16deg);
+      transition:
+        left .95s var(--spring),
+        opacity .35s ease;
+      pointer-events: none;
+    }
+
+    .phase-card::after {
+      content: "";
+      position: absolute;
+      right: -30%;
+      bottom: -48%;
+      z-index: -1;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      opacity: .15;
+      background:
+        radial-gradient(
+          circle,
+          rgba(var(--accent-rgb), .55),
+          transparent 67%
+        );
+      filter: blur(10px);
+      transition:
+        opacity .5s ease,
+        transform .7s var(--spring);
+      pointer-events: none;
+    }
+
+    .phase-card:hover {
+      border-color:
+        rgba(var(--accent-rgb), .34);
+      box-shadow:
+        0 1px 0 var(--glass-highlight) inset,
+        0 28px 78px rgba(22, 56, 104, .12);
+      transform:
+        perspective(1200px)
+        translate3d(0, -8px, 18px)
+        rotateX(var(--card-tilt-x, 0deg))
+        rotateY(var(--card-tilt-y, 0deg));
+    }
+
+    .phase-card:hover::before {
+      left: 110%;
+      opacity: 1;
+    }
+
+    .phase-card:hover::after {
+      opacity: .28;
+      transform: scale(1.2);
+    }
+
+    .phase-index {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .phase-index::before {
+      content: "";
+      width: 18px;
+      height: 1px;
+      background: currentColor;
+      transform-origin: left center;
+      transition:
+        width .4s var(--spring);
+    }
+
+    .phase-card:hover .phase-index::before {
+      width: 32px;
+    }
+
+    .phase-time {
+      border:
+        1px solid
+        rgba(var(--accent-rgb), .11);
+      transition:
+        transform .35s var(--spring),
+        background .35s ease;
+    }
+
+    .phase-card:hover .phase-time {
+      transform: translateY(-2px);
+    }
+
+    .task span {
+      overflow: hidden;
+      border-color:
+        color-mix(
+          in srgb,
+          var(--line) 82%,
+          transparent
+        );
+      background:
+        rgba(var(--bg-rgb), .29);
+      box-shadow:
+        0 1px 0
+        rgba(255, 255, 255, .06) inset;
+      transition:
+        border-color .32s ease,
+        color .32s ease,
+        background .32s ease,
+        transform .36s var(--spring),
+        box-shadow .32s ease;
+    }
+
+    .task span::before {
+      z-index: 2;
+      background:
+        rgba(var(--bg-rgb), .46);
+      box-shadow:
+        0 0 0 0
+        rgba(var(--accent-rgb), .22);
+    }
+
+    .task span::after {
+      z-index: 3;
+    }
+
+    .task:hover span {
+      color: var(--text);
+      border-color:
+        rgba(var(--accent-rgb), .24);
+      background:
+        rgba(var(--bg-rgb), .55);
+      box-shadow:
+        0 8px 25px rgba(0, 0, 0, .045);
+      transform: translateX(3px);
+    }
+
+    .task input:checked + span {
+      text-decoration-thickness: 1px;
+      animation:
+        taskSettle .55s var(--spring);
+    }
+
+    .task input:checked + span::before {
+      animation:
+        checkPulse .7s var(--spring);
+    }
+
+    @keyframes taskSettle {
+      0% {
+        transform: scale(1);
+      }
+      38% {
+        transform: scale(.985);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes checkPulse {
+      0% {
+        box-shadow:
+          0 0 0 0
+          rgba(var(--accent-rgb), .35);
+      }
+      60% {
+        box-shadow:
+          0 0 0 12px
+          rgba(var(--accent-rgb), 0);
+      }
+      100% {
+        box-shadow:
+          0 0 0 0
+          rgba(var(--accent-rgb), 0);
+      }
+    }
+
+    .completion-spark {
+      position: fixed;
+      z-index: 120;
+      width: var(--spark-size);
+      height: var(--spark-size);
+      border-radius: 50%;
+      background: var(--spark-color);
+      box-shadow:
+        0 0 8px
+        var(--spark-color);
+      pointer-events: none;
+      animation:
+        sparkFlight
+        var(--spark-duration)
+        var(--spring)
+        both;
+    }
+
+    @keyframes sparkFlight {
+      0% {
+        opacity: 1;
+        transform:
+          translate3d(0, 0, 0)
+          scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform:
+          translate3d(
+            var(--spark-x),
+            var(--spark-y),
+            0
+          )
+          scale(.15)
+          rotate(var(--spark-rotation));
+      }
+    }
+
+    .reflection-card {
+      position: relative;
+      overflow: hidden;
+      border-color: var(--card-edge);
+      background:
+        linear-gradient(
+          142deg,
+          rgba(255, 255, 255, .72),
+          rgba(255, 255, 255, .38)
+        );
+      box-shadow: var(--glass-shadow);
+      opacity: 1;
+      transform: none;
+      transition:
+        opacity 1s var(--spring),
+        transform 1s var(--spring),
+        filter 1s var(--spring),
+        background .65s ease,
+        border-color .65s ease;
+    }
+
+    html[data-mode="night"] .reflection-card {
+      background:
+        linear-gradient(
+          142deg,
+          rgba(37, 37, 43, .72),
+          rgba(14, 14, 18, .55)
+        );
+    }
+
+    .reflection-card:not(.is-visible) {
+      opacity: 0;
+      filter: blur(12px);
+      transform:
+        translateY(72px)
+        scale(.97);
+    }
+
+    .reflection-card::before {
+      content: "";
+      position: absolute;
+      top: -44%;
+      right: -12%;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      opacity: .19;
+      background:
+        radial-gradient(
+          circle,
+          rgba(var(--accent-rgb), .75),
+          transparent 66%
+        );
+      filter: blur(16px);
+      animation:
+        noteGlow 8s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes noteGlow {
+      from {
+        transform:
+          translate3d(-8%, 4%, 0)
+          scale(.9);
+      }
+      to {
+        transform:
+          translate3d(10%, -7%, 0)
+          scale(1.15);
+      }
+    }
+
+    .reflection-card > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    textarea {
+      border-color: var(--card-edge);
+      background:
+        rgba(var(--bg-rgb), .38);
+      box-shadow:
+        0 1px 0
+        var(--glass-highlight) inset;
+      transition:
+        border-color .35s ease,
+        box-shadow .35s ease,
+        background .65s ease,
+        transform .35s var(--spring);
+    }
+
+    textarea:hover {
+      border-color:
+        rgba(var(--accent-rgb), .26);
+    }
+
+    textarea:focus {
+      background:
+        rgba(var(--bg-rgb), .62);
+      box-shadow:
+        0 0 0 4px
+        rgba(var(--accent-rgb), .11),
+        0 20px 60px
+        rgba(0, 0, 0, .08);
+      transform: translateY(-2px);
+    }
+
+    .save-state {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .save-state::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #30d158;
+      box-shadow:
+        0 0 0 4px
+        rgba(48, 209, 88, .11);
+    }
+
+    .save-state.is-saving::before {
+      background: var(--accent);
+      animation:
+        savingPulse .7s ease-in-out infinite;
+    }
+
+    @keyframes savingPulse {
+      50% {
+        opacity: .3;
+        transform: scale(.7);
+      }
+    }
+
+    footer {
+      position: relative;
+      z-index: 2;
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 28px;
+      left: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--tertiary);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation:
+        scrollCueIn .8s ease 1.8s forwards;
+    }
+
+    .scroll-cue::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background:
+        linear-gradient(
+          90deg,
+          var(--accent),
+          transparent
+        );
+      animation:
+        scrollCueLine 1.8s ease-in-out infinite;
+    }
+
+    @keyframes scrollCueIn {
+      to {
+        opacity: .72;
+      }
+    }
+
+    @keyframes scrollCueLine {
+      0%,
+      100% {
+        transform: scaleX(.55);
+        transform-origin: left center;
+      }
+      50% {
+        transform: scaleX(1);
+        transform-origin: left center;
+      }
+    }
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom:
+        max(24px, env(safe-area-inset-bottom));
+      z-index: 130;
+      max-width: min(360px, calc(100vw - 48px));
+      padding: 13px 18px;
+      border: 1px solid var(--card-edge);
+      border-radius: 999px;
+      color: var(--text);
+      background:
+        rgba(var(--bg-rgb), .82);
+      box-shadow: var(--glass-shadow);
+      font-size: 13px;
+      font-weight: 600;
+      -webkit-backdrop-filter:
+        blur(24px)
+        saturate(180%);
+      backdrop-filter:
+        blur(24px)
+        saturate(180%);
+      opacity: 0;
+      pointer-events: none;
+      transform:
+        translateY(20px)
+        scale(.95);
+      transition:
+        opacity .35s ease,
+        transform .55s var(--spring-bounce),
+        background .65s ease;
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .view {
+      animation:
+        viewEnter .78s var(--spring) both;
+    }
+
+    @keyframes viewEnter {
+      from {
+        opacity: 0;
+        filter: blur(10px);
+        transform:
+          translate3d(0, 28px, 0)
+          scale(.985);
+      }
+      to {
+        opacity: 1;
+        filter: blur(0);
+        transform: none;
+      }
+    }
+
+    @media (hover: none), (pointer: coarse) {
+      .pointer-aura {
+        display: none;
+      }
+
+      .timer-card,
+      .phase-card,
+      .phase-card:hover {
+        transform: none;
+      }
+
+      .meta-chip:hover,
+      .task:hover span,
+      .primary-button:hover,
+      .quiet-button:hover {
+        transform: none;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        gap: 70px;
+      }
+
+      .hero::before {
+        top: 47%;
+        left: 15%;
+        width: 72vw;
+        height: 72vw;
+      }
+
+      .scroll-cue {
+        display: none;
+      }
+
+      .progress-panel {
+        top: 78px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .site-nav {
+        height: 66px;
+      }
+
+      .nav-inner {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+
+      .nav-date {
+        max-width: 42vw;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .nav-date::before {
+        flex: 0 0 auto;
+      }
+
+      .mode-switch {
+        width: 174px;
+      }
+
+      .hero {
+        padding-top: 66px;
+        padding-bottom: 84px;
+      }
+
+      .hero::before {
+        top: 50%;
+        left: 8%;
+        width: 84vw;
+        height: 84vw;
+      }
+
+      .eyebrow {
+        font-size: 11px;
+      }
+
+      .timer-card {
+        min-height: 430px;
+      }
+
+      .progress-panel {
+        top: 72px;
+      }
+
+      .phase-card:hover {
+        transform: none;
+      }
+
+      .toast {
+        right: 14px;
+        bottom:
+          max(14px, env(safe-area-inset-bottom));
+        max-width: calc(100vw - 28px);
+      }
+    }
+
+    @media (prefers-contrast: more) {
+      :root {
+        --line: rgba(0, 0, 0, .26);
+      }
+
+      html[data-mode="night"] {
+        --line: rgba(255, 255, 255, .30);
+      }
+
+      .phase-card,
+      .timer-card,
+      .reflection-card {
+        border-width: 2px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .boot-curtain {
+        display: none;
+      }
+
+      .mesh-blob,
+      .dust-particle,
+      .pointer-aura,
+      .timer-card::after,
+      .timer-ring::after,
+      .progress-track::after,
+      .progress-fill::after,
+      .reflection-card::before,
+      .scroll-cue::before {
+        animation: none !important;
+      }
+
+      .phase-card:not(.is-visible),
+      .section-heading:not(.is-visible) > *,
+      .reflection-card:not(.is-visible) {
+        opacity: 1;
+        filter: none;
+        transform: none;
+      }
+    }
+
   </style>
 </head>
 <body>
-  <div class="ambient" aria-hidden="true"><div class="orb"></div><div class="orb"></div></div>
+  <a class="skip-link" href="#main-content">Skip to routine</a>
+  <div class="boot-curtain" aria-hidden="true"></div>
+  <div class="scroll-meter" aria-hidden="true"></div>
+  <div class="mode-transition" id="mode-transition" aria-hidden="true"></div>
+
+  <div class="ambient" aria-hidden="true">
+    <div class="mesh">
+      <div class="mesh-blob"></div>
+      <div class="mesh-blob"></div>
+      <div class="mesh-blob"></div>
+    </div>
+    <div class="pointer-aura"></div>
+    <div class="dust-field" id="dust-field"></div>
+  </div>
 
   <nav class="site-nav" aria-label="Primary navigation">
     <div class="nav-inner">
-      <div class="brand"><span class="brand-mark">L</span><span>Life</span></div>
       <time class="nav-date" id="nav-date"></time>
       <div class="mode-switch" role="group" aria-label="Choose your routine">
         <span class="switch-pill" aria-hidden="true"></span>
@@ -380,17 +4596,18 @@
     </div>
   </nav>
 
-  <main>
+  <main id="main-content">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-text">
         <p class="eyebrow"><span class="eyebrow-dot"></span><span id="hero-eyebrow">Your morning, protected</span></p>
         <h1 id="hero-title">Own the first <span class="gradient-word">20 minutes.</span></h1>
         <p class="hero-copy" id="hero-copy">Before messages, feeds, and everyone else's priorities—wake your body, focus your mind, and choose the day you want to have.</p>
-        <div class="hero-meta" aria-label="Routine details">
+        <div class="hero-meta">
           <span class="meta-chip">20 minutes</span>
           <span class="meta-chip" id="phase-count">5 intentional phases</span>
           <span class="meta-chip">Saved on this device</span>
         </div>
+        <div class="scroll-cue" aria-hidden="true">Explore the ritual</div>
       </div>
 
       <aside class="timer-card" aria-label="Twenty minute ritual timer">
@@ -546,6 +4763,7 @@
   </main>
 
   <footer><span>Life, one deliberate day at a time.</span><span>Morning light. Night reflection.</span></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
     (() => {
@@ -737,5 +4955,646 @@
       setMode(mode, false);
     })();
   </script>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const root = document.documentElement;
+      const body = document.body;
+      const dustField = document.getElementById('dust-field');
+      const timerCard = document.querySelector('.timer-card');
+      const timerToggle = document.getElementById('timer-toggle');
+      const timerPhase = document.getElementById('timer-phase');
+      const modeTransition = document.getElementById('mode-transition');
+      const toast = document.getElementById('toast');
+      const saveState = document.getElementById('save-state');
+      const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const precisePointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
+      const completionMemory = {
+        morning: null,
+        night: null
+      };
+
+      let toastTimeout = null;
+      let scrollFrame = null;
+      let pointerFrame = null;
+      let lastPointerX = window.innerWidth / 2;
+      let lastPointerY = window.innerHeight / 3;
+      let timerCelebrated = false;
+
+      function motionAllowed() {
+        return !motionQuery.matches;
+      }
+
+      function currentMode() {
+        return root.dataset.mode === 'night'
+          ? 'night'
+          : 'morning';
+      }
+
+      function showToast(message, duration) {
+        if (!toast) return;
+
+        toast.textContent = message;
+        toast.classList.add('is-visible');
+        window.clearTimeout(toastTimeout);
+
+        toastTimeout = window.setTimeout(() => {
+          toast.classList.remove('is-visible');
+        }, duration || 2200);
+      }
+
+      function createDustField() {
+        if (!dustField) return;
+        if (dustField.childElementCount > 0) return;
+
+        const fragment = document.createDocumentFragment();
+
+        for (let index = 0; index < 188; index += 1) {
+          const particle = document.createElement('i');
+          particle.className = 'dust-particle';
+          fragment.appendChild(particle);
+        }
+
+        dustField.appendChild(fragment);
+      }
+
+      function renderPointerPosition() {
+        root.style.setProperty('--cursor-x', lastPointerX + 'px');
+        root.style.setProperty('--cursor-y', lastPointerY + 'px');
+        pointerFrame = null;
+      }
+
+      function trackPointer(event) {
+        lastPointerX = event.clientX;
+        lastPointerY = event.clientY;
+
+        if (pointerFrame !== null) return;
+
+        pointerFrame = window.requestAnimationFrame(renderPointerPosition);
+      }
+
+      function renderScrollState() {
+        const documentHeight = document.documentElement.scrollHeight;
+        const available = documentHeight - window.innerHeight;
+        const rawProgress = available > 0
+          ? window.scrollY / available
+          : 0;
+        const percentage = Math.min(
+          100,
+          Math.max(0, rawProgress * 100)
+        );
+
+        root.style.setProperty(
+          '--scroll-progress',
+          percentage.toFixed(3)
+        );
+
+        const progressPanel = document.querySelector('.progress-panel');
+
+        if (progressPanel) {
+          progressPanel.classList.toggle(
+            'is-condensed',
+            window.scrollY > 720
+          );
+        }
+
+        scrollFrame = null;
+      }
+
+      function requestScrollRender() {
+        if (scrollFrame !== null) return;
+
+        scrollFrame = window.requestAnimationFrame(
+          renderScrollState
+        );
+      }
+
+      function assignRevealOrder() {
+        document.querySelectorAll('.routine-grid').forEach(grid => {
+          [...grid.children].forEach((card, index) => {
+            card.style.setProperty(
+              '--reveal-order',
+              String(index % 6)
+            );
+          });
+        });
+      }
+
+      function observeReveals() {
+        const targets = [
+          ...document.querySelectorAll('.section-heading'),
+          ...document.querySelectorAll('.phase-card'),
+          ...document.querySelectorAll('.reflection-card')
+        ];
+
+        assignRevealOrder();
+
+        if (!('IntersectionObserver' in window)) {
+          targets.forEach(target => {
+            target.classList.add('is-visible');
+          });
+          return;
+        }
+
+        if (!motionAllowed()) {
+          targets.forEach(target => {
+            target.classList.add('is-visible');
+          });
+          return;
+        }
+
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          });
+        }, {
+          root: null,
+          rootMargin: '0px 0px -7% 0px',
+          threshold: .11
+        });
+
+        targets.forEach(target => {
+          observer.observe(target);
+        });
+      }
+
+      function applyTilt(element, event, strength) {
+        if (!precisePointerQuery.matches) return;
+        if (!motionAllowed()) return;
+
+        const bounds = element.getBoundingClientRect();
+        const localX = event.clientX - bounds.left;
+        const localY = event.clientY - bounds.top;
+        const normalizedX = localX / bounds.width - .5;
+        const normalizedY = localY / bounds.height - .5;
+        const rotateY = normalizedX * strength;
+        const rotateX = normalizedY * strength * -1;
+        const lightX = Math.max(
+          0,
+          Math.min(100, (normalizedX + .5) * 100)
+        );
+
+        if (element.classList.contains('timer-card')) {
+          element.style.setProperty(
+            '--tilt-x',
+            rotateX.toFixed(2) + 'deg'
+          );
+          element.style.setProperty(
+            '--tilt-y',
+            rotateY.toFixed(2) + 'deg'
+          );
+          element.style.setProperty(
+            '--card-light-x',
+            lightX.toFixed(2) + '%'
+          );
+          return;
+        }
+
+        element.style.setProperty(
+          '--card-tilt-x',
+          rotateX.toFixed(2) + 'deg'
+        );
+        element.style.setProperty(
+          '--card-tilt-y',
+          rotateY.toFixed(2) + 'deg'
+        );
+      }
+
+      function clearTilt(element) {
+        element.style.removeProperty('--tilt-x');
+        element.style.removeProperty('--tilt-y');
+        element.style.removeProperty('--card-tilt-x');
+        element.style.removeProperty('--card-tilt-y');
+        element.style.removeProperty('--card-light-x');
+      }
+
+      function initializeTilt() {
+        const elements = [
+          timerCard,
+          ...document.querySelectorAll('.phase-card')
+        ].filter(Boolean);
+
+        elements.forEach(element => {
+          const strength = element === timerCard
+            ? 7
+            : 3.2;
+
+          element.addEventListener('pointermove', event => {
+            applyTilt(element, event, strength);
+          });
+
+          element.addEventListener('pointerleave', () => {
+            clearTilt(element);
+          });
+        });
+      }
+
+      function addControlRipple(event) {
+        const control = event.currentTarget;
+        const bounds = control.getBoundingClientRect();
+        const rippleX = event.clientX - bounds.left;
+        const rippleY = event.clientY - bounds.top;
+
+        control.style.setProperty(
+          '--ripple-x',
+          rippleX + 'px'
+        );
+        control.style.setProperty(
+          '--ripple-y',
+          rippleY + 'px'
+        );
+        control.classList.remove('is-rippling');
+
+        void control.offsetWidth;
+
+        control.classList.add('is-rippling');
+
+        window.setTimeout(() => {
+          control.classList.remove('is-rippling');
+        }, 680);
+      }
+
+      function initializeRipples() {
+        document
+          .querySelectorAll('.primary-button, .quiet-button')
+          .forEach(control => {
+            control.addEventListener(
+              'pointerdown',
+              addControlRipple
+            );
+          });
+      }
+
+      function sparkPalette() {
+        if (currentMode() === 'night') {
+          return [
+            '#bf8cff',
+            '#ff9f6e',
+            '#64d2ff',
+            '#ffffff'
+          ];
+        }
+
+        return [
+          '#0071e3',
+          '#64d2ff',
+          '#30d158',
+          '#ffffff'
+        ];
+      }
+
+      function createCompletionSparks(origin, amount) {
+        if (!motionAllowed()) return;
+
+        const colors = sparkPalette();
+        const count = amount || 16;
+
+        for (let index = 0; index < count; index += 1) {
+          const spark = document.createElement('i');
+          const angle = (
+            Math.PI *
+            2 *
+            index /
+            count +
+            Math.random() *
+            .25
+          );
+          const distance = 44 + Math.random() * 86;
+          const size = 3 + Math.random() * 5;
+          const travelX = Math.cos(angle) * distance;
+          const travelY = Math.sin(angle) * distance;
+          const duration = .58 + Math.random() * .5;
+          const rotation = Math.round(Math.random() * 540);
+
+          spark.className = 'completion-spark';
+          spark.style.left = origin.x + 'px';
+          spark.style.top = origin.y + 'px';
+          spark.style.setProperty(
+            '--spark-x',
+            travelX + 'px'
+          );
+          spark.style.setProperty(
+            '--spark-y',
+            travelY + 'px'
+          );
+          spark.style.setProperty(
+            '--spark-size',
+            size + 'px'
+          );
+          spark.style.setProperty(
+            '--spark-duration',
+            duration + 's'
+          );
+          spark.style.setProperty(
+            '--spark-rotation',
+            rotation + 'deg'
+          );
+          spark.style.setProperty(
+            '--spark-color',
+            colors[index % colors.length]
+          );
+
+          body.appendChild(spark);
+
+          spark.addEventListener(
+            'animationend',
+            () => spark.remove(),
+            { once: true }
+          );
+        }
+      }
+
+      function vibrate(pattern) {
+        if (!('vibrate' in navigator)) return;
+        navigator.vibrate(pattern);
+      }
+
+      function celebrateTask(task) {
+        if (!task) return;
+
+        const bounds = task.getBoundingClientRect();
+
+        createCompletionSparks({
+          x: bounds.left + 25,
+          y: bounds.top + bounds.height / 2
+        }, 9);
+
+        vibrate(18);
+      }
+
+      function celebrateRoutine() {
+        createCompletionSparks({
+          x: window.innerWidth / 2,
+          y: Math.min(window.innerHeight * .52, 460)
+        }, 34);
+
+        if (currentMode() === 'morning') {
+          showToast(
+            'Morning ritual complete. The day is yours.',
+            3400
+          );
+        } else {
+          showToast(
+            'Night review complete. Let the day go.',
+            3400
+          );
+        }
+
+        vibrate([28, 34, 46]);
+      }
+
+      function celebrateTimer() {
+        if (!timerCard) return;
+
+        const bounds = timerCard.getBoundingClientRect();
+
+        createCompletionSparks({
+          x: bounds.left + bounds.width / 2,
+          y: bounds.top + bounds.height / 2
+        }, 38);
+
+        showToast(
+          'Twenty intentional minutes. Complete.',
+          3200
+        );
+
+        vibrate([32, 40, 48]);
+      }
+
+      function visibleTasks() {
+        const mode = currentMode();
+
+        return [
+          ...document.querySelectorAll(
+            '#' + mode + '-view input[data-task]'
+          )
+        ];
+      }
+
+      function inspectRoutineCompletion(allowCelebration) {
+        const mode = currentMode();
+        const tasks = visibleTasks();
+        const completed = tasks.filter(task => {
+          return task.checked;
+        }).length;
+        const previous = completionMemory[mode];
+
+        if (
+          allowCelebration &&
+          tasks.length > 0 &&
+          completed === tasks.length &&
+          previous !== completed
+        ) {
+          celebrateRoutine();
+        }
+
+        completionMemory[mode] = completed;
+      }
+
+      function initializeTaskCelebrations() {
+        document
+          .querySelectorAll('input[data-task]')
+          .forEach(task => {
+            task.addEventListener('change', () => {
+              if (task.checked) {
+                celebrateTask(task.closest('.task'));
+              }
+
+              inspectRoutineCompletion(true);
+            });
+          });
+
+        inspectRoutineCompletion(false);
+      }
+
+      function animateModePortal(button) {
+        if (!modeTransition) return;
+        if (!motionAllowed()) return;
+
+        const bounds = button.getBoundingClientRect();
+
+        modeTransition.style.left = (
+          bounds.left +
+          bounds.width /
+          2
+        ) + 'px';
+
+        modeTransition.style.top = (
+          bounds.top +
+          bounds.height /
+          2
+        ) + 'px';
+
+        modeTransition.classList.remove('is-active');
+
+        void modeTransition.offsetWidth;
+
+        modeTransition.classList.add('is-active');
+        body.classList.add('is-switching');
+
+        window.setTimeout(() => {
+          modeTransition.classList.remove('is-active');
+          body.classList.remove('is-switching');
+          inspectRoutineCompletion(false);
+        }, 980);
+      }
+
+      function initializeModePortal() {
+        document
+          .querySelectorAll('[data-set-mode]')
+          .forEach(button => {
+            button.addEventListener('click', () => {
+              animateModePortal(button);
+            }, {
+              capture: true
+            });
+          });
+      }
+
+      function observeTimerState() {
+        if (!timerToggle || !timerPhase || !timerCard) return;
+
+        const observer = new MutationObserver(() => {
+          const buttonState = timerToggle.textContent.trim();
+          const phaseState = timerPhase.textContent.trim();
+
+          timerCard.classList.toggle(
+            'is-running',
+            buttonState === 'Pause'
+          );
+
+          if (
+            phaseState === 'Ritual complete' &&
+            !timerCelebrated
+          ) {
+            timerCelebrated = true;
+            celebrateTimer();
+          }
+
+          if (phaseState !== 'Ritual complete') {
+            timerCelebrated = false;
+          }
+        });
+
+        observer.observe(timerToggle, {
+          childList: true,
+          subtree: true,
+          characterData: true
+        });
+
+        observer.observe(timerPhase, {
+          childList: true,
+          subtree: true,
+          characterData: true
+        });
+      }
+
+      function observeSaveState() {
+        if (!saveState) return;
+
+        const observer = new MutationObserver(() => {
+          const saving = saveState.textContent.trim() === 'Saving…';
+
+          saveState.classList.toggle(
+            'is-saving',
+            saving
+          );
+        });
+
+        observer.observe(saveState, {
+          childList: true,
+          subtree: true,
+          characterData: true
+        });
+      }
+
+      function initializeKeyboardShortcuts() {
+        document.addEventListener('keydown', event => {
+          const target = event.target;
+          const editing = target.matches(
+            'textarea, input, select, [contenteditable="true"]'
+          );
+
+          if (editing) return;
+          if (event.metaKey) return;
+          if (event.ctrlKey) return;
+          if (event.altKey) return;
+
+          const key = event.key.toLowerCase();
+
+          if (key === 'm') {
+            const morningButton = document.querySelector(
+              '[data-set-mode="morning"]'
+            );
+
+            if (morningButton) morningButton.click();
+          }
+
+          if (key === 'n') {
+            const nightButton = document.querySelector(
+              '[data-set-mode="night"]'
+            );
+
+            if (nightButton) nightButton.click();
+          }
+
+          if (event.code === 'Space') {
+            event.preventDefault();
+
+            if (timerToggle) timerToggle.click();
+          }
+        });
+      }
+
+      function cleanBootCurtain() {
+        const curtain = document.querySelector('.boot-curtain');
+
+        window.setTimeout(() => {
+          if (curtain) curtain.remove();
+        }, 1650);
+      }
+
+      function initializeExperience() {
+        createDustField();
+        observeReveals();
+        initializeTilt();
+        initializeRipples();
+        initializeTaskCelebrations();
+        initializeModePortal();
+        observeTimerState();
+        observeSaveState();
+        initializeKeyboardShortcuts();
+        renderScrollState();
+        renderPointerPosition();
+        cleanBootCurtain();
+
+        window.addEventListener(
+          'scroll',
+          requestScrollRender,
+          { passive: true }
+        );
+
+        window.addEventListener(
+          'resize',
+          requestScrollRender,
+          { passive: true }
+        );
+
+        window.addEventListener(
+          'pointermove',
+          trackPointer,
+          { passive: true }
+        );
+      }
+
+      initializeExperience();
+    })();
+  </script>
+
 </body>
 </html>
