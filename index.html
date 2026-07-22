@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="en" data-mode="morning">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f5f7">
+  <meta name="description" content="Life — a quiet twenty-minute ritual for intentional mornings and reflective nights.">
+  <title>Life — Morning & Night</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f5f7;
+      --bg-rgb: 245, 245, 247;
+      --surface: rgba(255, 255, 255, .72);
+      --surface-solid: #ffffff;
+      --surface-raised: rgba(255, 255, 255, .9);
+      --text: #1d1d1f;
+      --secondary: #6e6e73;
+      --tertiary: #86868b;
+      --line: rgba(0, 0, 0, .08);
+      --accent: #0071e3;
+      --accent-rgb: 0, 113, 227;
+      --accent-soft: #e8f2ff;
+      --glow-a: rgba(64, 156, 255, .25);
+      --glow-b: rgba(116, 215, 255, .2);
+      --shadow: 0 20px 60px rgba(0, 0, 0, .08);
+      --nav-height: 68px;
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+
+    html[data-mode="night"] {
+      color-scheme: dark;
+      --bg: #000000;
+      --bg-rgb: 0, 0, 0;
+      --surface: rgba(28, 28, 30, .7);
+      --surface-solid: #1c1c1e;
+      --surface-raised: rgba(44, 44, 46, .84);
+      --text: #f5f5f7;
+      --secondary: #a1a1a6;
+      --tertiary: #86868b;
+      --line: rgba(255, 255, 255, .12);
+      --accent: #bf8cff;
+      --accent-rgb: 191, 140, 255;
+      --accent-soft: rgba(191, 140, 255, .14);
+      --glow-a: rgba(118, 65, 190, .32);
+      --glow-b: rgba(255, 159, 67, .13);
+      --shadow: 0 24px 80px rgba(0, 0, 0, .55);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 18% 6%, var(--glow-a), transparent 30rem),
+        radial-gradient(circle at 88% 20%, var(--glow-b), transparent 34rem),
+        var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      transition: background-color .65s var(--ease), color .45s ease;
+    }
+
+    button, textarea { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .ambient {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      width: 34rem;
+      height: 34rem;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: .2;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+
+    .orb:first-child { top: -20rem; left: -10rem; background: var(--accent); }
+    .orb:last-child { right: -19rem; top: 36rem; background: #ff9f0a; animation-delay: -7s; }
+
+    @keyframes drift {
+      to { transform: translate3d(3rem, 4rem, 0) scale(1.1); }
+    }
+
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      height: var(--nav-height);
+      padding: max(10px, env(safe-area-inset-top)) 24px 10px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(var(--bg-rgb), .72);
+      -webkit-backdrop-filter: saturate(180%) blur(22px);
+      backdrop-filter: saturate(180%) blur(22px);
+    }
+
+    .nav-inner {
+      width: min(1120px, 100%);
+      height: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 650;
+      letter-spacing: -.01em;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--text);
+      color: var(--bg);
+      font-size: 13px;
+      font-weight: 760;
+      transition: background .4s, color .4s;
+    }
+
+    .nav-date { color: var(--secondary); font-size: 12px; font-weight: 500; }
+
+    .mode-switch {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 206px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .04);
+    }
+
+    .switch-pill {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: calc(50% - 4px);
+      height: calc(100% - 8px);
+      border-radius: 999px;
+      background: var(--surface-solid);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
+      transform: translateX(0);
+      transition: transform .55s var(--ease), background .4s;
+    }
+
+    html[data-mode="night"] .switch-pill { transform: translateX(100%); }
+
+    .mode-button {
+      position: relative;
+      z-index: 1;
+      height: 34px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--secondary);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: color .25s;
+    }
+
+    .mode-button[aria-pressed="true"] { color: var(--text); }
+    .mode-button:focus-visible, .primary-button:focus-visible, .quiet-button:focus-visible, .task input:focus-visible + span { outline: 3px solid rgba(var(--accent-rgb), .34); outline-offset: 3px; }
+
+    main { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+
+    .hero {
+      min-height: calc(92vh - var(--nav-height));
+      padding: 96px 0 70px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(340px, .72fr);
+      align-items: center;
+      gap: clamp(46px, 8vw, 110px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 20px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 650;
+      letter-spacing: .01em;
+    }
+
+    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 5px rgba(var(--accent-rgb), .1); }
+
+    h1 {
+      max-width: 730px;
+      margin: 0;
+      font-size: clamp(56px, 7.4vw, 104px);
+      line-height: .94;
+      letter-spacing: -.068em;
+      font-weight: 720;
+    }
+
+    .gradient-word {
+      display: block;
+      color: transparent;
+      background: linear-gradient(100deg, var(--accent), #64d2ff 72%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    html[data-mode="night"] .gradient-word { background-image: linear-gradient(100deg, #bf8cff, #ff9f6e 84%); }
+
+    .hero-copy {
+      max-width: 630px;
+      margin: 28px 0 0;
+      color: var(--secondary);
+      font-size: clamp(18px, 2vw, 23px);
+      line-height: 1.45;
+      letter-spacing: -.02em;
+    }
+
+    .hero-meta { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 10px; }
+    .meta-chip { padding: 8px 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--secondary); font-size: 12px; font-weight: 560; backdrop-filter: blur(12px); }
+
+    .timer-card {
+      position: relative;
+      min-height: 480px;
+      padding: 38px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      -webkit-backdrop-filter: blur(28px) saturate(150%);
+      backdrop-filter: blur(28px) saturate(150%);
+      overflow: hidden;
+    }
+
+    .timer-card::before { content: ""; position: absolute; inset: 0 0 auto; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent); }
+    .timer-label { margin-bottom: 25px; color: var(--secondary); font-size: 12px; font-weight: 650; text-transform: uppercase; letter-spacing: .12em; }
+
+    .timer-ring { position: relative; width: 245px; height: 245px; display: grid; place-items: center; }
+    .timer-ring svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+    .ring-track { fill: none; stroke: var(--line); stroke-width: 5; }
+    .ring-progress { fill: none; stroke: var(--accent); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 691.15; stroke-dashoffset: 0; filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), .35)); transition: stroke-dashoffset .55s linear, stroke .4s; }
+    .timer-value { font-size: 55px; font-weight: 620; letter-spacing: -.06em; font-variant-numeric: tabular-nums; }
+    .timer-phase { margin-top: 7px; color: var(--secondary); font-size: 13px; text-align: center; }
+    .timer-actions { margin-top: 30px; display: flex; gap: 10px; }
+
+    .primary-button, .quiet-button { min-width: 106px; min-height: 46px; padding: 0 20px; border-radius: 999px; cursor: pointer; font-size: 14px; font-weight: 650; transition: transform .2s, opacity .2s, background .3s; }
+    .primary-button { border: 0; color: white; background: var(--accent); box-shadow: 0 8px 22px rgba(var(--accent-rgb), .22); }
+    .quiet-button { border: 1px solid var(--line); color: var(--text); background: var(--surface-raised); }
+    .primary-button:hover, .quiet-button:hover { transform: translateY(-1px); }
+    .primary-button:active, .quiet-button:active { transform: scale(.97); }
+
+    .section { padding: 116px 0; }
+    .section-heading { max-width: 760px; margin-bottom: 54px; }
+    .section-kicker { margin: 0 0 13px; color: var(--accent); font-size: 14px; font-weight: 650; }
+    h2 { margin: 0; font-size: clamp(42px, 5.7vw, 72px); line-height: 1.02; letter-spacing: -.052em; font-weight: 700; }
+    .section-intro { max-width: 660px; margin: 20px 0 0; color: var(--secondary); font-size: 19px; line-height: 1.5; letter-spacing: -.015em; }
+
+    .progress-panel { margin-bottom: 26px; padding: 22px 24px; display: flex; align-items: center; gap: 18px; border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--surface); backdrop-filter: blur(20px); }
+    .progress-track { flex: 1; height: 7px; overflow: hidden; border-radius: 999px; background: var(--line); }
+    .progress-fill { width: 0; height: 100%; border-radius: inherit; background: var(--accent); transition: width .65s var(--ease), background .4s; }
+    .progress-copy { min-width: 105px; color: var(--secondary); font-size: 13px; font-weight: 600; text-align: right; }
+
+    .routine-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
+    .phase-card { grid-column: span 6; padding: 30px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); backdrop-filter: blur(20px); transition: transform .35s var(--ease), border-color .35s, background .4s; }
+    .phase-card:hover { transform: translateY(-4px); border-color: rgba(var(--accent-rgb), .26); }
+    .phase-card.featured { grid-column: span 12; display: grid; grid-template-columns: 240px 1fr; gap: 38px; }
+    .phase-index { margin-bottom: 22px; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .phase-time { display: inline-block; margin-bottom: 13px; padding: 6px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 11px; font-weight: 650; }
+    .phase-title { margin: 0; font-size: 26px; line-height: 1.12; letter-spacing: -.035em; }
+    .phase-subtitle { margin: 10px 0 0; color: var(--secondary); font-size: 14px; line-height: 1.45; }
+    .task-list { margin: 26px 0 0; padding: 0; display: grid; gap: 11px; list-style: none; }
+    .featured .task-list { margin-top: 0; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .task { position: relative; display: block; }
+    .task input { position: absolute; opacity: 0; pointer-events: none; }
+    .task span { min-height: 58px; padding: 14px 14px 14px 46px; display: flex; align-items: center; border: 1px solid var(--line); border-radius: 14px; color: var(--secondary); background: rgba(var(--bg-rgb), .35); cursor: pointer; font-size: 13px; line-height: 1.42; transition: border-color .25s, color .25s, background .25s, transform .25s; }
+    .task span::before { content: ""; position: absolute; left: 15px; width: 20px; height: 20px; border: 1.5px solid var(--tertiary); border-radius: 50%; transition: all .3s var(--ease); }
+    .task span::after { content: ""; position: absolute; left: 22px; width: 5px; height: 9px; border: solid white; border-width: 0 2px 2px 0; opacity: 0; transform: rotate(45deg) scale(.3); transition: all .25s var(--ease); }
+    .task input:checked + span { color: var(--tertiary); background: var(--accent-soft); text-decoration: line-through; text-decoration-color: rgba(var(--accent-rgb), .4); }
+    .task input:checked + span::before { border-color: var(--accent); background: var(--accent); transform: scale(1.05); }
+    .task input:checked + span::after { opacity: 1; transform: rotate(45deg) scale(1); }
+
+    .reflection-card { padding: clamp(28px, 5vw, 64px); display: grid; grid-template-columns: .72fr 1.28fr; gap: clamp(36px, 7vw, 92px); align-items: center; border: 1px solid var(--line); border-radius: var(--radius-xl); background: var(--surface); box-shadow: var(--shadow); backdrop-filter: blur(25px); }
+    .reflection-card h3 { margin: 0; font-size: clamp(30px, 4vw, 48px); line-height: 1.05; letter-spacing: -.045em; }
+    .reflection-card p { color: var(--secondary); font-size: 15px; line-height: 1.55; }
+    .note-wrap { position: relative; }
+    .note-label { display: block; margin-bottom: 10px; color: var(--secondary); font-size: 12px; font-weight: 650; }
+    textarea { width: 100%; min-height: 210px; resize: vertical; padding: 21px; border: 1px solid var(--line); border-radius: var(--radius-md); outline: none; color: var(--text); background: rgba(var(--bg-rgb), .44); font-size: 16px; line-height: 1.55; transition: border-color .25s, box-shadow .25s, background .4s; }
+    textarea:focus { border-color: rgba(var(--accent-rgb), .6); box-shadow: 0 0 0 4px rgba(var(--accent-rgb), .11); }
+    textarea::placeholder { color: var(--tertiary); }
+    .save-state { margin-top: 9px; color: var(--tertiary); font-size: 11px; text-align: right; }
+
+    footer { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 max(42px, env(safe-area-inset-bottom)); display: flex; justify-content: space-between; gap: 20px; border-top: 1px solid var(--line); color: var(--tertiary); font-size: 12px; }
+
+    .view { animation: reveal .65s var(--ease) both; }
+    .view[hidden] { display: none !important; }
+    @keyframes reveal { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+    @media (max-width: 860px) {
+      .nav-date { display: none; }
+      .hero { min-height: auto; padding: 76px 0 60px; grid-template-columns: 1fr; }
+      .timer-card { width: min(100%, 480px); justify-self: center; }
+      .section { padding: 86px 0; }
+      .phase-card, .phase-card.featured { grid-column: span 12; display: block; }
+      .featured .task-list { margin-top: 26px; }
+      .reflection-card { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      :root { --nav-height: 64px; --radius-xl: 25px; --radius-lg: 21px; }
+      .site-nav { padding-inline: 14px; }
+      .brand > span:last-child { display: none; }
+      .mode-switch { width: 184px; }
+      main, footer { width: min(100% - 28px, 1120px); }
+      .hero { padding-top: 58px; gap: 42px; }
+      h1 { font-size: clamp(50px, 16vw, 70px); }
+      .hero-copy { font-size: 18px; }
+      .timer-card { min-height: 410px; padding: 24px; }
+      .timer-ring { width: 210px; height: 210px; }
+      .timer-value { font-size: 48px; }
+      .section { padding: 72px 0; }
+      .section-heading { margin-bottom: 38px; }
+      .progress-panel { align-items: flex-start; flex-direction: column; }
+      .progress-track { width: 100%; }
+      .progress-copy { text-align: left; }
+      .phase-card { padding: 23px; }
+      .featured .task-list { grid-template-columns: 1fr; }
+      footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"><div class="orb"></div><div class="orb"></div></div>
+
+  <nav class="site-nav" aria-label="Primary navigation">
+    <div class="nav-inner">
+      <div class="brand"><span class="brand-mark">L</span><span>Life</span></div>
+      <time class="nav-date" id="nav-date"></time>
+      <div class="mode-switch" role="group" aria-label="Choose your routine">
+        <span class="switch-pill" aria-hidden="true"></span>
+        <button class="mode-button" type="button" data-set-mode="morning" aria-pressed="true">Morning</button>
+        <button class="mode-button" type="button" data-set-mode="night" aria-pressed="false">Night</button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-text">
+        <p class="eyebrow"><span class="eyebrow-dot"></span><span id="hero-eyebrow">Your morning, protected</span></p>
+        <h1 id="hero-title">Own the first <span class="gradient-word">20 minutes.</span></h1>
+        <p class="hero-copy" id="hero-copy">Before messages, feeds, and everyone else's priorities—wake your body, focus your mind, and choose the day you want to have.</p>
+        <div class="hero-meta" aria-label="Routine details">
+          <span class="meta-chip">20 minutes</span>
+          <span class="meta-chip" id="phase-count">5 intentional phases</span>
+          <span class="meta-chip">Saved on this device</span>
+        </div>
+      </div>
+
+      <aside class="timer-card" aria-label="Twenty minute ritual timer">
+        <div class="timer-label" id="timer-label">Morning ritual</div>
+        <div class="timer-ring">
+          <svg viewBox="0 0 240 240" aria-hidden="true">
+            <circle class="ring-track" cx="120" cy="120" r="110"></circle>
+            <circle class="ring-progress" id="ring-progress" cx="120" cy="120" r="110"></circle>
+          </svg>
+          <div><div class="timer-value" id="timer-value" role="timer" aria-live="off">20:00</div><div class="timer-phase" id="timer-phase">Ready when you are</div></div>
+        </div>
+        <div class="timer-actions">
+          <button class="primary-button" type="button" id="timer-toggle">Start</button>
+          <button class="quiet-button" type="button" id="timer-reset">Reset</button>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="routine" aria-labelledby="routine-title">
+      <div class="section-heading">
+        <p class="section-kicker" id="routine-kicker">Begin deliberately</p>
+        <h2 id="routine-title">A small ritual.<br>A different day.</h2>
+        <p class="section-intro" id="routine-intro">Move from body to mind to plan. Check off each action as you go—your progress stays here for today.</p>
+      </div>
+
+      <div class="progress-panel">
+        <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="progress-copy" id="progress-copy">0 of 15 complete</div>
+      </div>
+
+      <div class="view" id="morning-view">
+        <div class="routine-grid">
+          <article class="phase-card">
+            <div class="phase-index">Phase 01</div><span class="phase-time">00:00–00:04</span>
+            <h3 class="phase-title">Body ignition</h3><p class="phase-subtitle">Wake the brain before you ask it to work.</p>
+            <ul class="task-list">
+              <li><label class="task"><input type="checkbox" data-task="morning-sun"><span>Step outside or stand by a bright window for 2–5 minutes.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-water"><span>Drink a full glass of water before anything else.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-move"><span>Move for four minutes—even ninety seconds counts.</span></label></li>
+            </ul>
+          </article>
+
+          <article class="phase-card">
+            <div class="phase-index">Phase 02</div><span class="phase-time">00:04–00:08</span>
+            <h3 class="phase-title">Mind activation</h3><p class="phase-subtitle">Focus before the day loads in.</p>
+            <ul class="task-list">
+              <li><label class="task"><input type="checkbox" data-task="morning-breathe"><span>Sit still and breathe for two quiet minutes.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-recall"><span>Recall yesterday's key ideas before opening notes.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-anki"><span>Complete the spaced-repetition cards that are due.</span></label></li>
+            </ul>
+          </article>
+
+          <article class="phase-card featured">
+            <div><div class="phase-index">Phase 03</div><span class="phase-time">00:08–00:12</span><h3 class="phase-title">Recall check</h3><p class="phase-subtitle">Verify what sleep actually consolidated.</p></div>
+            <ul class="task-list">
+              <li><label class="task"><input type="checkbox" data-task="morning-retained"><span><b>Retained:</b>&nbsp; name what you can explain cold.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-degraded"><span><b>Degraded:</b>&nbsp; mark what became fuzzy overnight.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-connected"><span><b>Connected:</b>&nbsp; capture any new link that appeared.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-gap"><span><b>Gap:</b>&nbsp; name what you still do not understand.</span></label></li>
+            </ul>
+          </article>
+
+          <article class="phase-card">
+            <div class="phase-index">Phase 04</div><span class="phase-time">00:12–00:17</span>
+            <h3 class="phase-title">Daily plan</h3><p class="phase-subtitle">Sharpen the plan you made last night.</p>
+            <ul class="task-list">
+              <li><label class="task"><input type="checkbox" data-task="morning-frog"><span>Circle the hardest, highest-value task. Do it first.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-block"><span>Give each task a time block and leave a buffer.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-scope"><span>Confirm today's work maps to what actually matters.</span></label></li>
+            </ul>
+          </article>
+
+          <article class="phase-card">
+            <div class="phase-index">Phase 05</div><span class="phase-time">00:17–00:20</span>
+            <h3 class="phase-title">Mental ignition</h3><p class="phase-subtitle">Turn intention into a clear first action.</p>
+            <ul class="task-list">
+              <li><label class="task"><input type="checkbox" data-task="morning-contract"><span>Say: “At [time], I will [action] for [duration].”</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-visualize"><span>Picture the feeling of finishing today's frog task.</span></label></li>
+            </ul>
+          </article>
+        </div>
+      </div>
+
+      <div class="view" id="night-view" hidden>
+        <div class="routine-grid">
+          <article class="phase-card">
+            <div class="phase-index">Phase 01</div><span class="phase-time">00:00–00:03</span>
+            <h3 class="phase-title">Wind down</h3><p class="phase-subtitle">Give reflection a quiet place to happen.</p>
+            <ul class="task-list">
+              <li><label class="task"><input type="checkbox" data-task="night-light"><span>Dim the lights and switch to warmer color.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-phone"><span>Put the phone face-down—or in another room.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-breathe"><span>Box breathe once: in, hold, out, hold.</span></label></li>
+            </ul>
+          </article>
+
+          <article class="phase-card">
+            <div class="phase-index">Phase 02</div><span class="phase-time">00:03–00:07</span>
+            <h3 class="phase-title">Memory blurt</h3><p class="phase-subtitle">Retrieve today before reviewing it.</p>
+            <ul class="task-list">
+              <li><label class="task"><input type="checkbox" data-task="night-blurt"><span>Write everything you remember. No notes. Two minutes.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-compare"><span>Open your notes and circle what your blurt missed.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-feynman"><span>Explain the hardest idea in plain language.</span></label></li>
+            </ul>
+          </article>
+
+          <article class="phase-card featured">
+            <div><div class="phase-index">Phase 03</div><span class="phase-time">00:07–00:13</span><h3 class="phase-title">Keep · Improve<br>Start · Stop</h3><p class="phase-subtitle">Specific behaviors, not vague feelings.</p></div>
+            <ul class="task-list">
+              <li><label class="task"><input type="checkbox" data-task="night-keep"><span><b>Keep:</b>&nbsp; what moved the needle today?</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-improve"><span><b>Improve:</b>&nbsp; what deserves a better approach?</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-start"><span><b>Start:</b>&nbsp; what useful behavior will you add?</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-stop"><span><b>Stop:</b>&nbsp; what stole focus or time?</span></label></li>
+            </ul>
+          </article>
+
+          <article class="phase-card">
+            <div class="phase-index">Phase 04</div><span class="phase-time">00:13–00:16</span>
+            <h3 class="phase-title">Consolidate</h3><p class="phase-subtitle">Lock in the gaps before sleep.</p>
+            <ul class="task-list">
+              <li><label class="task"><input type="checkbox" data-task="night-cards"><span>Turn today's gaps into spaced-repetition cards.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-schedule"><span>Schedule reviews for tomorrow, +3 days, and +1 week.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-insight"><span>Write today's most important insight in one sentence.</span></label></li>
+            </ul>
+          </article>
+
+          <article class="phase-card">
+            <div class="phase-index">Phase 05</div><span class="phase-time">00:16–00:19</span>
+            <h3 class="phase-title">Tomorrow, clearly</h3><p class="phase-subtitle">One concrete goal. No vague intentions.</p>
+            <ul class="task-list">
+              <li><label class="task"><input type="checkbox" data-task="night-goal"><span>Write one specific, measurable, time-bound goal.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-list"><span>Make tomorrow's list—five items or fewer.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-why"><span>Write one honest sentence about why it matters.</span></label></li>
+            </ul>
+          </article>
+
+          <article class="phase-card featured">
+            <div><div class="phase-index">Phase 06</div><span class="phase-time">00:19–00:20</span><h3 class="phase-title">Sleep prep</h3><p class="phase-subtitle">The mechanism—not the reward.</p></div>
+            <ul class="task-list">
+              <li><label class="task"><input type="checkbox" data-task="night-still"><span>Close your eyes and sit completely still for one minute.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-sleep"><span>Protect 7–9 hours for memory, energy, and tomorrow.</span></label></li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="reflection-title">
+      <div class="reflection-card">
+        <div><p class="section-kicker" id="note-kicker">Set your intention</p><h3 id="reflection-title">One thought is enough.</h3><p id="note-copy">Write the first action you will take today. Keep it concrete, short, and easy to begin.</p></div>
+        <div class="note-wrap"><label class="note-label" for="daily-note" id="note-label">Today's first action</label><textarea id="daily-note" placeholder="At 9:00, I will…"></textarea><div class="save-state" id="save-state" aria-live="polite">Saved automatically</div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer><span>Life, one deliberate day at a time.</span><span>Morning light. Night reflection.</span></footer>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const root = document.documentElement;
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      const modeButtons = [...document.querySelectorAll('[data-set-mode]')];
+      const morningView = document.getElementById('morning-view');
+      const nightView = document.getElementById('night-view');
+      const timerValue = document.getElementById('timer-value');
+      const timerToggle = document.getElementById('timer-toggle');
+      const timerReset = document.getElementById('timer-reset');
+      const ring = document.getElementById('ring-progress');
+      const totalSeconds = 20 * 60;
+      const circumference = 2 * Math.PI * 110;
+
+      const copy = {
+        morning: {
+          eyebrow: 'Your morning, protected',
+          title: 'Own the first <span class="gradient-word">20 minutes.</span>',
+          hero: 'Before messages, feeds, and everyone else\'s priorities—wake your body, focus your mind, and choose the day you want to have.',
+          phases: '5 intentional phases',
+          timer: 'Morning ritual',
+          kicker: 'Begin deliberately',
+          routineTitle: 'A small ritual.<br>A different day.',
+          routineIntro: 'Move from body to mind to plan. Check off each action as you go—your progress stays here for today.',
+          noteKicker: 'Set your intention',
+          noteTitle: 'One thought is enough.',
+          noteCopy: 'Write the first action you will take today. Keep it concrete, short, and easy to begin.',
+          noteLabel: 'Today\'s first action',
+          placeholder: 'At 9:00, I will…',
+          theme: '#f5f5f7'
+        },
+        night: {
+          eyebrow: 'Your evening, reclaimed',
+          title: 'Close today.<span class="gradient-word">Clear tomorrow.</span>',
+          hero: 'Dim the noise. Retrieve what mattered, learn from what happened, and let tomorrow begin before you fall asleep.',
+          phases: '6 reflective phases',
+          timer: 'Night review',
+          kicker: 'End with intention',
+          routineTitle: 'Keep the lesson.<br>Release the day.',
+          routineIntro: 'Reflect, consolidate, and make tomorrow obvious. Honest notes beat perfect notes—one line is enough.',
+          noteKicker: 'Leave a clear signal',
+          noteTitle: 'Tomorrow starts here.',
+          noteCopy: 'Capture the most important lesson from today or the first task waiting for you tomorrow.',
+          noteLabel: 'Tonight\'s closing thought',
+          placeholder: 'Today I learned…',
+          theme: '#000000'
+        }
+      };
+
+      let mode = localStorage.getItem('life-mode');
+      if (!mode) {
+        const hour = new Date().getHours();
+        mode = hour >= 5 && hour < 18 ? 'morning' : 'night';
+      }
+
+      let remaining = totalSeconds;
+      let interval = null;
+      let running = false;
+
+      function setText(id, value, html = false) {
+        const element = document.getElementById(id);
+        if (html) element.innerHTML = value;
+        else element.textContent = value;
+      }
+
+      function setMode(nextMode, persist = true) {
+        mode = nextMode;
+        const current = copy[mode];
+        root.dataset.mode = mode;
+        metaTheme.content = current.theme;
+        morningView.hidden = mode !== 'morning';
+        nightView.hidden = mode !== 'night';
+        modeButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.setMode === mode)));
+        setText('hero-eyebrow', current.eyebrow);
+        setText('hero-title', current.title, true);
+        setText('hero-copy', current.hero);
+        setText('phase-count', current.phases);
+        setText('timer-label', current.timer);
+        setText('routine-kicker', current.kicker);
+        setText('routine-title', current.routineTitle, true);
+        setText('routine-intro', current.routineIntro);
+        setText('note-kicker', current.noteKicker);
+        setText('reflection-title', current.noteTitle);
+        setText('note-copy', current.noteCopy);
+        setText('note-label', current.noteLabel);
+        document.getElementById('daily-note').placeholder = current.placeholder;
+        document.getElementById('daily-note').value = localStorage.getItem(`life-note-${mode}`) || '';
+        if (persist) localStorage.setItem('life-mode', mode);
+        updateProgress();
+        resetTimer();
+      }
+
+      function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }
+
+      function currentPhase(elapsedSeconds) {
+        const minute = elapsedSeconds / 60;
+        const phases = mode === 'morning'
+          ? [[4, 'Body ignition'], [8, 'Mind activation'], [12, 'Recall check'], [17, 'Daily plan'], [20, 'Mental ignition']]
+          : [[3, 'Wind down'], [7, 'Memory blurt'], [13, 'Keep · Improve · Start · Stop'], [16, 'Consolidate'], [19, 'Tomorrow, clearly'], [20, 'Sleep prep']];
+        return phases.find(([end]) => minute < end)?.[1] || 'Complete';
+      }
+
+      function renderTimer() {
+        const elapsed = totalSeconds - remaining;
+        timerValue.textContent = formatTime(remaining);
+        timerValue.setAttribute('aria-label', `${Math.floor(remaining / 60)} minutes ${remaining % 60} seconds remaining`);
+        document.getElementById('timer-phase').textContent = remaining === totalSeconds ? 'Ready when you are' : currentPhase(elapsed);
+        ring.style.strokeDasharray = circumference;
+        ring.style.strokeDashoffset = circumference * (elapsed / totalSeconds);
+        document.title = running ? `${formatTime(remaining)} — Life` : 'Life — Morning & Night';
+      }
+
+      function stopTimer() {
+        window.clearInterval(interval);
+        interval = null;
+        running = false;
+        timerToggle.textContent = remaining < totalSeconds && remaining > 0 ? 'Resume' : 'Start';
+      }
+
+      function resetTimer() {
+        stopTimer();
+        remaining = totalSeconds;
+        timerToggle.textContent = 'Start';
+        renderTimer();
+      }
+
+      function toggleTimer() {
+        if (running) { stopTimer(); return; }
+        if (remaining <= 0) remaining = totalSeconds;
+        running = true;
+        timerToggle.textContent = 'Pause';
+        interval = window.setInterval(() => {
+          remaining -= 1;
+          renderTimer();
+          if (remaining <= 0) {
+            stopTimer();
+            timerToggle.textContent = 'Again';
+            document.getElementById('timer-phase').textContent = 'Ritual complete';
+          }
+        }, 1000);
+      }
+
+      function visibleTasks() {
+        return [...document.querySelectorAll(`#${mode}-view input[data-task]`)];
+      }
+
+      function updateProgress() {
+        const tasks = visibleTasks();
+        const done = tasks.filter(task => task.checked).length;
+        const percent = tasks.length ? (done / tasks.length) * 100 : 0;
+        document.getElementById('progress-fill').style.width = `${percent}%`;
+        document.getElementById('progress-copy').textContent = `${done} of ${tasks.length} complete`;
+      }
+
+      function restoreTasks() {
+        document.querySelectorAll('input[data-task]').forEach(task => {
+          task.checked = localStorage.getItem(`life-task-${task.dataset.task}`) === 'true';
+          task.addEventListener('change', () => {
+            localStorage.setItem(`life-task-${task.dataset.task}`, String(task.checked));
+            updateProgress();
+          });
+        });
+      }
+
+      modeButtons.forEach(button => button.addEventListener('click', () => setMode(button.dataset.setMode)));
+      timerToggle.addEventListener('click', toggleTimer);
+      timerReset.addEventListener('click', resetTimer);
+
+      const note = document.getElementById('daily-note');
+      let saveMessageTimer;
+      note.addEventListener('input', () => {
+        localStorage.setItem(`life-note-${mode}`, note.value);
+        setText('save-state', 'Saving…');
+        window.clearTimeout(saveMessageTimer);
+        saveMessageTimer = window.setTimeout(() => setText('save-state', 'Saved automatically'), 450);
+      });
+
+      const dateFormatter = new Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+      document.getElementById('nav-date').textContent = dateFormatter.format(new Date());
+      ring.style.strokeDasharray = circumference;
+      restoreTasks();
+      setMode(mode, false);
+    })();
+  </script>
+</body>
+</html>
