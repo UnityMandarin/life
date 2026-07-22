@@ -4567,6 +4567,65 @@
       }
     }
 
+
+    /* Performance patch: let the browser skip layout, paint, and animation work
+       for content that is not close to the viewport. */
+    main > section {
+      content-visibility: auto;
+      contain: layout paint style;
+    }
+
+    main > .hero {
+      contain-intrinsic-size: auto 900px;
+    }
+
+    main > #routine {
+      contain-intrinsic-size: auto 2400px;
+      scroll-margin-top: 96px;
+    }
+
+    main > section:last-child {
+      contain-intrinsic-size: auto 640px;
+    }
+
+    .phase-card {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 430px;
+    }
+
+    main > section:not(.is-near-viewport) *,
+    body.is-tab-hidden *,
+    body.is-tab-hidden *::before,
+    body.is-tab-hidden *::after {
+      animation-play-state: paused !important;
+    }
+
+    .scroll-cue {
+      text-decoration: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .scroll-cue:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 8px;
+      border-radius: 999px;
+    }
+
+    @media (max-width: 760px) {
+      main > .hero {
+        contain-intrinsic-size: auto 1040px;
+      }
+
+      main > #routine {
+        contain-intrinsic-size: auto 3600px;
+      }
+
+      .phase-card {
+        contain-intrinsic-size: auto 470px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -4607,7 +4666,7 @@
           <span class="meta-chip" id="phase-count">5 intentional phases</span>
           <span class="meta-chip">Saved on this device</span>
         </div>
-        <div class="scroll-cue" aria-hidden="true">Explore the ritual</div>
+        <a class="scroll-cue" href="#routine">Explore the ritual</a>
       </div>
 
       <aside class="timer-card" aria-label="Twenty minute ritual timer">
@@ -5008,16 +5067,38 @@
       function createDustField() {
         if (!dustField) return;
         if (dustField.childElementCount > 0) return;
+        if (!motionAllowed()) return;
 
+        const narrowScreen = window.matchMedia(
+          '(max-width: 760px)'
+        ).matches;
+        const particleCount = narrowScreen ? 24 : 64;
         const fragment = document.createDocumentFragment();
 
-        for (let index = 0; index < 188; index += 1) {
+        for (let index = 0; index < particleCount; index += 1) {
           const particle = document.createElement('i');
           particle.className = 'dust-particle';
           fragment.appendChild(particle);
         }
 
         dustField.appendChild(fragment);
+      }
+
+      function scheduleAmbientBoot() {
+        if (!motionAllowed()) return;
+
+        const boot = () => {
+          if (!document.hidden) createDustField();
+        };
+
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(boot, {
+            timeout: 1400
+          });
+          return;
+        }
+
+        window.setTimeout(boot, 320);
       }
 
       function renderPointerPosition() {
@@ -5121,6 +5202,76 @@
         targets.forEach(target => {
           observer.observe(target);
         });
+      }
+
+      function initializeViewportRendering() {
+        const sections = [
+          ...document.querySelectorAll('main > section')
+        ];
+
+        if (!('IntersectionObserver' in window)) {
+          sections.forEach(section => {
+            section.classList.add('is-near-viewport');
+          });
+          return;
+        }
+
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            entry.target.classList.toggle(
+              'is-near-viewport',
+              entry.isIntersecting
+            );
+          });
+        }, {
+          root: null,
+          rootMargin: '35% 0px 35% 0px',
+          threshold: 0
+        });
+
+        sections.forEach(section => {
+          observer.observe(section);
+        });
+
+        const updateTabState = () => {
+          body.classList.toggle(
+            'is-tab-hidden',
+            document.hidden
+          );
+
+          if (!document.hidden) createDustField();
+        };
+
+        document.addEventListener(
+          'visibilitychange',
+          updateTabState,
+          { passive: true }
+        );
+
+        updateTabState();
+      }
+
+      function initializeSmoothNavigation() {
+        document
+          .querySelectorAll('a[href^="#"]')
+          .forEach(link => {
+            link.addEventListener('click', event => {
+              const id = link.getAttribute('href');
+              const target = id && id.length > 1
+                ? document.querySelector(id)
+                : null;
+
+              if (!target) return;
+
+              event.preventDefault();
+              target.scrollIntoView({
+                behavior: motionAllowed() ? 'smooth' : 'auto',
+                block: 'start'
+              });
+
+              window.history.replaceState(null, '', id);
+            });
+          });
       }
 
       function applyTilt(element, event, strength) {
@@ -5560,7 +5711,9 @@
       }
 
       function initializeExperience() {
-        createDustField();
+        scheduleAmbientBoot();
+        initializeViewportRendering();
+        initializeSmoothNavigation();
         observeReveals();
         initializeTilt();
         initializeRipples();
@@ -5585,11 +5738,13 @@
           { passive: true }
         );
 
-        window.addEventListener(
-          'pointermove',
-          trackPointer,
-          { passive: true }
-        );
+        if (precisePointerQuery.matches && motionAllowed()) {
+          window.addEventListener(
+            'pointermove',
+            trackPointer,
+            { passive: true }
+          );
+        }
       }
 
       initializeExperience();
