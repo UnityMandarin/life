@@ -6,6 +6,30 @@
   <meta name="theme-color" content="#f5f5f7">
   <meta name="description" content="Life — a quiet twenty-minute ritual for intentional mornings and reflective nights.">
   <title>Life — Morning &amp; Night</title>
+  <script>
+    (() => {
+      'use strict';
+      const accessKey = 'life-access-granted';
+
+      function hasAccess() {
+        try {
+          return window.sessionStorage.getItem(accessKey) === 'true';
+        } catch (error) {
+          return false;
+        }
+      }
+
+      if (!hasAccess()) {
+        window.location.replace('security.html');
+      }
+
+      window.addEventListener('pageshow', event => {
+        if (event.persisted && !hasAccess()) {
+          window.location.replace('security.html');
+        }
+      });
+    })();
+  </script>
   <style>
     :root {
       color-scheme: light;
