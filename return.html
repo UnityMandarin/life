@@ -317,13 +317,13 @@
 
     .duration-picker {
       margin-top: 22px;
-      padding: 17px 18px 15px;
+      padding: 18px;
       border: 1px solid var(--line);
       border-radius: var(--radius-md);
       background: var(--surface-muted);
     }
 
-    .duration-head, .duration-scale {
+    .duration-head, .duration-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -343,63 +343,67 @@
       font-variant-numeric: tabular-nums;
     }
 
-    .duration-range {
+    .time-picker-grid {
+      margin-top: 15px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .time-picker-label {
+      display: block;
+      margin: 0 0 7px 2px;
+      color: var(--secondary);
+      font-size: 11px;
+      font-weight: 580;
+    }
+
+    .time-picker-control { position: relative; }
+
+    .time-select {
       width: 100%;
-      height: 24px;
-      margin: 12px 0 6px;
-      padding: 0;
-      border: 0;
+      height: 68px;
+      padding: 0 54px 0 18px;
+      border: 1px solid var(--line-strong);
+      border-radius: 14px;
       outline: none;
-      background: transparent;
-      cursor: pointer;
-      accent-color: var(--blue);
-    }
-
-    .duration-range::-webkit-slider-runnable-track {
-      height: 5px;
-      border-radius: 999px;
-      background: linear-gradient(to right, var(--blue) 0 var(--range-fill, 20%), #d9d9de var(--range-fill, 20%) 100%);
-    }
-
-    .duration-range::-webkit-slider-thumb {
-      width: 22px;
-      height: 22px;
-      margin-top: -8.5px;
-      border: 0;
-      border-radius: 50%;
+      color: var(--text);
       background: white;
-      box-shadow: 0 1px 5px rgba(0, 0, 0, .22), 0 0 0 1px rgba(0, 0, 0, .06);
+      font-size: 27px;
+      font-weight: 590;
+      letter-spacing: -.035em;
+      font-variant-numeric: tabular-nums;
+      cursor: pointer;
       -webkit-appearance: none;
       appearance: none;
+      transition: border-color .18s ease, box-shadow .18s ease, opacity .18s ease;
     }
 
-    .duration-range::-moz-range-track {
-      height: 5px;
-      border-radius: 999px;
-      background: #d9d9de;
+    .time-select:focus {
+      border-color: rgba(0, 113, 227, .55);
+      box-shadow: 0 0 0 4px rgba(0, 113, 227, .1);
     }
 
-    .duration-range::-moz-range-progress {
-      height: 5px;
-      border-radius: 999px;
-      background: var(--blue);
+    .time-select:disabled {
+      color: var(--secondary);
+      background: #ededf0;
+      cursor: default;
+      opacity: .72;
     }
 
-    .duration-range::-moz-range-thumb {
-      width: 22px;
-      height: 22px;
-      border: 0;
-      border-radius: 50%;
-      background: white;
-      box-shadow: 0 1px 5px rgba(0, 0, 0, .22), 0 0 0 1px rgba(0, 0, 0, .06);
+    .time-unit {
+      position: absolute;
+      top: 50%;
+      right: 18px;
+      pointer-events: none;
+      color: var(--secondary);
+      font-size: 13px;
+      font-weight: 580;
+      transform: translateY(-50%);
     }
 
-    .duration-range:focus-visible {
-      border-radius: 999px;
-      box-shadow: 0 0 0 4px rgba(0, 113, 227, .12);
-    }
-
-    .duration-scale {
+    .duration-footer {
+      margin-top: 11px;
       color: var(--tertiary);
       font-size: 10px;
       font-variant-numeric: tabular-nums;
@@ -943,14 +947,33 @@
             <input class="task-field" id="task-input" name="task" type="text" maxlength="120" autocomplete="off" placeholder="Finish the first draft" required>
             <div class="duration-picker">
               <div class="duration-head">
-                <label class="duration-label" for="duration-input">Timer length</label>
-                <output class="duration-output" id="duration-output" for="duration-input">25 minutes</output>
+                <span class="duration-label">Timer length</span>
+                <output class="duration-output" id="duration-output" for="duration-hours duration-minutes">25 minutes</output>
               </div>
-              <input class="duration-range" id="duration-input" name="duration" type="range" min="1" max="120" step="1" value="25" aria-label="Timer duration in minutes">
-              <div class="duration-scale">
-                <span>1 min</span>
+              <div class="time-picker-grid" role="group" aria-label="Timer duration">
+                <label>
+                  <span class="time-picker-label">Hours</span>
+                  <span class="time-picker-control">
+                    <select class="time-select" id="duration-hours" name="hours" aria-label="Hours">
+                      <option value="0" selected>0</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                    </select>
+                    <span class="time-unit" aria-hidden="true">hr</span>
+                  </span>
+                </label>
+                <label>
+                  <span class="time-picker-label">Minutes</span>
+                  <span class="time-picker-control">
+                    <select class="time-select" id="duration-minutes" name="minutes" aria-label="Minutes"></select>
+                    <span class="time-unit" aria-hidden="true">min</span>
+                  </span>
+                </label>
+              </div>
+              <div class="duration-footer">
+                <span>1 minute minimum</span>
                 <button class="sound-test" id="sound-test-button" type="button">Test alert</button>
-                <span>2 hours</span>
+                <span>2 hours maximum</span>
               </div>
             </div>
             <div class="form-bottom">
@@ -1092,7 +1115,8 @@
       const statusCopy = document.getElementById('status-copy');
       const taskForm = document.getElementById('task-form');
       const taskInput = document.getElementById('task-input');
-      const durationInput = document.getElementById('duration-input');
+      const durationHours = document.getElementById('duration-hours');
+      const durationMinutes = document.getElementById('duration-minutes');
       const durationOutput = document.getElementById('duration-output');
       const focusTask = document.getElementById('focus-task');
       const focusTimer = document.getElementById('focus-timer');
@@ -1194,12 +1218,50 @@
         return hours + ' hr ' + remainder + ' min';
       }
 
+      function buildDurationPicker() {
+        if (durationMinutes.childElementCount) return;
+        const fragment = document.createDocumentFragment();
+        for (let minute = 0; minute < 60; minute += 1) {
+          const option = document.createElement('option');
+          option.value = String(minute);
+          option.textContent = String(minute).padStart(2, '0');
+          fragment.appendChild(option);
+        }
+        durationMinutes.appendChild(fragment);
+      }
+
+      function selectedDurationMinutes() {
+        let hours = Math.min(2, Math.max(0, Number.parseInt(durationHours.value, 10) || 0));
+        let minutes = Math.min(59, Math.max(0, Number.parseInt(durationMinutes.value, 10) || 0));
+
+        if (hours === 2) {
+          minutes = 0;
+          durationMinutes.value = '0';
+          durationMinutes.disabled = true;
+        } else {
+          durationMinutes.disabled = false;
+        }
+
+        if (hours === 0 && minutes === 0) {
+          minutes = 1;
+          durationMinutes.value = '1';
+        }
+
+        durationHours.value = String(hours);
+        const total = clampMinutes(hours * 60 + minutes);
+        durationOutput.value = formatDurationLabel(total);
+        return total;
+      }
+
+      function setDurationPicker(totalMinutes) {
+        const total = clampMinutes(totalMinutes);
+        durationHours.value = String(Math.floor(total / 60));
+        durationMinutes.value = String(total % 60);
+        selectedDurationMinutes();
+      }
+
       function renderDurationPicker() {
-        const minutes = clampMinutes(durationInput.value);
-        durationInput.value = String(minutes);
-        durationOutput.value = formatDurationLabel(minutes);
-        const fill = ((minutes - 1) / 119 * 100).toFixed(2) + '%';
-        durationInput.style.setProperty('--range-fill', fill);
+        selectedDurationMinutes();
       }
 
       function sessionDurationMs() {
@@ -1603,8 +1665,7 @@
         lastReturnDuration = 0;
         removeStorage(sessionKey);
         taskForm.reset();
-        durationInput.value = '25';
-        renderDurationPicker();
+        setDurationPicker(25);
         showPanel('setup', taskInput);
       }
 
@@ -1638,10 +1699,11 @@
           taskInput.focus();
           return;
         }
-        startSession(task, durationInput.value);
+        startSession(task, selectedDurationMinutes());
       });
 
-      durationInput.addEventListener('input', renderDurationPicker);
+      durationHours.addEventListener('change', renderDurationPicker);
+      durationMinutes.addEventListener('change', renderDurationPicker);
       document.getElementById('sound-test-button').addEventListener('click', testAlert);
 
       document.getElementById('stuck-button').addEventListener('click', beginRecovery);
@@ -1677,7 +1739,8 @@
       });
 
       renderReasons();
-      renderDurationPicker();
+      buildDurationPicker();
+      setDurationPicker(25);
       renderHistory();
       restoreSession();
     })();
