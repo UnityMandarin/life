@@ -4878,6 +4878,21 @@
       filter: none !important;
     }
 
+    /* Keep routine content visible after the legacy reveal engine was removed. */
+    #routine .section-heading,
+    #routine .view:not([hidden]),
+    #routine .routine-grid,
+    #routine .phase-card {
+      opacity: 1 !important;
+      visibility: visible !important;
+      filter: none !important;
+      transform: none !important;
+    }
+
+    #routine .view[hidden] {
+      display: none !important;
+    }
+
     .eyebrow {
       padding: 0;
       border: 0;
