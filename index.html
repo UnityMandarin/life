@@ -5316,6 +5316,291 @@
       }
     }
 
+    /* ============================================================
+       RELIABLE RESPONSIVE LAYOUT
+       Keep the calm product styling while removing containment and
+       fixed-size assumptions that can clip or hide content in Safari.
+       ============================================================ */
+
+    :root {
+      --nav-height: calc(48px + env(safe-area-inset-top, 0px));
+      --page-gutter: clamp(14px, 4vw, 22px);
+    }
+
+    html {
+      min-width: 0;
+      overflow-x: clip;
+      scroll-padding-top: calc(var(--nav-height) + 18px);
+    }
+
+    body {
+      min-width: 0;
+      min-height: 100svh;
+      overflow-x: clip;
+    }
+
+    .site-nav {
+      height: var(--nav-height);
+      padding:
+        env(safe-area-inset-top, 0px)
+        max(var(--page-gutter), env(safe-area-inset-right, 0px))
+        0
+        max(var(--page-gutter), env(safe-area-inset-left, 0px));
+    }
+
+    .nav-inner {
+      min-width: 0;
+      min-height: 48px;
+    }
+
+    .nav-left,
+    .hero > *,
+    .routine-grid > *,
+    .reflection-card > * {
+      min-width: 0;
+    }
+
+    main,
+    footer {
+      width: min(
+        980px,
+        calc(
+          100% -
+          max(28px, calc(env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px) + 20px))
+        )
+      );
+    }
+
+    main > section,
+    main > .hero,
+    main > #routine,
+    main > section:last-child,
+    .phase-card {
+      content-visibility: visible !important;
+      contain: none !important;
+      contain-intrinsic-size: none !important;
+    }
+
+    .section,
+    #routine,
+    #routine .view:not([hidden]),
+    #routine .routine-grid,
+    #routine .phase-card,
+    .reflection-card {
+      max-height: none !important;
+      overflow: visible;
+      clip: auto;
+    }
+
+    #routine .view:not([hidden]),
+    #routine .view:not([hidden]) .routine-grid,
+    #routine .view:not([hidden]) .phase-card,
+    main > section:last-child .reflection-card {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    #routine .view:not([hidden]) {
+      display: block;
+    }
+
+    #routine .view:not([hidden]) .routine-grid,
+    main > section:last-child .reflection-card {
+      display: grid;
+    }
+
+    .progress-panel {
+      position: relative;
+      top: auto;
+      z-index: 1;
+      overflow: visible;
+      transform: none !important;
+    }
+
+    .timer-card {
+      overflow: visible;
+    }
+
+    h1,
+    h2,
+    .phase-title,
+    .phase-subtitle,
+    .task span,
+    .reflection-card,
+    footer {
+      overflow-wrap: break-word;
+    }
+
+    .primary-button,
+    .quiet-button,
+    .mode-button,
+    .security-link,
+    .task span {
+      touch-action: manipulation;
+    }
+
+    @media (max-width: 840px) {
+      .hero {
+        gap: 50px;
+      }
+
+      .timer-card {
+        justify-self: center;
+      }
+    }
+
+    @media (max-width: 620px) {
+      :root {
+        --page-gutter: 14px;
+      }
+
+      .site-nav {
+        padding-inline:
+          max(14px, env(safe-area-inset-left, 0px))
+          max(14px, env(safe-area-inset-right, 0px));
+      }
+
+      .nav-inner {
+        gap: 10px;
+      }
+
+      .nav-left {
+        flex: 0 1 auto;
+      }
+
+      .mode-switch {
+        flex: 0 0 156px;
+        width: 156px;
+      }
+
+      main,
+      footer {
+        width: min(
+          980px,
+          calc(
+            100% -
+            max(24px, calc(env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px) + 16px))
+          )
+        );
+      }
+
+      .hero {
+        padding: 48px 0 58px;
+        gap: 42px;
+      }
+
+      h1 {
+        font-size: clamp(44px, 14vw, 62px);
+        line-height: .98;
+        letter-spacing: -.052em;
+      }
+
+      h2 {
+        font-size: clamp(38px, 12vw, 54px);
+        line-height: 1.02;
+        letter-spacing: -.045em;
+      }
+
+      .hero-copy,
+      .section-intro {
+        font-size: 17px;
+      }
+
+      .timer-card,
+      html[data-mode="night"] .timer-card {
+        width: 100%;
+        min-height: 380px;
+        padding: 28px 20px;
+        border-radius: 26px;
+      }
+
+      .timer-ring {
+        width: min(210px, 68vw);
+        height: min(210px, 68vw);
+      }
+
+      .timer-value {
+        font-size: clamp(44px, 14vw, 52px);
+      }
+
+      .section {
+        padding: 66px 0;
+      }
+
+      .section-heading {
+        margin-bottom: 34px;
+      }
+
+      .progress-panel {
+        gap: 12px;
+        padding-bottom: 24px;
+      }
+
+      .routine-grid {
+        gap: 14px;
+      }
+
+      .phase-card,
+      .phase-card.featured {
+        padding: 22px 18px;
+        border-radius: 21px;
+      }
+
+      .task-list,
+      .featured .task-list {
+        gap: 9px;
+        margin-top: 22px;
+      }
+
+      .task span {
+        min-height: 56px;
+        padding: 13px 12px 13px 44px;
+      }
+
+      .reflection-card {
+        gap: 28px;
+        padding: 26px 20px;
+        border-radius: 24px;
+      }
+
+      textarea {
+        min-height: 180px;
+      }
+    }
+
+    @media (max-width: 370px) {
+      .security-link {
+        font-size: 10px;
+      }
+
+      .mode-switch {
+        flex-basis: 146px;
+        width: 146px;
+      }
+
+      .mode-button {
+        font-size: 10px;
+      }
+
+      .timer-actions {
+        width: 100%;
+      }
+
+      .primary-button,
+      .quiet-button {
+        flex: 1;
+        min-width: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      main > section,
+      .phase-card {
+        content-visibility: visible !important;
+        contain: none !important;
+      }
+    }
+
   </style>
 </head>
 <body>
