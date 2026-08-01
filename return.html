@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f5f7">
+  <meta name="description" content="Return — a quiet focus timer with tiny recovery actions for the moments when you get stuck.">
+  <title>Return — Find your way back</title>
+  <script>
+    (() => {
+      'use strict';
+      try {
+        if (window.sessionStorage.getItem('life-access-granted') !== 'true') {
+          window.location.replace('security.html');
+        }
+      } catch (error) {
+        window.location.replace('security.html');
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f5f5f7;
+      --surface: #ffffff;
+      --surface-muted: #f7f7f8;
+      --text: #1d1d1f;
+      --secondary: #6e6e73;
+      --tertiary: #8e8e93;
+      --line: rgba(29, 29, 31, .1);
+      --line-strong: rgba(29, 29, 31, .16);
+      --blue: #0071e3;
+      --blue-hover: #0077ed;
+      --blue-soft: #eef6ff;
+      --green: #248a3d;
+      --green-soft: #edf8ef;
+      --orange: #b25000;
+      --orange-soft: #fff5e8;
+      --shadow: 0 20px 55px rgba(0, 0, 0, .065), 0 2px 8px rgba(0, 0, 0, .035);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      min-width: 320px;
+      min-height: 100%;
+      background: var(--page);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100svh;
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% -18%, rgba(255, 255, 255, .95) 0 20rem, transparent 42rem),
+        var(--page);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      top: 12px;
+      left: 12px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      color: white;
+      background: var(--blue);
+      text-decoration: none;
+      transform: translateY(-150%);
+      transition: transform .2s ease;
+    }
+
+    .skip-link:focus { transform: none; }
+
+    .topbar {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      height: 64px;
+      padding: 0 max(22px, env(safe-area-inset-right)) 0 max(22px, env(safe-area-inset-left));
+      border-bottom: 1px solid var(--line);
+      background: rgba(245, 245, 247, .82);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      backdrop-filter: blur(22px) saturate(180%);
+    }
+
+    .topbar-inner {
+      width: min(1040px, 100%);
+      height: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 650;
+      letter-spacing: -.015em;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      color: white;
+      background: var(--text);
+      font-size: 13px;
+      font-weight: 760;
+    }
+
+    .brand-divider { width: 1px; height: 16px; background: var(--line-strong); }
+    .brand-section { color: var(--secondary); font-weight: 500; }
+
+    .nav-link {
+      color: var(--secondary);
+      font-size: 13px;
+      font-weight: 520;
+      text-decoration: none;
+      transition: color .18s ease;
+    }
+
+    .nav-link:hover { color: var(--text); }
+
+    main {
+      width: min(1040px, calc(100% - 44px));
+      margin: 0 auto;
+      padding: clamp(64px, 9vw, 108px) 0 64px;
+    }
+
+    .intro {
+      max-width: 750px;
+      margin-bottom: 44px;
+    }
+
+    .eyebrow {
+      margin: 0 0 17px;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 650;
+      letter-spacing: .005em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(48px, 7.6vw, 84px);
+      line-height: .98;
+      letter-spacing: -.064em;
+      font-weight: 700;
+    }
+
+    .intro-copy {
+      max-width: 650px;
+      margin: 22px 0 0;
+      color: var(--secondary);
+      font-size: clamp(18px, 2.2vw, 22px);
+      line-height: 1.46;
+      letter-spacing: -.022em;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .app-card, .history-card {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .94);
+      box-shadow: var(--shadow);
+    }
+
+    .app-card {
+      min-height: 590px;
+      padding: clamp(26px, 5vw, 48px);
+      border-radius: var(--radius-xl);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-status {
+      min-height: 25px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--secondary);
+      font-size: 12px;
+      font-weight: 570;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #b6b6bb;
+      box-shadow: 0 0 0 4px rgba(142, 142, 147, .09);
+      transition: background .25s ease, box-shadow .25s ease;
+    }
+
+    .app-card[data-state="focus"] .status-dot {
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(36, 138, 61, .1);
+    }
+
+    .app-card[data-state="reason"] .status-dot,
+    .app-card[data-state="action"] .status-dot {
+      background: var(--orange);
+      box-shadow: 0 0 0 4px rgba(178, 80, 0, .1);
+    }
+
+    .app-card[data-state="returned"] .status-dot,
+    .app-card[data-state="summary"] .status-dot {
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(0, 113, 227, .1);
+    }
+
+    .panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      animation: panel-in .42s var(--ease) both;
+    }
+
+    .panel[hidden] { display: none; }
+
+    @keyframes panel-in {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .panel-kicker {
+      margin: 0 0 14px;
+      color: var(--secondary);
+      font-size: 12px;
+      font-weight: 650;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 52px);
+      line-height: 1.04;
+      letter-spacing: -.05em;
+      font-weight: 670;
+    }
+
+    .panel-copy {
+      max-width: 560px;
+      margin: 16px 0 0;
+      color: var(--secondary);
+      font-size: 16px;
+      line-height: 1.55;
+      letter-spacing: -.01em;
+    }
+
+    .task-form { margin-top: 34px; }
+
+    .field-label {
+      display: block;
+      margin: 0 0 10px 2px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 620;
+    }
+
+    .task-field {
+      width: 100%;
+      height: 64px;
+      padding: 0 19px;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-md);
+      outline: none;
+      color: var(--text);
+      background: var(--surface-muted);
+      font-size: 17px;
+      letter-spacing: -.012em;
+      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .task-field::placeholder { color: #98989d; }
+
+    .task-field:focus {
+      border-color: rgba(0, 113, 227, .55);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(0, 113, 227, .1);
+    }
+
+    .form-bottom {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .form-hint {
+      margin: 0;
+      color: var(--tertiary);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .button {
+      min-height: 48px;
+      padding: 0 21px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 650;
+      letter-spacing: -.01em;
+      transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease, opacity .18s ease;
+      touch-action: manipulation;
+    }
+
+    .button:hover { transform: translateY(-1px); }
+    .button:active { transform: scale(.975); }
+
+    .button-primary {
+      border: 1px solid var(--blue);
+      color: white;
+      background: var(--blue);
+    }
+
+    .button-primary:hover { border-color: var(--blue-hover); background: var(--blue-hover); }
+
+    .button-secondary {
+      border: 1px solid var(--line-strong);
+      color: var(--text);
+      background: white;
+    }
+
+    .button-secondary:hover { border-color: rgba(29, 29, 31, .28); background: var(--surface-muted); }
+
+    .button-danger {
+      border: 1px solid #1d1d1f;
+      color: white;
+      background: #1d1d1f;
+    }
+
+    .button-link {
+      min-height: 40px;
+      padding: 0;
+      border: 0;
+      color: var(--secondary);
+      background: transparent;
+      font-weight: 520;
+    }
+
+    .button-link:hover { color: var(--text); transform: none; }
+
+    .button:focus-visible, .reason-button:focus-visible, .nav-link:focus-visible, .brand:focus-visible {
+      outline: 3px solid rgba(0, 113, 227, .28);
+      outline-offset: 3px;
+    }
+
+    .focus-head {
+      margin-bottom: 36px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .current-task-label {
+      margin: 0 0 8px;
+      color: var(--secondary);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .current-task {
+      max-width: 490px;
+      margin: 0;
+      font-size: clamp(24px, 4vw, 36px);
+      line-height: 1.14;
+      letter-spacing: -.04em;
+      font-weight: 640;
+      overflow-wrap: anywhere;
+    }
+
+    .return-count {
+      flex: 0 0 auto;
+      padding: 7px 11px;
+      border-radius: 999px;
+      color: var(--secondary);
+      background: var(--surface-muted);
+      font-size: 12px;
+      font-weight: 580;
+    }
+
+    .timer-wrap {
+      margin: 2px 0 42px;
+      text-align: center;
+    }
+
+    .timer-label {
+      margin-bottom: 10px;
+      color: var(--secondary);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .timer-value {
+      font-size: clamp(64px, 12vw, 96px);
+      line-height: 1;
+      letter-spacing: -.075em;
+      font-weight: 630;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .focus-actions, .return-actions, .summary-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stuck-button { min-width: 146px; }
+
+    .reason-grid {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .reason-button {
+      min-height: 60px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      color: var(--text);
+      background: var(--surface-muted);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 580;
+      text-align: left;
+      transition: border-color .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    .reason-button:last-child { grid-column: 1 / -1; }
+    .reason-button::after {
+      content: "";
+      flex: 0 0 auto;
+      width: 7px;
+      height: 7px;
+      margin-right: 3px;
+      border-top: 1.5px solid var(--tertiary);
+      border-right: 1.5px solid var(--tertiary);
+      transform: rotate(45deg);
+    }
+    .reason-button:hover { border-color: rgba(0, 113, 227, .32); background: white; transform: translateY(-1px); }
+
+    .reason-footer {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .away-timer {
+      color: var(--tertiary);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .action-shell {
+      max-width: 580px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .action-number {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--blue);
+      background: var(--blue-soft);
+      font-size: 13px;
+      font-weight: 720;
+    }
+
+    .action-copy {
+      max-width: 470px;
+      margin: 18px auto 0;
+      color: var(--secondary);
+      font-size: 17px;
+      line-height: 1.58;
+    }
+
+    .action-meta {
+      margin: 27px auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: var(--secondary);
+      background: var(--surface-muted);
+      font-size: 12px;
+      font-weight: 560;
+    }
+
+    .action-meta::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--orange);
+    }
+
+    .action-links { margin-top: 10px; }
+
+    .return-shell, .summary-shell { max-width: 580px; margin: 0 auto; text-align: center; }
+
+    .success-mark {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--green);
+      background: var(--green-soft);
+      font-size: 21px;
+      font-weight: 700;
+    }
+
+    .return-time {
+      margin: 8px 0 0;
+      font-size: clamp(60px, 11vw, 88px);
+      line-height: 1;
+      letter-spacing: -.07em;
+      font-weight: 650;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .return-label { margin: 10px 0 0; color: var(--secondary); font-size: 14px; }
+
+    .return-message {
+      margin: 26px auto 30px;
+      color: var(--secondary);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .summary-stats {
+      margin: 32px 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--surface-muted);
+    }
+
+    .summary-stat { padding: 18px 12px; }
+    .summary-stat + .summary-stat { border-left: 1px solid var(--line); }
+    .summary-stat strong { display: block; font-size: 20px; letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
+    .summary-stat span { display: block; margin-top: 5px; color: var(--secondary); font-size: 11px; }
+
+    .history-card {
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, .045);
+    }
+
+    .history-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .history-title { margin: 0; font-size: 17px; letter-spacing: -.025em; font-weight: 650; }
+    .history-date { margin: 5px 0 0; color: var(--secondary); font-size: 12px; }
+
+    .clear-button {
+      padding: 2px 0;
+      border: 0;
+      color: var(--tertiary);
+      background: transparent;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .clear-button:hover { color: var(--text); }
+    .clear-button[hidden] { display: none; }
+
+    .history-summary {
+      margin: 22px 0 18px;
+      padding: 15px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .history-metric + .history-metric { border-left: 1px solid var(--line); padding-left: 15px; }
+    .history-metric strong { display: block; font-size: 22px; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+    .history-metric span { display: block; margin-top: 4px; color: var(--secondary); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
+
+    .history-list { margin: 0; padding: 0; display: grid; gap: 6px; list-style: none; }
+
+    .history-item {
+      padding: 11px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .history-item:last-child { border-bottom: 0; }
+
+    .history-item-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .history-reason { min-width: 0; font-size: 12px; font-weight: 620; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .history-duration { flex: 0 0 auto; color: var(--blue); font-size: 12px; font-weight: 650; font-variant-numeric: tabular-nums; }
+    .history-task { margin: 5px 0 0; color: var(--secondary); font-size: 11px; line-height: 1.35; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+    .empty-history {
+      margin: 4px 0 0;
+      padding: 10px 0 2px;
+      color: var(--secondary);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .privacy-note {
+      margin: 22px 4px 0;
+      color: var(--tertiary);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .privacy-note::before { content: "●"; margin-right: 7px; color: var(--green); font-size: 7px; vertical-align: 1px; }
+
+    .live-region {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 820px) {
+      .workspace { grid-template-columns: 1fr; }
+      .history-card { display: grid; grid-template-columns: minmax(180px, .7fr) 1.3fr; gap: 0 28px; }
+      .history-head, .history-summary { grid-column: 1; }
+      .history-list, .empty-history { grid-column: 2; grid-row: 1 / span 2; }
+    }
+
+    @media (max-width: 600px) {
+      main { width: min(100% - 28px, 1040px); padding-top: 50px; }
+      .topbar { padding-inline: 15px; }
+      .brand-divider, .brand-section { display: none; }
+      .intro { margin-bottom: 32px; }
+      h1 { font-size: clamp(46px, 15vw, 64px); }
+      .app-card { min-height: 570px; padding: 24px 20px; border-radius: 24px; }
+      .form-bottom { align-items: stretch; flex-direction: column; }
+      .form-bottom .button { width: 100%; }
+      .focus-head { margin-top: 20px; }
+      .reason-grid { grid-template-columns: 1fr; }
+      .reason-button:last-child { grid-column: auto; }
+      .reason-footer { align-items: flex-start; flex-direction: column-reverse; gap: 4px; }
+      .history-card { display: block; }
+      .history-list, .empty-history { margin-top: 4px; }
+      .summary-stats { grid-template-columns: 1fr; }
+      .summary-stat + .summary-stat { border-top: 1px solid var(--line); border-left: 0; }
+      .button { min-height: 50px; }
+      .focus-actions .button, .return-actions .button, .summary-actions .button { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#return-app">Skip to focus timer</a>
+
+  <nav class="topbar" aria-label="Primary navigation">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html" aria-label="Life routine home">
+        <span class="brand-mark" aria-hidden="true">L</span>
+        <span>Life</span>
+        <span class="brand-divider" aria-hidden="true"></span>
+        <span class="brand-section">Return</span>
+      </a>
+      <a class="nav-link" href="index.html">Routine</a>
+    </div>
+  </nav>
+
+  <main id="return-app">
+    <header class="intro">
+      <p class="eyebrow">A gentler focus timer</p>
+      <h1>Find your way back.</h1>
+      <p class="intro-copy">Choose one thing. When momentum breaks, get one tiny action—not a lecture—and measure the return.</p>
+    </header>
+
+    <div class="workspace">
+      <section class="app-card" id="app-card" data-state="setup" aria-label="Return focus session">
+        <div class="app-status" aria-live="polite">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="status-copy">Ready when you are</span>
+        </div>
+
+        <div class="panel" id="setup-panel">
+          <p class="panel-kicker">One thing only</p>
+          <h2>What are you returning to?</h2>
+          <p class="panel-copy">Keep it concrete enough that you can picture the first move.</p>
+          <form class="task-form" id="task-form">
+            <label class="field-label" for="task-input">Your task</label>
+            <input class="task-field" id="task-input" name="task" type="text" maxlength="120" autocomplete="off" placeholder="Finish the first draft" required>
+            <div class="form-bottom">
+              <p class="form-hint">The timer counts only the time you spend on the task.</p>
+              <button class="button button-primary" type="submit">Start timer</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel" id="focus-panel" hidden>
+          <div class="focus-head">
+            <div>
+              <p class="current-task-label">Now working on</p>
+              <h2 class="current-task" id="focus-task"></h2>
+            </div>
+            <span class="return-count" id="return-count">No returns yet</span>
+          </div>
+          <div class="timer-wrap">
+            <div class="timer-label">Time on task</div>
+            <div class="timer-value" id="focus-timer">00:00</div>
+          </div>
+          <div class="focus-actions">
+            <button class="button button-danger stuck-button" id="stuck-button" type="button">I’m stuck</button>
+            <button class="button button-link" id="finish-button" type="button">Finish session</button>
+          </div>
+        </div>
+
+        <div class="panel" id="reason-panel" hidden>
+          <p class="panel-kicker">No judgment</p>
+          <h2>What pulled you away?</h2>
+          <p class="panel-copy">Name the friction. That’s enough to choose a way through it.</p>
+          <div class="reason-grid" id="reason-grid" role="group" aria-label="Choose what made you feel stuck"></div>
+          <div class="reason-footer">
+            <button class="button button-link" id="cancel-stuck-button" type="button">I’m okay—go back</button>
+            <span class="away-timer" id="reason-away-timer">Away for 00:00</span>
+          </div>
+        </div>
+
+        <div class="panel" id="action-panel" hidden>
+          <div class="action-shell">
+            <div class="action-number" aria-hidden="true">01</div>
+            <p class="panel-kicker" id="action-reason">One small move</p>
+            <h2 id="action-title"></h2>
+            <p class="action-copy" id="action-copy"></p>
+            <div class="action-meta" id="action-away-timer">Away for 00:00</div>
+            <div>
+              <button class="button button-primary" id="back-button" type="button">I’m back</button>
+            </div>
+            <div class="action-links">
+              <button class="button button-link" id="change-reason-button" type="button">Choose a different reason</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" id="returned-panel" hidden>
+          <div class="return-shell">
+            <div class="success-mark" aria-hidden="true">✓</div>
+            <p class="panel-kicker">Return recorded</p>
+            <div class="return-time" id="return-time">00:00</div>
+            <p class="return-label">to find your way back</p>
+            <p class="return-message" id="return-message">That return counts. Pick up with the smallest visible step.</p>
+            <div class="return-actions">
+              <button class="button button-primary" id="continue-button" type="button">Continue task</button>
+              <button class="button button-secondary" id="finish-after-return-button" type="button">Finish session</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" id="summary-panel" hidden>
+          <div class="summary-shell">
+            <div class="success-mark" aria-hidden="true">✓</div>
+            <p class="panel-kicker">Session complete</p>
+            <h2>Good work returning.</h2>
+            <p class="panel-copy" style="margin-inline:auto">Progress is not never getting stuck. It is learning how to come back.</p>
+            <div class="summary-stats">
+              <div class="summary-stat"><strong id="summary-focus">00:00</strong><span>On task</span></div>
+              <div class="summary-stat"><strong id="summary-returns">0</strong><span>Returns</span></div>
+              <div class="summary-stat"><strong id="summary-average">—</strong><span>Avg. return</span></div>
+            </div>
+            <div class="summary-actions">
+              <button class="button button-primary" id="new-session-button" type="button">Start another task</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="history-card" aria-labelledby="history-title">
+        <div class="history-head">
+          <div>
+            <h2 class="history-title" id="history-title">Today’s returns</h2>
+            <p class="history-date" id="history-date"></p>
+          </div>
+          <button class="clear-button" id="clear-history-button" type="button" hidden>Clear</button>
+        </div>
+        <div class="history-summary">
+          <div class="history-metric"><strong id="history-count">0</strong><span>Returns</span></div>
+          <div class="history-metric"><strong id="history-average">—</strong><span>Average</span></div>
+        </div>
+        <ol class="history-list" id="history-list"></ol>
+        <p class="empty-history" id="empty-history">Your first return will appear here. There is no target to hit.</p>
+        <p class="privacy-note">Saved only in this browser.</p>
+      </aside>
+    </div>
+  </main>
+
+  <p class="live-region" id="live-region" aria-live="polite"></p>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const sessionKey = 'life-return-session-v1';
+      const historyKey = 'life-return-history-v1';
+      const panels = {
+        setup: document.getElementById('setup-panel'),
+        focus: document.getElementById('focus-panel'),
+        reason: document.getElementById('reason-panel'),
+        action: document.getElementById('action-panel'),
+        returned: document.getElementById('returned-panel'),
+        summary: document.getElementById('summary-panel')
+      };
+      const appCard = document.getElementById('app-card');
+      const statusCopy = document.getElementById('status-copy');
+      const taskForm = document.getElementById('task-form');
+      const taskInput = document.getElementById('task-input');
+      const focusTask = document.getElementById('focus-task');
+      const focusTimer = document.getElementById('focus-timer');
+      const returnCount = document.getElementById('return-count');
+      const reasonGrid = document.getElementById('reason-grid');
+      const reasonAwayTimer = document.getElementById('reason-away-timer');
+      const actionReason = document.getElementById('action-reason');
+      const actionTitle = document.getElementById('action-title');
+      const actionCopy = document.getElementById('action-copy');
+      const actionAwayTimer = document.getElementById('action-away-timer');
+      const returnTime = document.getElementById('return-time');
+      const liveRegion = document.getElementById('live-region');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let ticker = 0;
+      let session = readStorage(sessionKey, null);
+      let history = readStorage(historyKey, []);
+      let lastReturnDuration = 0;
+
+      const reasons = [
+        {
+          id: 'frustrated',
+          label: 'Frustrated',
+          title: 'Release the pressure.',
+          copy: 'Drop your shoulders. Breathe out slowly for six counts, then name only the next physical move.'
+        },
+        {
+          id: 'bored',
+          label: 'Bored',
+          title: 'Make it almost too easy.',
+          copy: 'Make a sixty-second deal with yourself. Do the smallest visible part—one sentence, one cell, one dish.'
+        },
+        {
+          id: 'confused',
+          label: 'Confused',
+          title: 'Turn the fog into one question.',
+          copy: 'Write one sentence: “The thing I need to know next is ___.” Then look for only that answer.'
+        },
+        {
+          id: 'distracted',
+          label: 'Distracted',
+          title: 'Close one door.',
+          copy: 'Put the phone out of reach, close one unrelated tab, and return your cursor to the task.'
+        },
+        {
+          id: 'overwhelmed',
+          label: 'Overwhelmed / feeling low',
+          title: 'Shrink the horizon.',
+          copy: 'Put both feet on the floor. Take one sip of water. Choose a step that takes less than thirty seconds.'
+        }
+      ];
+
+      function readStorage(key, fallback) {
+        try {
+          const value = window.localStorage.getItem(key);
+          return value ? JSON.parse(value) : fallback;
+        } catch (error) {
+          return fallback;
+        }
+      }
+
+      function writeStorage(key, value) {
+        try {
+          window.localStorage.setItem(key, JSON.stringify(value));
+        } catch (error) {
+          // The app remains fully usable when private browsing blocks storage.
+        }
+      }
+
+      function removeStorage(key) {
+        try {
+          window.localStorage.removeItem(key);
+        } catch (error) {
+          // Nothing else to clean up.
+        }
+      }
+
+      function isValidSession(value) {
+        return value && typeof value.task === 'string' && value.task.trim() && panels[value.state];
+      }
+
+      function formatClock(milliseconds) {
+        const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        const base = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+        return hours > 0 ? String(hours).padStart(2, '0') + ':' + base : base;
+      }
+
+      function formatCompactDuration(milliseconds) {
+        const seconds = Math.max(1, Math.round(milliseconds / 1000));
+        if (seconds < 60) return seconds + 's';
+        const minutes = Math.floor(seconds / 60);
+        const remaining = seconds % 60;
+        return remaining ? minutes + 'm ' + remaining + 's' : minutes + 'm';
+      }
+
+      function todayKey(timestamp) {
+        const date = new Date(timestamp);
+        return [date.getFullYear(), date.getMonth(), date.getDate()].join('-');
+      }
+
+      function focusElapsed(now = Date.now()) {
+        if (!session) return 0;
+        const active = session.state === 'focus' && session.focusAnchor
+          ? Math.max(0, now - session.focusAnchor)
+          : 0;
+        return Math.max(0, session.focusedMs || 0) + active;
+      }
+
+      function awayElapsed(now = Date.now()) {
+        if (!session || !session.stuckStartedAt) return 0;
+        return Math.max(0, now - session.stuckStartedAt);
+      }
+
+      function selectedReason() {
+        return reasons.find(reason => reason.id === session?.reasonId) || null;
+      }
+
+      function saveSession() {
+        if (session) writeStorage(sessionKey, session);
+      }
+
+      function setStatus(state) {
+        const labels = {
+          setup: 'Ready when you are',
+          focus: 'Timer running',
+          reason: 'Recovery timer running',
+          action: 'One small move',
+          returned: 'Return recorded',
+          summary: 'Session complete'
+        };
+        statusCopy.textContent = labels[state];
+      }
+
+      function showPanel(state, focusTarget) {
+        Object.entries(panels).forEach(([name, panel]) => {
+          panel.hidden = name !== state;
+        });
+        appCard.dataset.state = state;
+        setStatus(state);
+        window.clearInterval(ticker);
+        ticker = 0;
+        renderTimers();
+
+        if (state === 'focus' || state === 'reason' || state === 'action') {
+          ticker = window.setInterval(renderTimers, 250);
+        }
+
+        if (focusTarget) {
+          window.setTimeout(() => focusTarget.focus({ preventScroll: true }), reduceMotion.matches ? 0 : 180);
+        }
+      }
+
+      function renderTimers() {
+        focusTimer.textContent = formatClock(focusElapsed());
+        const awayCopy = 'Away for ' + formatClock(awayElapsed());
+        reasonAwayTimer.textContent = awayCopy;
+        actionAwayTimer.textContent = awayCopy;
+      }
+
+      function renderFocus() {
+        if (!session) return;
+        focusTask.textContent = session.task;
+        const count = session.returns || 0;
+        returnCount.textContent = count === 0 ? 'No returns yet' : count + (count === 1 ? ' return' : ' returns');
+        renderTimers();
+      }
+
+      function renderReasons() {
+        reasonGrid.replaceChildren();
+        const fragment = document.createDocumentFragment();
+        reasons.forEach(reason => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'reason-button';
+          button.dataset.reason = reason.id;
+          button.textContent = reason.label;
+          fragment.appendChild(button);
+        });
+        reasonGrid.appendChild(fragment);
+      }
+
+      function renderAction() {
+        const reason = selectedReason();
+        if (!reason) return;
+        actionReason.textContent = reason.label;
+        actionTitle.textContent = reason.title;
+        actionCopy.textContent = reason.copy;
+      }
+
+      function renderHistory() {
+        const currentDay = todayKey(Date.now());
+        history = Array.isArray(history) ? history.filter(item => item && typeof item.durationMs === 'number') : [];
+        const today = history.filter(item => todayKey(item.timestamp) === currentDay).slice(0, 8);
+        const average = today.length
+          ? today.reduce((sum, item) => sum + item.durationMs, 0) / today.length
+          : 0;
+
+        document.getElementById('history-date').textContent = new Intl.DateTimeFormat(undefined, {
+          weekday: 'long', month: 'short', day: 'numeric'
+        }).format(new Date());
+        document.getElementById('history-count').textContent = String(today.length);
+        document.getElementById('history-average').textContent = today.length ? formatCompactDuration(average) : '—';
+        document.getElementById('clear-history-button').hidden = today.length === 0;
+        document.getElementById('empty-history').hidden = today.length > 0;
+
+        const list = document.getElementById('history-list');
+        list.replaceChildren();
+        const fragment = document.createDocumentFragment();
+        today.forEach(item => {
+          const entry = document.createElement('li');
+          entry.className = 'history-item';
+          const top = document.createElement('div');
+          top.className = 'history-item-top';
+          const reason = document.createElement('span');
+          reason.className = 'history-reason';
+          reason.textContent = item.reasonLabel;
+          const duration = document.createElement('span');
+          duration.className = 'history-duration';
+          duration.textContent = formatCompactDuration(item.durationMs);
+          const task = document.createElement('p');
+          task.className = 'history-task';
+          task.textContent = item.task;
+          top.append(reason, duration);
+          entry.append(top, task);
+          fragment.appendChild(entry);
+        });
+        list.appendChild(fragment);
+      }
+
+      function renderSummary() {
+        if (!session) return;
+        const durations = Array.isArray(session.returnDurations) ? session.returnDurations : [];
+        const average = durations.length
+          ? durations.reduce((sum, duration) => sum + duration, 0) / durations.length
+          : 0;
+        document.getElementById('summary-focus').textContent = formatClock(session.focusedMs || 0);
+        document.getElementById('summary-returns').textContent = String(session.returns || 0);
+        document.getElementById('summary-average').textContent = durations.length ? formatCompactDuration(average) : '—';
+      }
+
+      function startSession(task) {
+        const now = Date.now();
+        session = {
+          task,
+          state: 'focus',
+          sessionStartedAt: now,
+          focusAnchor: now,
+          focusedMs: 0,
+          stuckStartedAt: null,
+          reasonId: null,
+          returns: 0,
+          returnDurations: []
+        };
+        saveSession();
+        renderFocus();
+        showPanel('focus', document.getElementById('stuck-button'));
+        liveRegion.textContent = 'Timer started for ' + task;
+      }
+
+      function beginRecovery() {
+        if (!session || session.state !== 'focus') return;
+        const now = Date.now();
+        session.focusedMs = focusElapsed(now);
+        session.focusAnchor = null;
+        session.stuckStartedAt = now;
+        session.reasonId = null;
+        session.state = 'reason';
+        saveSession();
+        showPanel('reason', reasonGrid.querySelector('button'));
+        liveRegion.textContent = 'Recovery timer started. Choose what made you feel stuck.';
+      }
+
+      function cancelRecovery() {
+        if (!session) return;
+        session.state = 'focus';
+        session.focusAnchor = Date.now();
+        session.stuckStartedAt = null;
+        session.reasonId = null;
+        saveSession();
+        renderFocus();
+        showPanel('focus', document.getElementById('stuck-button'));
+      }
+
+      function chooseReason(id) {
+        if (!session || !reasons.some(reason => reason.id === id)) return;
+        session.reasonId = id;
+        session.state = 'action';
+        saveSession();
+        renderAction();
+        showPanel('action', document.getElementById('back-button'));
+        liveRegion.textContent = 'Tiny recovery action ready.';
+      }
+
+      function recordReturn() {
+        if (!session || !session.stuckStartedAt || !selectedReason()) return;
+        const now = Date.now();
+        const reason = selectedReason();
+        const duration = Math.max(1000, now - session.stuckStartedAt);
+        lastReturnDuration = duration;
+        session.returns = (session.returns || 0) + 1;
+        session.returnDurations = [...(session.returnDurations || []), duration];
+        session.state = 'returned';
+        session.stuckStartedAt = null;
+        history = [{
+          timestamp: now,
+          task: session.task,
+          reasonId: reason.id,
+          reasonLabel: reason.label,
+          durationMs: duration
+        }, ...history].slice(0, 80);
+        writeStorage(historyKey, history);
+        saveSession();
+        returnTime.textContent = formatClock(duration);
+        renderHistory();
+        showPanel('returned', document.getElementById('continue-button'));
+        liveRegion.textContent = 'Return recorded in ' + formatCompactDuration(duration) + '.';
+      }
+
+      function continueTask() {
+        if (!session) return;
+        session.state = 'focus';
+        session.focusAnchor = Date.now();
+        session.reasonId = null;
+        saveSession();
+        renderFocus();
+        showPanel('focus', document.getElementById('stuck-button'));
+      }
+
+      function finishSession() {
+        if (!session) return;
+        session.focusedMs = focusElapsed();
+        session.focusAnchor = null;
+        session.stuckStartedAt = null;
+        session.state = 'summary';
+        saveSession();
+        renderSummary();
+        showPanel('summary', document.getElementById('new-session-button'));
+        liveRegion.textContent = 'Session complete.';
+      }
+
+      function resetSession() {
+        window.clearInterval(ticker);
+        session = null;
+        lastReturnDuration = 0;
+        removeStorage(sessionKey);
+        taskForm.reset();
+        showPanel('setup', taskInput);
+      }
+
+      function restoreSession() {
+        if (!isValidSession(session)) {
+          session = null;
+          removeStorage(sessionKey);
+          showPanel('setup');
+          return;
+        }
+
+        renderFocus();
+        if (session.state === 'action') renderAction();
+        if (session.state === 'summary') renderSummary();
+        if (session.state === 'returned') {
+          const durations = session.returnDurations || [];
+          lastReturnDuration = durations[durations.length - 1] || 0;
+          returnTime.textContent = formatClock(lastReturnDuration);
+        }
+        showPanel(session.state);
+      }
+
+      taskForm.addEventListener('submit', event => {
+        event.preventDefault();
+        const task = taskInput.value.trim().replace(/\s+/g, ' ');
+        if (!task) {
+          taskInput.focus();
+          return;
+        }
+        startSession(task);
+      });
+
+      document.getElementById('stuck-button').addEventListener('click', beginRecovery);
+      document.getElementById('cancel-stuck-button').addEventListener('click', cancelRecovery);
+      document.getElementById('change-reason-button').addEventListener('click', () => {
+        if (!session) return;
+        session.state = 'reason';
+        session.reasonId = null;
+        saveSession();
+        showPanel('reason', reasonGrid.querySelector('button'));
+      });
+      reasonGrid.addEventListener('click', event => {
+        const button = event.target.closest('[data-reason]');
+        if (button) chooseReason(button.dataset.reason);
+      });
+      document.getElementById('back-button').addEventListener('click', recordReturn);
+      document.getElementById('continue-button').addEventListener('click', continueTask);
+      document.getElementById('finish-button').addEventListener('click', finishSession);
+      document.getElementById('finish-after-return-button').addEventListener('click', finishSession);
+      document.getElementById('new-session-button').addEventListener('click', resetSession);
+      document.getElementById('clear-history-button').addEventListener('click', () => {
+        const currentDay = todayKey(Date.now());
+        history = history.filter(item => todayKey(item.timestamp) !== currentDay);
+        writeStorage(historyKey, history);
+        renderHistory();
+        liveRegion.textContent = 'Today’s return history cleared.';
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) renderTimers();
+      });
+
+      renderReasons();
+      renderHistory();
+      restoreSession();
+    })();
+  </script>
+</body>
+</html>
