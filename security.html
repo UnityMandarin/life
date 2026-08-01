@@ -1697,10 +1697,312 @@
       }
     }
 
+    /* ============================================================
+       RESPONSIVE LOCK GEOMETRY + SAFARI-SAFE LAYOUT
+       Percentage translation keeps the key aligned to the keyhole
+       at every SVG size; natural-height stages prevent cutoffs.
+       ============================================================ */
+
+    :root {
+      --topbar-height: calc(48px + env(safe-area-inset-top, 0px));
+      --key-home-x: -114%;
+      --key-home-y: 121%;
+      --key-seat-x: -15.8%;
+      --key-seat-y: -21.9%;
+      --key-back-x: -57%;
+      --key-back-y: 69%;
+      --key-finish-x: -8.8%;
+      --key-finish-y: 4.2%;
+    }
+
+    html,
+    body {
+      min-width: 0;
+      min-height: 100svh;
+      overflow-x: clip;
+    }
+
+    .topbar {
+      height: var(--topbar-height);
+      padding:
+        env(safe-area-inset-top, 0px)
+        max(22px, env(safe-area-inset-right, 0px))
+        0
+        max(22px, env(safe-area-inset-left, 0px));
+    }
+
+    main {
+      width: min(
+        1080px,
+        calc(
+          100% -
+          max(28px, calc(env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px) + 20px))
+        )
+      );
+      min-height: 100svh;
+      padding-top: var(--topbar-height);
+    }
+
+    .stage,
+    .stage:not([hidden]) {
+      min-height: calc(100svh - var(--topbar-height));
+      height: auto;
+      max-height: none;
+      overflow: visible;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .stage[hidden] {
+      display: none !important;
+    }
+
+    .panel,
+    .button-stage .panel,
+    .success .panel {
+      max-width: 100%;
+      max-height: none;
+      overflow: visible;
+    }
+
+    .panel > *,
+    .form-row > *,
+    .true-page > * {
+      min-width: 0;
+    }
+
+    h1,
+    h2,
+    .intro,
+    .hint,
+    .secret-card,
+    .choice {
+      overflow-wrap: break-word;
+    }
+
+    .home-link,
+    .lock-action,
+    .continue-button,
+    .choice,
+    input {
+      touch-action: manipulation;
+    }
+
+    .unlock-scene {
+      inset: var(--topbar-height) 0 0;
+      contain: layout paint style;
+    }
+
+    .unlock-scene svg {
+      overflow: visible;
+    }
+
+    .key-path {
+      display: none;
+    }
+
+    .key-unit {
+      transform-box: fill-box;
+      transform-origin: 100% 50%;
+      transform: translate(var(--key-home-x), var(--key-home-y)) rotate(-15deg);
+    }
+
+    @keyframes keyRest {
+      0%, 100% {
+        transform: translate(var(--key-home-x), var(--key-home-y)) rotate(-15deg);
+      }
+      50% {
+        transform: translate(var(--key-home-x), 113%) rotate(-12deg);
+      }
+    }
+
+    @keyframes keyFirstTurn {
+      0% {
+        transform: translate(var(--key-home-x), var(--key-home-y)) rotate(-15deg);
+      }
+      58% {
+        transform: translate(var(--key-seat-x), var(--key-seat-y)) rotate(0deg);
+      }
+      80% {
+        transform: translate(var(--key-seat-x), var(--key-seat-y)) rotate(24deg);
+      }
+      100% {
+        transform: translate(var(--key-seat-x), var(--key-seat-y)) rotate(18deg);
+      }
+    }
+
+    @keyframes keySecondTurn {
+      0% {
+        transform: translate(var(--key-seat-x), var(--key-seat-y)) rotate(18deg);
+      }
+      26% {
+        transform: translate(var(--key-back-x), var(--key-back-y)) rotate(-8deg);
+      }
+      60% {
+        transform: translate(var(--key-seat-x), var(--key-seat-y)) rotate(0deg);
+      }
+      82% {
+        transform: translate(var(--key-seat-x), var(--key-seat-y)) rotate(52deg);
+      }
+      100% {
+        transform: translate(var(--key-seat-x), var(--key-seat-y)) rotate(42deg);
+      }
+    }
+
+    @keyframes keyFinalTurn {
+      0% {
+        transform: translate(var(--key-seat-x), var(--key-seat-y)) rotate(42deg);
+      }
+      20% {
+        transform: translate(var(--key-back-x), var(--key-back-y)) rotate(-10deg);
+      }
+      55% {
+        transform: translate(var(--key-seat-x), var(--key-seat-y)) rotate(0deg);
+      }
+      76% {
+        transform: translate(var(--key-seat-x), var(--key-seat-y)) rotate(92deg);
+      }
+      100% {
+        transform: translate(var(--key-finish-x), var(--key-finish-y)) rotate(88deg);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .stage,
+      .stage:not([hidden]) {
+        align-items: flex-start;
+        padding: clamp(218px, 35vh, 278px) 0 54px;
+      }
+
+      .unlock-scene svg {
+        top: 6px;
+        right: 50%;
+        width: min(720px, 132vw);
+        transform: translateX(50%);
+        opacity: .78;
+      }
+
+      .button-stage {
+        padding-top: clamp(190px, 30vh, 238px);
+      }
+    }
+
+    @media (max-width: 620px) {
+      .topbar {
+        padding-inline:
+          max(14px, env(safe-area-inset-left, 0px))
+          max(14px, env(safe-area-inset-right, 0px));
+      }
+
+      main {
+        width: min(
+          760px,
+          calc(
+            100% -
+            max(20px, calc(env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px) + 14px))
+          )
+        );
+      }
+
+      .stage,
+      .stage:not([hidden]) {
+        min-height: calc(100svh - var(--topbar-height));
+        padding: clamp(204px, 31vh, 242px) 0 max(24px, env(safe-area-inset-bottom, 0px));
+      }
+
+      .button-stage {
+        padding-top: 188px;
+      }
+
+      .panel,
+      .button-stage .panel,
+      .success .panel {
+        padding: 25px 18px;
+        border-radius: 22px;
+      }
+
+      h1,
+      h2 {
+        font-size: clamp(38px, 11.5vw, 50px);
+        line-height: 1;
+        letter-spacing: -.048em;
+      }
+
+      .intro {
+        margin-top: 18px;
+        font-size: 15px;
+      }
+
+      form {
+        margin-top: 26px;
+      }
+
+      input,
+      .continue-button {
+        min-height: 50px;
+      }
+
+      .button-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 6px;
+        margin-top: 24px;
+      }
+
+      .choice {
+        min-height: 43px;
+        animation: none !important;
+      }
+
+      .unlock-scene svg {
+        top: 4px;
+        width: min(660px, 164vw);
+        opacity: .72;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .stage-markers {
+        display: flex;
+      }
+
+      .stage-marker {
+        width: 14px;
+      }
+
+      .stage-marker.is-active {
+        width: 24px;
+      }
+
+      .home-link,
+      .lock-action {
+        font-size: 11px;
+      }
+
+      .panel,
+      .button-stage .panel,
+      .success .panel {
+        padding-inline: 16px;
+      }
+
+      .unlock-scene svg {
+        width: 620px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .key-unit,
+      body[data-unlock-step="1"] .key-unit,
+      body[data-unlock-step="2"] .key-unit,
+      body[data-unlock-step="3"] .key-unit,
+      body[data-unlock-step="4"] .key-unit {
+        transform: translate(var(--key-seat-x), var(--key-seat-y)) rotate(0deg) !important;
+      }
+    }
+
   </style>
 </head>
 <body data-unlock-step="1">
-  
+
   <div class="unlock-scene" aria-hidden="true">
     <svg viewBox="0 0 1000 520" role="presentation">
       <defs>
@@ -1790,7 +2092,7 @@
 
   <header class="topbar">
     <a class="home-link" href="index.html">← Home</a>
-    <div class="stage-markers" aria-label="Access progress">
+    <div class="stage-markers" role="group" aria-label="Access progress">
       <span class="stage-marker is-active" data-marker="1"></span>
       <span class="stage-marker" data-marker="2"></span>
       <span class="stage-marker" data-marker="3"></span>
@@ -1806,7 +2108,7 @@
         <p class="intro">Begin with the phrase that opens the door. Every incorrect answer returns the experience to this first checkpoint.</p>
         <form id="phrase-form" novalidate>
           <div class="form-row">
-            <div class="field-wrap"><input id="phrase" type="password" autocomplete="off" spellcheck="false" placeholder="Enter password" aria-describedby="phrase-error" required></div>
+            <div class="field-wrap"><input id="phrase" type="password" autocomplete="current-password" spellcheck="false" placeholder="Enter password" aria-describedby="phrase-error" required></div>
             <button class="continue-button" type="submit">Continue</button>
           </div>
           <p class="error" id="phrase-error" role="alert">That phrase is not correct.</p>
@@ -1835,7 +2137,7 @@
         <p class="step-label">Final choice · 03</p>
         <h2 id="stage-3-title">One in a <span class="gradient-text">hundred.</span></h2>
         <p class="intro">Only one button completes the sequence. Choose carefully—one wrong choice returns you to the beginning.</p>
-        <div class="button-grid" id="button-grid" aria-label="One hundred numbered choices"></div>
+        <div class="button-grid" id="button-grid" role="group" aria-label="One hundred numbered choices"></div>
       </div>
     </section>
 
