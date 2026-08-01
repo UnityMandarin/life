@@ -484,7 +484,7 @@
 
     .button-link:hover { color: var(--text); transform: none; }
 
-    .button:focus-visible, .reason-button:focus-visible, .nav-link:focus-visible, .brand:focus-visible {
+    .button:focus-visible, .reason-button:focus-visible, .flow-back:focus-visible, .nav-link:focus-visible, .brand:focus-visible {
       outline: 3px solid rgba(0, 113, 227, .28);
       outline-offset: 3px;
     }
@@ -579,50 +579,131 @@
 
     .stuck-button { min-width: 146px; }
 
-    .reason-grid {
-      margin-top: 30px;
+    .flow-nav {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
     }
 
-    .reason-button {
-      min-height: 60px;
-      padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+    .flow-back {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      display: grid;
+      place-items: center;
       border: 1px solid var(--line);
-      border-radius: var(--radius-md);
+      border-radius: 50%;
       color: var(--text);
-      background: var(--surface-muted);
+      background: white;
       cursor: pointer;
-      font-size: 14px;
-      font-weight: 580;
-      text-align: left;
+      font-size: 21px;
+      line-height: 1;
       transition: border-color .18s ease, background .18s ease, transform .18s ease;
     }
 
-    .reason-button:last-child { grid-column: 1 / -1; }
-    .reason-button::after {
-      content: "";
-      flex: 0 0 auto;
-      width: 7px;
-      height: 7px;
-      margin-right: 3px;
-      border-top: 1.5px solid var(--tertiary);
-      border-right: 1.5px solid var(--tertiary);
-      transform: rotate(45deg);
+    .flow-back:hover { border-color: var(--line-strong); background: var(--surface-muted); transform: translateX(-1px); }
+    .flow-name { color: var(--secondary); font-size: 13px; font-weight: 590; }
+    .flow-step { justify-self: end; color: var(--tertiary); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+    .reason-hero {
+      max-width: 570px;
+      margin: 0 auto;
+      text-align: center;
     }
-    .reason-button:hover { border-color: rgba(0, 113, 227, .32); background: white; transform: translateY(-1px); }
+
+    .recovery-emoji {
+      width: 94px;
+      height: 94px;
+      margin: 6px auto 21px;
+      display: grid;
+      place-items: center;
+      border: 8px solid white;
+      border-radius: 50%;
+      background: var(--recovery-soft, #f4f0ff);
+      box-shadow: 0 0 0 1px var(--line), 0 12px 32px rgba(0, 0, 0, .07);
+      font-size: 47px;
+      line-height: 1;
+      transition: background .25s ease, transform .35s var(--ease);
+    }
+
+    .reason-hero h2 { font-size: clamp(32px, 5vw, 47px); }
+
+    .reason-hero-copy {
+      max-width: 510px;
+      margin: 13px auto 0;
+      color: var(--secondary);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .reason-grid {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .reason-button {
+      position: relative;
+      min-width: 0;
+      min-height: 116px;
+      padding: 17px 7px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      color: var(--text);
+      background: var(--surface-muted);
+      cursor: pointer;
+      text-align: center;
+      transition: border-color .2s ease, background .2s ease, transform .2s ease, box-shadow .2s ease;
+    }
+
+    .reason-button:hover { border-color: var(--reason-accent, var(--blue)); background: white; transform: translateY(-2px); }
+
+    .reason-button.is-selected {
+      border-color: var(--reason-accent, var(--blue));
+      background: var(--reason-soft, var(--blue-soft));
+      box-shadow: 0 8px 22px rgba(0, 0, 0, .07);
+      transform: translateY(-3px);
+    }
+
+    .reason-radio {
+      position: absolute;
+      top: 9px;
+      right: 9px;
+      width: 17px;
+      height: 17px;
+      border: 1.5px solid #a9a9ae;
+      border-radius: 50%;
+      background: white;
+    }
+
+    .reason-button.is-selected .reason-radio { border: 5px solid var(--reason-accent, var(--blue)); }
+    .reason-emoji { font-size: 31px; line-height: 1; }
+    .reason-label { font-size: 11px; font-weight: 620; line-height: 1.2; overflow-wrap: anywhere; }
 
     .reason-footer {
-      margin-top: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 18px;
+      margin-top: 20px;
+      display: grid;
+      justify-items: center;
+      gap: 9px;
+    }
+
+    .reason-continue { width: min(100%, 390px); }
+
+    .button:disabled {
+      border-color: var(--line);
+      color: var(--tertiary);
+      background: #ededf0;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
     }
 
     .away-timer {
@@ -632,34 +713,62 @@
     }
 
     .action-shell {
-      max-width: 580px;
+      max-width: 620px;
       margin: 0 auto;
       text-align: center;
     }
 
-    .action-number {
-      width: 46px;
-      height: 46px;
-      margin: 0 auto 24px;
+    .action-shell .recovery-emoji { margin-top: 0; }
+    .action-shell h2 { font-size: clamp(34px, 5vw, 50px); }
+
+    .action-copy {
+      max-width: 520px;
+      margin: 14px auto 0;
+      color: var(--secondary);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .action-steps {
+      max-width: 540px;
+      margin: 24px auto 0;
+      padding: 0;
+      display: grid;
+      gap: 9px;
+      list-style: none;
+      text-align: left;
+    }
+
+    .action-step {
+      min-height: 56px;
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid color-mix(in srgb, var(--recovery-accent, var(--blue)) 22%, transparent);
+      border-radius: 15px;
+      background: var(--recovery-soft, var(--blue-soft));
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 550;
+      line-height: 1.42;
+    }
+
+    .action-step-number {
+      flex: 0 0 auto;
+      width: 27px;
+      height: 27px;
       display: grid;
       place-items: center;
       border-radius: 50%;
-      color: var(--blue);
-      background: var(--blue-soft);
-      font-size: 13px;
-      font-weight: 720;
-    }
-
-    .action-copy {
-      max-width: 470px;
-      margin: 18px auto 0;
-      color: var(--secondary);
-      font-size: 17px;
-      line-height: 1.58;
+      color: white;
+      background: var(--recovery-accent, var(--blue));
+      font-size: 11px;
+      font-weight: 700;
     }
 
     .action-meta {
-      margin: 27px auto;
+      margin: 18px auto;
       display: inline-flex;
       align-items: center;
       gap: 9px;
@@ -676,10 +785,11 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--orange);
+      background: var(--recovery-accent, var(--orange));
     }
 
-    .action-links { margin-top: 10px; }
+    .action-primary { width: min(100%, 390px); }
+    .action-links { margin-top: 6px; }
 
     .return-shell, .summary-shell { max-width: 580px; margin: 0 auto; text-align: center; }
 
@@ -892,9 +1002,13 @@
       .form-bottom { align-items: stretch; flex-direction: column; }
       .form-bottom .button { width: 100%; }
       .focus-head { margin-top: 20px; }
-      .reason-grid { grid-template-columns: 1fr; }
-      .reason-button:last-child { grid-column: auto; }
-      .reason-footer { align-items: flex-start; flex-direction: column-reverse; gap: 4px; }
+      .flow-nav { margin-bottom: 10px; }
+      .recovery-emoji { width: 86px; height: 86px; font-size: 42px; }
+      .reason-grid { grid-template-columns: 1fr 1fr; }
+      .reason-button { min-height: 105px; }
+      .reason-button:last-child { grid-column: 1 / -1; min-height: 92px; }
+      .reason-footer { gap: 8px; }
+      .action-step { align-items: flex-start; }
       .history-card { display: block; }
       .history-list, .empty-history { margin-top: 4px; }
       .summary-stats { grid-template-columns: 1fr; }
@@ -1004,28 +1118,38 @@
         </div>
 
         <div class="panel" id="reason-panel" hidden>
-          <p class="panel-kicker">No judgment</p>
-          <h2>What pulled you away?</h2>
-          <p class="panel-copy">Name the friction. That’s enough to choose a way through it.</p>
+          <div class="flow-nav">
+            <button class="flow-back" id="cancel-stuck-button" type="button" aria-label="Return to timer">←</button>
+            <span class="flow-name">Recovery</span>
+            <span class="flow-step">1 of 2</span>
+          </div>
+          <div class="reason-hero">
+            <div class="recovery-emoji" id="reason-hero-emoji" aria-hidden="true">🫶</div>
+            <h2>What’s getting in the way?</h2>
+            <p class="reason-hero-copy" id="reason-support-copy">Choose the feeling that is closest. There is no wrong answer.</p>
+          </div>
           <div class="reason-grid" id="reason-grid" role="group" aria-label="Choose what made you feel stuck"></div>
           <div class="reason-footer">
-            <button class="button button-link" id="cancel-stuck-button" type="button">I’m okay—go back</button>
+            <button class="button button-primary reason-continue" id="reason-continue-button" type="button" disabled>Continue</button>
             <span class="away-timer" id="reason-away-timer">Away for 00:00</span>
           </div>
         </div>
 
         <div class="panel" id="action-panel" hidden>
+          <div class="flow-nav">
+            <button class="flow-back" id="change-reason-button" type="button" aria-label="Choose a different reason">←</button>
+            <span class="flow-name">Recovery</span>
+            <span class="flow-step">2 of 2</span>
+          </div>
           <div class="action-shell">
-            <div class="action-number" aria-hidden="true">01</div>
+            <div class="recovery-emoji" id="action-emoji" aria-hidden="true">🫶</div>
             <p class="panel-kicker" id="action-reason">One small move</p>
             <h2 id="action-title"></h2>
             <p class="action-copy" id="action-copy"></p>
+            <ol class="action-steps" id="action-steps"></ol>
             <div class="action-meta" id="action-away-timer">Away for 00:00</div>
             <div>
-              <button class="button button-primary" id="back-button" type="button">I’m back</button>
-            </div>
-            <div class="action-links">
-              <button class="button button-link" id="change-reason-button" type="button">Choose a different reason</button>
+              <button class="button button-primary action-primary" id="back-button" type="button">I’m back</button>
             </div>
           </div>
         </div>
@@ -1124,12 +1248,18 @@
       const timerProgressFill = document.getElementById('timer-progress-fill');
       const returnCount = document.getElementById('return-count');
       const reasonGrid = document.getElementById('reason-grid');
+      const reasonHeroEmoji = document.getElementById('reason-hero-emoji');
+      const reasonSupportCopy = document.getElementById('reason-support-copy');
+      const reasonContinueButton = document.getElementById('reason-continue-button');
       const reasonAwayTimer = document.getElementById('reason-away-timer');
+      const actionEmoji = document.getElementById('action-emoji');
       const actionReason = document.getElementById('action-reason');
       const actionTitle = document.getElementById('action-title');
       const actionCopy = document.getElementById('action-copy');
+      const actionSteps = document.getElementById('action-steps');
       const actionAwayTimer = document.getElementById('action-away-timer');
       const returnTime = document.getElementById('return-time');
+      const returnMessage = document.getElementById('return-message');
       const timeupDuration = document.getElementById('timeup-duration');
       const timeupTask = document.getElementById('timeup-task');
       const addTimeButton = document.getElementById('add-time-button');
@@ -1148,32 +1278,82 @@
         {
           id: 'frustrated',
           label: 'Frustrated',
-          title: 'Release the pressure.',
-          copy: 'Drop your shoulders. Breathe out slowly for six counts, then name only the next physical move.'
+          shortLabel: 'Frustrated',
+          emoji: '😤',
+          accent: '#ff6b4a',
+          soft: '#fff1ec',
+          title: 'Let the pressure out.',
+          copy: 'Frustration is energy with nowhere to go. Release your body first, then narrow the task.',
+          steps: [
+            'Drop your shoulders and unclench your jaw.',
+            'Breathe out slowly for six counts—twice.',
+            'Name only the next physical move, not the whole outcome.'
+          ],
+          returnCopy: 'You came back without forcing it. Keep the next move small and physical.'
         },
         {
           id: 'bored',
           label: 'Bored',
+          shortLabel: 'Bored',
+          emoji: '🥱',
+          accent: '#ff9f0a',
+          soft: '#fff7e8',
           title: 'Make it almost too easy.',
-          copy: 'Make a sixty-second deal with yourself. Do the smallest visible part—one sentence, one cell, one dish.'
+          copy: 'Boredom usually needs a smaller finish line or a little novelty. Give yourself a tiny deal.',
+          steps: [
+            'Choose the smallest visible part of the task.',
+            'Commit to doing only sixty seconds of it.',
+            'After one minute, choose freely: stop or do one more.'
+          ],
+          returnCopy: 'You restarted momentum. One small round is enough to make the next one easier.'
         },
         {
           id: 'confused',
           label: 'Confused',
+          shortLabel: 'Confused',
+          emoji: '😵‍💫',
+          accent: '#7c5cff',
+          soft: '#f3f0ff',
           title: 'Turn the fog into one question.',
-          copy: 'Write one sentence: “The thing I need to know next is ___.” Then look for only that answer.'
+          copy: 'You do not need the whole map. You only need to identify the next missing piece.',
+          steps: [
+            'Write: “The thing I need to know next is ___.”',
+            'Separate what you know from what you are guessing.',
+            'Search, test, or ask for only that one missing answer.'
+          ],
+          returnCopy: 'The fog has an edge now. Follow the one question you named.'
         },
         {
           id: 'distracted',
           label: 'Distracted',
+          shortLabel: 'Distracted',
+          emoji: '🫨',
+          accent: '#32ade6',
+          soft: '#edf9ff',
           title: 'Close one door.',
-          copy: 'Put the phone out of reach, close one unrelated tab, and return your cursor to the task.'
+          copy: 'Attention returns more easily when you remove one doorway instead of fighting every distraction.',
+          steps: [
+            'Put your phone face down and out of reach.',
+            'Close one unrelated tab, window, or notification.',
+            'Place your cursor exactly where the next action starts.'
+          ],
+          returnCopy: 'You protected one clear lane. Stay with what is directly in front of you.'
         },
         {
           id: 'overwhelmed',
           label: 'Overwhelmed / feeling low',
+          shortLabel: 'Overwhelmed',
+          emoji: '🫂',
+          accent: '#34a853',
+          soft: '#eefaf1',
           title: 'Shrink the horizon.',
-          copy: 'Put both feet on the floor. Take one sip of water. Choose a step that takes less than thirty seconds.'
+          copy: 'You do not have to feel better before you begin. Make the world smaller and kinder for one minute.',
+          steps: [
+            'Put both feet on the floor and take one sip of water.',
+            'Choose a step that takes less than thirty seconds.',
+            'If even that feels heavy, message someone you trust for support.'
+          ],
+          returnCopy: 'Coming back while things feel heavy is real progress. Gentle is still forward.'
         }
       ];
 
@@ -1484,23 +1664,64 @@
       function renderReasons() {
         reasonGrid.replaceChildren();
         const fragment = document.createDocumentFragment();
+        const selected = selectedReason();
+
         reasons.forEach(reason => {
           const button = document.createElement('button');
+          const radio = document.createElement('span');
+          const emoji = document.createElement('span');
+          const label = document.createElement('span');
           button.type = 'button';
           button.className = 'reason-button';
           button.dataset.reason = reason.id;
-          button.textContent = reason.label;
+          button.setAttribute('aria-pressed', String(reason.id === selected?.id));
+          button.style.setProperty('--reason-accent', reason.accent);
+          button.style.setProperty('--reason-soft', reason.soft);
+          button.classList.toggle('is-selected', reason.id === selected?.id);
+          radio.className = 'reason-radio';
+          radio.setAttribute('aria-hidden', 'true');
+          emoji.className = 'reason-emoji';
+          emoji.setAttribute('aria-hidden', 'true');
+          emoji.textContent = reason.emoji;
+          label.className = 'reason-label';
+          label.textContent = reason.shortLabel;
+          button.append(radio, emoji, label);
           fragment.appendChild(button);
         });
         reasonGrid.appendChild(fragment);
+
+        reasonHeroEmoji.textContent = selected?.emoji || '🫶';
+        reasonSupportCopy.textContent = selected
+          ? selected.label + ' makes sense. Continue for a small reset made for this moment.'
+          : 'Choose the feeling that is closest. There is no wrong answer.';
+        reasonContinueButton.disabled = !selected;
+        appCard.style.setProperty('--recovery-accent', selected?.accent || '#7c5cff');
+        appCard.style.setProperty('--recovery-soft', selected?.soft || '#f4f0ff');
       }
 
       function renderAction() {
         const reason = selectedReason();
         if (!reason) return;
+        appCard.style.setProperty('--recovery-accent', reason.accent);
+        appCard.style.setProperty('--recovery-soft', reason.soft);
+        actionEmoji.textContent = reason.emoji;
         actionReason.textContent = reason.label;
         actionTitle.textContent = reason.title;
         actionCopy.textContent = reason.copy;
+        actionSteps.replaceChildren();
+        const fragment = document.createDocumentFragment();
+        reason.steps.forEach((step, index) => {
+          const item = document.createElement('li');
+          const number = document.createElement('span');
+          const copy = document.createElement('span');
+          item.className = 'action-step';
+          number.className = 'action-step-number';
+          number.textContent = String(index + 1);
+          copy.textContent = step;
+          item.append(number, copy);
+          fragment.appendChild(item);
+        });
+        actionSteps.appendChild(fragment);
       }
 
       function renderHistory() {
@@ -1529,7 +1750,7 @@
           top.className = 'history-item-top';
           const reason = document.createElement('span');
           reason.className = 'history-reason';
-          reason.textContent = item.reasonLabel;
+          reason.textContent = (item.reasonEmoji ? item.reasonEmoji + ' ' : '') + item.reasonLabel;
           const duration = document.createElement('span');
           duration.className = 'history-duration';
           duration.textContent = formatCompactDuration(item.durationMs);
@@ -1585,6 +1806,7 @@
         session.reasonId = null;
         session.state = 'reason';
         saveSession();
+        renderReasons();
         showPanel('reason', reasonGrid.querySelector('button'));
         liveRegion.textContent = 'Recovery timer started. Choose what made you feel stuck.';
       }
@@ -1603,11 +1825,19 @@
       function chooseReason(id) {
         if (!session || !reasons.some(reason => reason.id === id)) return;
         session.reasonId = id;
+        saveSession();
+        renderReasons();
+        reasonContinueButton.focus({ preventScroll: true });
+        liveRegion.textContent = selectedReason().label + ' selected.';
+      }
+
+      function continueReason() {
+        if (!session || !selectedReason()) return;
         session.state = 'action';
         saveSession();
         renderAction();
         showPanel('action', document.getElementById('back-button'));
-        liveRegion.textContent = 'Tiny recovery action ready.';
+        liveRegion.textContent = 'Your tailored recovery steps are ready.';
       }
 
       function recordReturn() {
@@ -1625,11 +1855,13 @@
           task: session.task,
           reasonId: reason.id,
           reasonLabel: reason.label,
+          reasonEmoji: reason.emoji,
           durationMs: duration
         }, ...history].slice(0, 80);
         writeStorage(historyKey, history);
         saveSession();
         returnTime.textContent = formatClock(duration);
+        returnMessage.textContent = reason.returnCopy;
         renderHistory();
         showPanel('returned', document.getElementById('continue-button'));
         liveRegion.textContent = 'Return recorded in ' + formatCompactDuration(duration) + '.';
@@ -1687,6 +1919,8 @@
           const durations = session.returnDurations || [];
           lastReturnDuration = durations[durations.length - 1] || 0;
           returnTime.textContent = formatClock(lastReturnDuration);
+          const reason = selectedReason();
+          if (reason) returnMessage.textContent = reason.returnCopy;
         }
         showPanel(session.state);
         if (session.state === 'timeup') startAlarm();
@@ -1708,12 +1942,14 @@
 
       document.getElementById('stuck-button').addEventListener('click', beginRecovery);
       document.getElementById('cancel-stuck-button').addEventListener('click', cancelRecovery);
+      reasonContinueButton.addEventListener('click', continueReason);
       document.getElementById('change-reason-button').addEventListener('click', () => {
         if (!session) return;
         session.state = 'reason';
-        session.reasonId = null;
         saveSession();
-        showPanel('reason', reasonGrid.querySelector('button'));
+        renderReasons();
+        const selectedButton = reasonGrid.querySelector('[aria-pressed="true"]') || reasonGrid.querySelector('button');
+        showPanel('reason', selectedButton);
       });
       reasonGrid.addEventListener('click', event => {
         const button = event.target.closest('[data-reason]');
