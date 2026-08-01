@@ -837,9 +837,944 @@
       .panel { transform: none !important; }
       body::before { display: none; }
     }
+  
+    /* ============================================================
+       PRECISION SECURITY INTERFACE
+       One purposeful scene: a physical key releases the chain at
+       each checkpoint. All former ambient particle and pointer
+       animation layers are disabled to keep every frame smooth.
+       ============================================================ */
+
+    :root {
+      color-scheme: light;
+      --page: #f5f5f7;
+      --paper: #ffffff;
+      --ink: #1d1d1f;
+      --muted: #6e6e73;
+      --hairline: rgba(0, 0, 0, .09);
+      --blue: #0071e3;
+      --blue-hover: #0077ed;
+      --blue-soft: rgba(0, 113, 227, .09);
+      --red: #d70015;
+      --metal-a: #f5f5f7;
+      --metal-b: #c7c7cc;
+      --metal-c: #6e6e73;
+      --shadow-soft: 0 10px 42px rgba(0, 0, 0, .075);
+      --ease-precision: cubic-bezier(.25, .1, .25, 1);
+      --ease-release: cubic-bezier(.2, .8, .2, 1);
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      background: var(--page) !important;
+      color: var(--ink);
+    }
+
+    body {
+      overflow-x: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .atmosphere,
+    .motion-canvas,
+    .aurora,
+    .orb,
+    .halo-rings,
+    .light-beam,
+    .perspective-grid,
+    .energy-line,
+    .grain,
+    .crumble-layer,
+    .transition-flash,
+    .shockwave,
+    .crumble-dust,
+    .exit-portal {
+      display: none !important;
+    }
+
+    .topbar {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 40;
+      height: 48px;
+      padding: 0 22px;
+      border-bottom: 1px solid var(--hairline);
+      background: rgba(245, 245, 247, .84);
+      box-shadow: none;
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      backdrop-filter: saturate(180%) blur(20px);
+    }
+
+    .home-link,
+    .lock-action {
+      min-height: 30px;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 520;
+      transition: color .18s ease;
+    }
+
+    .home-link:hover,
+    .lock-action:hover {
+      color: var(--ink);
+      background: transparent;
+      transform: none;
+    }
+
+    .stage-markers {
+      gap: 7px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .stage-marker {
+      width: 22px;
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(0, 0, 0, .13);
+      box-shadow: none;
+      transition: width .32s var(--ease-release), background-color .32s ease;
+    }
+
+    .stage-marker::before,
+    .stage-marker::after {
+      display: none;
+    }
+
+    .stage-marker.is-active {
+      width: 38px;
+      background: var(--blue);
+      box-shadow: none;
+    }
+
+    .stage-marker.is-complete {
+      background: rgba(0, 113, 227, .38);
+    }
+
+    main {
+      position: relative;
+      z-index: 4;
+      width: min(1080px, calc(100% - 44px));
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 48px 0 0;
+    }
+
+    .stage {
+      min-height: calc(100vh - 48px);
+      padding: clamp(72px, 10vh, 112px) 0 70px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      perspective: none;
+    }
+
+    .stage[hidden] {
+      display: none !important;
+    }
+
+    .panel {
+      position: relative;
+      width: min(650px, 63vw);
+      margin: 0;
+      padding: clamp(38px, 5vw, 58px);
+      overflow: hidden;
+      border: 1px solid var(--hairline);
+      border-radius: 30px;
+      background: rgba(255, 255, 255, .92);
+      box-shadow: var(--shadow-soft);
+      transform: none !important;
+      filter: none !important;
+      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(18px);
+      animation: panelEnter .52s var(--ease-release) both;
+    }
+
+    .panel::before,
+    .panel::after {
+      display: none;
+    }
+
+    @keyframes panelEnter {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(.99);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .stage.is-transitioning .panel {
+      animation: panelLeave .34s var(--ease-precision) both !important;
+    }
+
+    @keyframes panelLeave {
+      to {
+        opacity: 0;
+        transform: translateY(-10px) scale(.995);
+      }
+    }
+
+    .step-label {
+      margin-bottom: 14px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 620;
+      letter-spacing: .02em;
+      text-transform: none;
+    }
+
+    h1,
+    h2 {
+      max-width: 600px;
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(46px, 6vw, 72px);
+      font-weight: 690;
+      line-height: .98;
+      letter-spacing: -.058em;
+      text-wrap: balance;
+    }
+
+    .gradient-text {
+      color: var(--muted);
+      background: none;
+      -webkit-background-clip: initial;
+      background-clip: initial;
+      -webkit-text-fill-color: currentColor;
+      animation: none !important;
+    }
+
+    .intro {
+      max-width: 560px;
+      margin-top: 23px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.52;
+      letter-spacing: -.012em;
+    }
+
+    form {
+      margin-top: 32px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+    }
+
+    .field-wrap {
+      position: relative;
+      border: 0;
+      border-radius: 14px;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .field-wrap::before,
+    .field-wrap::after {
+      display: none;
+    }
+
+    input {
+      height: 50px;
+      padding: 0 16px;
+      border: 1px solid rgba(0, 0, 0, .15);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .94);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, .025);
+      color: var(--ink);
+      font-size: 16px;
+      outline: none;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+
+    input::placeholder {
+      color: #98989d;
+    }
+
+    input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px var(--blue-soft);
+    }
+
+    .continue-button {
+      min-width: 112px;
+      height: 50px;
+      padding: 0 22px;
+      overflow: hidden;
+      border: 0;
+      border-radius: 980px;
+      background: var(--blue);
+      box-shadow: none;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      transform: none !important;
+      transition: background-color .18s ease, opacity .18s ease;
+    }
+
+    .continue-button::before,
+    .continue-button::after {
+      display: none;
+    }
+
+    .continue-button:hover {
+      background: var(--blue-hover);
+      box-shadow: none;
+      transform: none;
+    }
+
+    .continue-button:active {
+      opacity: .76;
+    }
+
+    .hint {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .error {
+      min-height: 17px;
+      margin-top: 12px;
+      color: var(--red);
+      font-size: 12px;
+      transform: none;
+    }
+
+    .error.is-visible {
+      animation: none;
+    }
+
+    .panel.is-wrong {
+      animation: appleShake .35s ease both !important;
+    }
+
+    @keyframes appleShake {
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(4px); }
+      75% { transform: translateX(-2px); }
+    }
+
+    .button-stage {
+      align-items: flex-start;
+    }
+
+    .button-stage .panel {
+      width: 100%;
+      padding: clamp(32px, 4vw, 48px);
+    }
+
+    .button-grid {
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 30px;
+    }
+
+    .choice {
+      aspect-ratio: 1;
+      min-height: 44px;
+      padding: 0;
+      border: 1px solid var(--hairline);
+      border-radius: 11px;
+      background: #fff;
+      box-shadow: none;
+      color: var(--ink);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      transform: none !important;
+      animation: choiceEnter .32s var(--ease-release) both;
+      animation-delay: calc(min(var(--order), 24) * 8ms);
+      transition: border-color .14s ease, background-color .14s ease, color .14s ease;
+    }
+
+    @keyframes choiceEnter {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .choice::before,
+    .choice::after {
+      display: none;
+    }
+
+    .choice:hover {
+      z-index: 1;
+      border-color: var(--blue);
+      background: var(--blue-soft);
+      box-shadow: none;
+      color: var(--blue);
+      transform: none;
+    }
+
+    .choice:active {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .success .panel {
+      width: min(720px, 68vw);
+    }
+
+    .success-badge {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 24px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: none;
+      animation: successCheck .46s var(--ease-release) both !important;
+    }
+
+    @keyframes successCheck {
+      from {
+        opacity: 0;
+        transform: scale(.72);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .success-badge::before,
+    .success-badge::after {
+      display: none;
+    }
+
+    .true-page {
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .secret-card {
+      min-height: 120px;
+      padding: 20px;
+      border: 1px solid var(--hairline);
+      border-radius: 18px;
+      background: var(--page);
+      box-shadow: none;
+      transform: none !important;
+      animation: none !important;
+    }
+
+    .secret-card::before,
+    .secret-card::after {
+      display: none;
+    }
+
+    .secret-card strong {
+      color: var(--ink);
+    }
+
+    .secret-card span {
+      color: var(--muted);
+    }
+
+    /* The key-and-chain scene uses only transform and opacity.
+       Both are GPU-composited and do not trigger layout or paint loops. */
+
+    .unlock-scene {
+      position: fixed;
+      inset: 48px 0 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+      contain: strict;
+    }
+
+    .unlock-scene svg {
+      position: absolute;
+      top: 50%;
+      right: max(-70px, calc((100vw - 1440px) / 2));
+      width: min(62vw, 900px);
+      height: auto;
+      overflow: visible;
+      transform: translateY(-50%);
+    }
+
+    .chain-track {
+      fill: none;
+      stroke: rgba(0, 0, 0, .15);
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .chain-link {
+      fill: none;
+      stroke: url(#metal-gradient);
+      stroke-width: 9;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .chain-link-highlight {
+      fill: none;
+      stroke: rgba(255, 255, 255, .8);
+      stroke-width: 2;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .chain-left,
+    .chain-right,
+    .lock-unit,
+    .key-unit,
+    .key-glint {
+      transform-box: fill-box;
+      will-change: transform, opacity;
+    }
+
+    .chain-left,
+    .chain-right {
+      transform-origin: center;
+      transition: transform 1.05s var(--ease-release), opacity .65s ease;
+    }
+
+    .lock-shadow {
+      fill: rgba(0, 0, 0, .09);
+      filter: blur(9px);
+    }
+
+    .lock-body {
+      fill: url(#lock-gradient);
+      stroke: rgba(0, 0, 0, .16);
+      stroke-width: 1.5;
+    }
+
+    .lock-face {
+      fill: rgba(255, 255, 255, .52);
+      stroke: rgba(255, 255, 255, .75);
+      stroke-width: 1;
+    }
+
+    .shackle-back,
+    .shackle-front {
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .shackle-back {
+      stroke: rgba(0, 0, 0, .18);
+      stroke-width: 26;
+    }
+
+    .shackle-front {
+      stroke: url(#metal-gradient);
+      stroke-width: 20;
+    }
+
+    .shackle {
+      transform-box: fill-box;
+      transform-origin: 82% 88%;
+      transition: transform 1s var(--ease-release);
+      will-change: transform;
+    }
+
+    .keyhole {
+      fill: #3a3a3c;
+    }
+
+    .key-unit {
+      transform-origin: 50% 50%;
+      transform: translate3d(-260px, 116px, 0) rotate(-15deg);
+      filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .16));
+    }
+
+    .key-metal {
+      fill: url(#key-gradient);
+      stroke: rgba(0, 0, 0, .18);
+      stroke-width: 1.4;
+    }
+
+    .key-cut {
+      fill: var(--page);
+    }
+
+    .key-glint {
+      opacity: 0;
+      transform-origin: center;
+    }
+
+    .key-path {
+      fill: none;
+      stroke: rgba(0, 113, 227, .14);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-dasharray: 4 9;
+      opacity: .55;
+    }
+
+    .release-wave {
+      fill: none;
+      stroke: rgba(0, 113, 227, .32);
+      stroke-width: 2;
+      opacity: 0;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    body[data-unlock-step="1"] .key-unit {
+      animation: keyRest 4.8s ease-in-out infinite;
+    }
+
+    @keyframes keyRest {
+      0%, 100% {
+        transform: translate3d(-260px, 116px, 0) rotate(-15deg);
+      }
+      50% {
+        transform: translate3d(-260px, 108px, 0) rotate(-12deg);
+      }
+    }
+
+    body[data-unlock-step="2"] .key-unit {
+      animation: keyFirstTurn 1.12s var(--ease-release) both;
+    }
+
+    @keyframes keyFirstTurn {
+      0% {
+        transform: translate3d(-260px, 116px, 0) rotate(-15deg);
+      }
+      62% {
+        transform: translate3d(-44px, 16px, 0) rotate(0deg);
+      }
+      82% {
+        transform: translate3d(-44px, 16px, 0) rotate(24deg);
+      }
+      100% {
+        transform: translate3d(-44px, 16px, 0) rotate(18deg);
+      }
+    }
+
+    body[data-unlock-step="3"] .key-unit {
+      animation: keySecondTurn 1.12s var(--ease-release) both;
+    }
+
+    @keyframes keySecondTurn {
+      0% {
+        transform: translate3d(-44px, 16px, 0) rotate(18deg);
+      }
+      28% {
+        transform: translate3d(-130px, 66px, 0) rotate(-8deg);
+      }
+      64% {
+        transform: translate3d(-44px, 16px, 0) rotate(0deg);
+      }
+      84% {
+        transform: translate3d(-44px, 16px, 0) rotate(52deg);
+      }
+      100% {
+        transform: translate3d(-44px, 16px, 0) rotate(42deg);
+      }
+    }
+
+    body[data-unlock-step="4"] .key-unit {
+      animation: keyFinalTurn 1.25s var(--ease-release) both;
+    }
+
+    @keyframes keyFinalTurn {
+      0% {
+        transform: translate3d(-44px, 16px, 0) rotate(42deg);
+      }
+      22% {
+        transform: translate3d(-126px, 72px, 0) rotate(-10deg);
+      }
+      58% {
+        transform: translate3d(-44px, 16px, 0) rotate(0deg);
+      }
+      78% {
+        transform: translate3d(-44px, 16px, 0) rotate(92deg);
+      }
+      100% {
+        transform: translate3d(-20px, 4px, 0) rotate(88deg);
+      }
+    }
+
+    body[data-unlock-step="2"] .key-glint,
+    body[data-unlock-step="3"] .key-glint,
+    body[data-unlock-step="4"] .key-glint {
+      animation: keyGlint .6s ease .62s both;
+    }
+
+    @keyframes keyGlint {
+      0% {
+        opacity: 0;
+        transform: scale(.45) rotate(0);
+      }
+      40% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1.55) rotate(70deg);
+      }
+    }
+
+    body[data-unlock-step="2"] .chain-left {
+      transform: translate3d(-10px, 8px, 0) rotate(-1.2deg);
+    }
+
+    body[data-unlock-step="2"] .chain-right {
+      transform: translate3d(10px, 8px, 0) rotate(1.2deg);
+    }
+
+    body[data-unlock-step="3"] .chain-left {
+      transform: translate3d(-26px, 22px, 0) rotate(-3deg);
+    }
+
+    body[data-unlock-step="3"] .chain-right {
+      transform: translate3d(26px, 22px, 0) rotate(3deg);
+    }
+
+    body[data-unlock-step="4"] .chain-left {
+      opacity: .34;
+      transform: translate3d(-120px, 88px, 0) rotate(-9deg);
+    }
+
+    body[data-unlock-step="4"] .chain-right {
+      opacity: .34;
+      transform: translate3d(120px, 88px, 0) rotate(9deg);
+    }
+
+    body[data-unlock-step="2"] .shackle {
+      transform: translateY(-8px) rotate(3deg);
+    }
+
+    body[data-unlock-step="3"] .shackle {
+      transform: translateY(-18px) rotate(10deg);
+    }
+
+    body[data-unlock-step="4"] .shackle {
+      transform: translate3d(21px, -48px, 0) rotate(36deg);
+    }
+
+    body[data-unlock-step="2"] .release-wave,
+    body[data-unlock-step="3"] .release-wave,
+    body[data-unlock-step="4"] .release-wave {
+      animation: releaseWave .78s ease-out .68s both;
+    }
+
+    @keyframes releaseWave {
+      0% {
+        opacity: .8;
+        transform: scale(.3);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(2.1);
+      }
+    }
+
+    body[data-unlock-step="4"] .lock-unit {
+      animation: lockRelease .9s var(--ease-release) .6s both;
+    }
+
+    @keyframes lockRelease {
+      to {
+        transform: translateY(12px) scale(.96);
+        opacity: .65;
+      }
+    }
+
+    @media (max-width: 900px) {
+      main {
+        width: min(100% - 30px, 760px);
+      }
+
+      .stage {
+        align-items: flex-end;
+        padding-top: 190px;
+      }
+
+      .panel,
+      .success .panel {
+        width: 100%;
+      }
+
+      .unlock-scene svg {
+        top: 4%;
+        right: 50%;
+        width: min(780px, 112vw);
+        transform: translate(50%, 0);
+        opacity: .72;
+      }
+
+      .button-grid {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 620px) {
+      .topbar {
+        padding: 0 14px;
+      }
+
+      main {
+        width: min(100% - 24px, 760px);
+      }
+
+      .stage {
+        min-height: 100svh;
+        padding: 168px 0 18px;
+      }
+
+      .panel,
+      .button-stage .panel {
+        padding: 26px 20px;
+        border-radius: 24px;
+      }
+
+      h1,
+      h2 {
+        font-size: clamp(39px, 12vw, 54px);
+      }
+
+      .intro {
+        font-size: 15px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .continue-button {
+        width: 100%;
+      }
+
+      .button-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 6px;
+      }
+
+      .choice {
+        min-height: 42px;
+      }
+
+      .unlock-scene svg {
+        top: 10px;
+        width: 760px;
+        opacity: .62;
+      }
+
+      .true-page {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition-duration: .01ms !important;
+      }
+
+      .key-unit {
+        transform: translate3d(-44px, 16px, 0) rotate(0) !important;
+      }
+
+      body[data-unlock-step="4"] .shackle {
+        transform: translate3d(21px, -48px, 0) rotate(36deg);
+      }
+    }
+
   </style>
 </head>
-<body>
+<body data-unlock-step="1">
+  
+  <div class="unlock-scene" aria-hidden="true">
+    <svg viewBox="0 0 1000 520" role="presentation">
+      <defs>
+        <linearGradient id="metal-gradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#8e8e93"></stop>
+          <stop offset=".25" stop-color="#f2f2f7"></stop>
+          <stop offset=".48" stop-color="#a1a1a6"></stop>
+          <stop offset=".72" stop-color="#ffffff"></stop>
+          <stop offset="1" stop-color="#6e6e73"></stop>
+        </linearGradient>
+        <linearGradient id="lock-gradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#ffffff"></stop>
+          <stop offset=".36" stop-color="#d1d1d6"></stop>
+          <stop offset=".68" stop-color="#f2f2f7"></stop>
+          <stop offset="1" stop-color="#8e8e93"></stop>
+        </linearGradient>
+        <linearGradient id="key-gradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#ffd60a"></stop>
+          <stop offset=".42" stop-color="#ffb800"></stop>
+          <stop offset=".76" stop-color="#fff1a6"></stop>
+          <stop offset="1" stop-color="#d89400"></stop>
+        </linearGradient>
+        <g id="link">
+          <ellipse class="chain-link" cx="0" cy="0" rx="34" ry="18"></ellipse>
+          <path class="chain-link-highlight" d="M-27 -8 C-17 -16 14 -18 27 -8"></path>
+        </g>
+      </defs>
+
+      <path class="key-path" d="M120 412 C250 390 370 350 496 270"></path>
+
+      <g class="chain-left">
+        <path class="chain-track" d="M-40 258 C150 258 250 268 405 270"></path>
+        <use href="#link" x="-5" y="258" transform="rotate(4 -5 258)"></use>
+        <use href="#link" x="55" y="257" transform="rotate(-5 55 257)"></use>
+        <use href="#link" x="115" y="259" transform="rotate(5 115 259)"></use>
+        <use href="#link" x="175" y="258" transform="rotate(-5 175 258)"></use>
+        <use href="#link" x="235" y="261" transform="rotate(6 235 261)"></use>
+        <use href="#link" x="295" y="263" transform="rotate(-6 295 263)"></use>
+        <use href="#link" x="355" y="267" transform="rotate(8 355 267)"></use>
+        <use href="#link" x="408" y="271" transform="rotate(-9 408 271)"></use>
+      </g>
+
+      <g class="chain-right">
+        <path class="chain-track" d="M595 270 C750 268 850 258 1040 258"></path>
+        <use href="#link" x="592" y="271" transform="rotate(9 592 271)"></use>
+        <use href="#link" x="645" y="267" transform="rotate(-8 645 267)"></use>
+        <use href="#link" x="705" y="263" transform="rotate(6 705 263)"></use>
+        <use href="#link" x="765" y="261" transform="rotate(-6 765 261)"></use>
+        <use href="#link" x="825" y="258" transform="rotate(5 825 258)"></use>
+        <use href="#link" x="885" y="259" transform="rotate(-5 885 259)"></use>
+        <use href="#link" x="945" y="257" transform="rotate(5 945 257)"></use>
+        <use href="#link" x="1005" y="258" transform="rotate(-4 1005 258)"></use>
+      </g>
+
+      <g class="lock-unit">
+        <ellipse class="lock-shadow" cx="500" cy="391" rx="104" ry="18"></ellipse>
+        <g class="shackle">
+          <path class="shackle-back" d="M440 258 V202 C440 122 560 122 560 202 V259"></path>
+          <path class="shackle-front" d="M440 258 V202 C440 122 560 122 560 202 V259"></path>
+        </g>
+        <rect class="lock-body" x="405" y="247" width="190" height="144" rx="34"></rect>
+        <rect class="lock-face" x="417" y="259" width="166" height="120" rx="26"></rect>
+        <path class="keyhole" d="M500 294 A20 20 0 0 1 512 330 L519 357 H481 L488 330 A20 20 0 0 1 500 294Z"></path>
+        <circle class="release-wave" cx="500" cy="322" r="34"></circle>
+      </g>
+
+      <g class="key-unit">
+        <path class="key-metal" d="M356 300 A48 48 0 1 0 356 396 A48 48 0 0 0 356 300 M356 319 A29 29 0 1 1 356 377 A29 29 0 0 1 356 319 Z M399 336 H524 V360 H500 V381 H471 V360 H443 V378 H419 V360 H399 Z" fill-rule="evenodd"></path>
+        <path class="key-metal" d="M504 331 L536 348 L504 365 Z"></path>
+        <circle class="key-glint" cx="438" cy="346" r="18" fill="none" stroke="#ffffff" stroke-width="3"></circle>
+      </g>
+    </svg>
+  </div>
+
   <div class="atmosphere" aria-hidden="true">
     <canvas class="motion-canvas" id="motion-canvas"></canvas>
     <div class="aurora"></div>
@@ -1136,6 +2071,7 @@
         phraseInput.value = '';
         timeInput.value = '';
         clearErrors();
+        document.body.dataset.unlockStep = '1';
         showStage(1);
         if (showMessage) {
           const error = document.getElementById('phrase-error');
@@ -1228,30 +2164,23 @@
         if (transitioning) return;
         const outgoing = stages.find(stage => Number(stage.dataset.stage) === currentStage);
         if (!outgoing) return;
+
         transitioning = true;
         clearErrors();
+        document.body.dataset.unlockStep = String(nextStage);
+        outgoing.classList.add('is-transitioning');
 
-        if (reduceMotion.matches) {
-          showStage(nextStage);
-          transitioning = false;
-          return;
-        }
-
-        const panel = outgoing.querySelector('.panel');
-        const layer = buildCrumble(panel);
-        const burst = buildTransitionBurst(panel);
-        outgoing.classList.add('is-crumbling');
+        const handoffDelay = reduceMotion.matches ? 0 : 430;
+        const finishDelay = reduceMotion.matches ? 20 : 1120;
 
         window.setTimeout(() => {
-          outgoing.classList.remove('is-crumbling');
+          outgoing.classList.remove('is-transitioning');
           showStage(nextStage);
-        }, 220);
+        }, handoffDelay);
 
         window.setTimeout(() => {
-          layer.remove();
-          burst.forEach(element => element.remove());
           transitioning = false;
-        }, 1450);
+        }, finishDelay);
       }
 
       function currentTimeCode() {
@@ -1278,22 +2207,8 @@
       function enterTruePage() {
         setAccess(true);
         advance(4);
-
-        if (reduceMotion.matches) {
-          window.setTimeout(() => window.location.replace('index.html'), 120);
-          return;
-        }
-
-        window.setTimeout(() => {
-          const portal = document.createElement('div');
-          const copy = document.createElement('span');
-          portal.className = 'exit-portal';
-          copy.className = 'portal-copy';
-          copy.textContent = 'Opening your life';
-          portal.appendChild(copy);
-          document.body.appendChild(portal);
-          window.setTimeout(() => window.location.replace('index.html'), 1380);
-        }, 1650);
+        const redirectDelay = reduceMotion.matches ? 160 : 1750;
+        window.setTimeout(() => window.location.replace('index.html'), redirectDelay);
       }
 
       phraseForm.addEventListener('submit', event => {
@@ -1333,8 +2248,8 @@
       lockButton.addEventListener('click', () => reset(false));
       buildButtons();
       showStage(1);
-      setupPointerDepth();
-      setupMotionField();
+      // Decorative pointer and canvas loops are intentionally not started.
+      // The key-and-chain scene is CSS-composited and follows checkpoint state.
     })();
   </script>
 </body>
