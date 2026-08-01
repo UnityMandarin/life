@@ -5601,6 +5601,71 @@
       }
     }
 
+
+    /* Card spacing correction: consistent header rhythm and grid breathing room. */
+    .routine-grid {
+      gap: 22px;
+    }
+
+    .phase-card,
+    .phase-card.featured {
+      padding: 30px;
+    }
+
+    .phase-card.featured {
+      column-gap: 42px;
+    }
+
+    .phase-index {
+      min-height: 26px;
+      margin: 0 10px 18px 0;
+      vertical-align: middle;
+      line-height: 1;
+    }
+
+    .phase-time {
+      margin: 0 0 18px;
+      vertical-align: middle;
+      line-height: 1.2;
+    }
+
+    .phase-title {
+      margin-top: 0;
+    }
+
+    .phase-subtitle {
+      margin-top: 10px;
+    }
+
+    .task-list {
+      margin-top: 26px;
+    }
+
+    @media (max-width: 620px) {
+      .routine-grid {
+        gap: 16px;
+      }
+
+      .phase-card,
+      .phase-card.featured {
+        padding: 22px;
+      }
+
+      .phase-index {
+        margin-right: 8px;
+        margin-bottom: 16px;
+      }
+
+      .phase-time {
+        margin-bottom: 16px;
+      }
+
+      .task-list,
+      .featured .task-list {
+        margin-top: 22px;
+      }
+    }
+
   </style>
 </head>
 <body>
