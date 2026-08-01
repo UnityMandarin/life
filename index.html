@@ -5602,43 +5602,88 @@
     }
 
 
-    /* Card spacing correction: consistent header rhythm and grid breathing room. */
+    /* Card rhythm: one restrained spacing system for both routines. */
     .routine-grid {
-      gap: 22px;
+      gap: clamp(18px, 1.45vw, 24px);
+      align-items: stretch;
     }
 
     .phase-card,
     .phase-card.featured {
-      padding: 30px;
-    }
-
-    .phase-card.featured {
-      column-gap: 42px;
+      padding: clamp(26px, 2.15vw, 34px);
     }
 
     .phase-index {
-      min-height: 26px;
-      margin: 0 10px 18px 0;
+      min-height: 28px;
+      margin: 0 14px 22px 0;
       vertical-align: middle;
       line-height: 1;
     }
 
     .phase-time {
-      margin: 0 0 18px;
+      min-height: 28px;
+      margin: 0 0 22px;
+      padding: 7px 12px;
       vertical-align: middle;
-      line-height: 1.2;
+      line-height: 1.1;
     }
 
     .phase-title {
-      margin-top: 0;
+      margin: 0;
     }
 
     .phase-subtitle {
-      margin-top: 10px;
+      max-width: 38ch;
+      margin: 12px 0 0;
+    }
+
+    .task-list,
+    .featured .task-list {
+      gap: 12px;
     }
 
     .task-list {
-      margin-top: 26px;
+      margin: 28px 0 0;
+    }
+
+    .task span {
+      min-height: 62px;
+      padding: 15px 18px 15px 52px;
+    }
+
+    .task span::before {
+      left: 18px;
+    }
+
+    .task span::after {
+      left: 25px;
+    }
+
+    @media (min-width: 901px) {
+      .phase-card.featured {
+        grid-template-columns: minmax(270px, .72fr) minmax(0, 1.7fr);
+        column-gap: clamp(38px, 4vw, 58px);
+        align-items: start;
+      }
+
+      .phase-card.featured > div {
+        min-width: 0;
+      }
+
+      .phase-card.featured .phase-subtitle {
+        max-width: 32ch;
+      }
+
+      .phase-card.featured .task-list {
+        margin-top: 0;
+        align-content: start;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .phase-card.featured .task-list {
+        margin-top: 28px;
+      }
     }
 
     @media (max-width: 620px) {
@@ -5652,17 +5697,42 @@
       }
 
       .phase-index {
-        margin-right: 8px;
-        margin-bottom: 16px;
+        margin-right: 10px;
+        margin-bottom: 18px;
       }
 
       .phase-time {
-        margin-bottom: 16px;
+        margin-bottom: 18px;
+      }
+
+      .phase-subtitle {
+        margin-top: 10px;
       }
 
       .task-list,
       .featured .task-list {
-        margin-top: 22px;
+        gap: 10px;
+        margin-top: 24px;
+      }
+
+      .task span {
+        min-height: 58px;
+        padding: 14px 14px 14px 48px;
+      }
+
+      .task span::before {
+        left: 15px;
+      }
+
+      .task span::after {
+        left: 22px;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .phase-card,
+      .phase-card.featured {
+        padding: 20px;
       }
     }
 
