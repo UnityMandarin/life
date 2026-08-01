@@ -36,6 +36,8 @@
       --green-soft: #edf8ef;
       --orange: #b25000;
       --orange-soft: #fff5e8;
+      --red: #d70015;
+      --red-soft: #fff0f1;
       --shadow: 0 20px 55px rgba(0, 0, 0, .065), 0 2px 8px rgba(0, 0, 0, .035);
       --radius-xl: 30px;
       --radius-lg: 22px;
@@ -229,6 +231,11 @@
       box-shadow: 0 0 0 4px rgba(178, 80, 0, .1);
     }
 
+    .app-card[data-state="timeup"] .status-dot {
+      background: var(--red);
+      box-shadow: 0 0 0 4px rgba(215, 0, 21, .1);
+    }
+
     .app-card[data-state="returned"] .status-dot,
     .app-card[data-state="summary"] .status-dot {
       background: var(--blue);
@@ -307,6 +314,108 @@
       background: white;
       box-shadow: 0 0 0 4px rgba(0, 113, 227, .1);
     }
+
+    .duration-picker {
+      margin-top: 22px;
+      padding: 17px 18px 15px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--surface-muted);
+    }
+
+    .duration-head, .duration-scale {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .duration-label {
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 620;
+    }
+
+    .duration-output {
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 650;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .duration-range {
+      width: 100%;
+      height: 24px;
+      margin: 12px 0 6px;
+      padding: 0;
+      border: 0;
+      outline: none;
+      background: transparent;
+      cursor: pointer;
+      accent-color: var(--blue);
+    }
+
+    .duration-range::-webkit-slider-runnable-track {
+      height: 5px;
+      border-radius: 999px;
+      background: linear-gradient(to right, var(--blue) 0 var(--range-fill, 20%), #d9d9de var(--range-fill, 20%) 100%);
+    }
+
+    .duration-range::-webkit-slider-thumb {
+      width: 22px;
+      height: 22px;
+      margin-top: -8.5px;
+      border: 0;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, .22), 0 0 0 1px rgba(0, 0, 0, .06);
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .duration-range::-moz-range-track {
+      height: 5px;
+      border-radius: 999px;
+      background: #d9d9de;
+    }
+
+    .duration-range::-moz-range-progress {
+      height: 5px;
+      border-radius: 999px;
+      background: var(--blue);
+    }
+
+    .duration-range::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border: 0;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, .22), 0 0 0 1px rgba(0, 0, 0, .06);
+    }
+
+    .duration-range:focus-visible {
+      border-radius: 999px;
+      box-shadow: 0 0 0 4px rgba(0, 113, 227, .12);
+    }
+
+    .duration-scale {
+      color: var(--tertiary);
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .sound-test {
+      padding: 3px 7px;
+      border: 0;
+      color: var(--secondary);
+      background: transparent;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 570;
+    }
+
+    .sound-test:hover { color: var(--text); }
 
     .form-bottom {
       margin-top: 14px;
@@ -431,6 +540,31 @@
       font-variant-numeric: tabular-nums;
     }
 
+    .timer-goal {
+      margin-top: 10px;
+      color: var(--secondary);
+      font-size: 13px;
+      font-weight: 560;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .timer-progress {
+      width: min(330px, 82%);
+      height: 5px;
+      margin: 18px auto 0;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--line);
+    }
+
+    .timer-progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--blue);
+      transition: width .35s linear;
+    }
+
     .focus-actions, .return-actions, .summary-actions {
       display: flex;
       align-items: center;
@@ -544,6 +678,62 @@
     .action-links { margin-top: 10px; }
 
     .return-shell, .summary-shell { max-width: 580px; margin: 0 auto; text-align: center; }
+
+    .alarm-shell { max-width: 590px; margin: 0 auto; text-align: center; }
+
+    .alarm-mark {
+      position: relative;
+      width: 54px;
+      height: 54px;
+      margin: 0 auto 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--red);
+      background: var(--red-soft);
+      font-size: 22px;
+      font-weight: 720;
+    }
+
+    .alarm-mark::after {
+      content: "";
+      position: absolute;
+      inset: -7px;
+      border: 1px solid rgba(215, 0, 21, .18);
+      border-radius: 50%;
+      animation: alarm-ring 1.15s ease-out infinite;
+    }
+
+    @keyframes alarm-ring {
+      from { opacity: .8; transform: scale(.8); }
+      to { opacity: 0; transform: scale(1.28); }
+    }
+
+    .alarm-detail {
+      margin: 20px auto 30px;
+      color: var(--secondary);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .alarm-detail strong { color: var(--text); font-weight: 650; }
+
+    .alarm-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .button-alarm {
+      min-width: 135px;
+      border: 1px solid var(--red);
+      color: white;
+      background: var(--red);
+    }
+
+    .button-alarm:hover { border-color: #e30018; background: #e30018; }
 
     .success-mark {
       width: 48px;
@@ -706,7 +896,7 @@
       .summary-stats { grid-template-columns: 1fr; }
       .summary-stat + .summary-stat { border-top: 1px solid var(--line); border-left: 0; }
       .button { min-height: 50px; }
-      .focus-actions .button, .return-actions .button, .summary-actions .button { width: 100%; }
+      .focus-actions .button, .return-actions .button, .summary-actions .button, .alarm-actions .button { width: 100%; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -734,7 +924,7 @@
     <header class="intro">
       <p class="eyebrow">A gentler focus timer</p>
       <h1>Find your way back.</h1>
-      <p class="intro-copy">Choose one thing. When momentum breaks, get one tiny action—not a lecture—and measure the return.</p>
+      <p class="intro-copy">Choose one thing and a focus time. When momentum breaks, get one tiny action—not a lecture—and measure the return.</p>
     </header>
 
     <div class="workspace">
@@ -751,8 +941,20 @@
           <form class="task-form" id="task-form">
             <label class="field-label" for="task-input">Your task</label>
             <input class="task-field" id="task-input" name="task" type="text" maxlength="120" autocomplete="off" placeholder="Finish the first draft" required>
+            <div class="duration-picker">
+              <div class="duration-head">
+                <label class="duration-label" for="duration-input">Timer length</label>
+                <output class="duration-output" id="duration-output" for="duration-input">25 minutes</output>
+              </div>
+              <input class="duration-range" id="duration-input" name="duration" type="range" min="1" max="120" step="1" value="25" aria-label="Timer duration in minutes">
+              <div class="duration-scale">
+                <span>1 min</span>
+                <button class="sound-test" id="sound-test-button" type="button">Test alert</button>
+                <span>2 hours</span>
+              </div>
+            </div>
             <div class="form-bottom">
-              <p class="form-hint">The timer counts only the time you spend on the task.</p>
+              <p class="form-hint">Counts upward while you work. Recovery time stays paused.</p>
               <button class="button button-primary" type="submit">Start timer</button>
             </div>
           </form>
@@ -769,6 +971,8 @@
           <div class="timer-wrap">
             <div class="timer-label">Time on task</div>
             <div class="timer-value" id="focus-timer">00:00</div>
+            <div class="timer-goal" id="timer-goal">of 25:00</div>
+            <div class="timer-progress" aria-hidden="true"><div class="timer-progress-fill" id="timer-progress-fill"></div></div>
           </div>
           <div class="focus-actions">
             <button class="button button-danger stuck-button" id="stuck-button" type="button">I’m stuck</button>
@@ -813,6 +1017,19 @@
             <div class="return-actions">
               <button class="button button-primary" id="continue-button" type="button">Continue task</button>
               <button class="button button-secondary" id="finish-after-return-button" type="button">Finish session</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" id="timeup-panel" hidden role="alert" aria-labelledby="timeup-title">
+          <div class="alarm-shell">
+            <div class="alarm-mark" aria-hidden="true">!</div>
+            <p class="panel-kicker">Target reached</p>
+            <h2 id="timeup-title">Time’s up.</h2>
+            <p class="alarm-detail"><strong id="timeup-duration">25 minutes</strong> on <span id="timeup-task"></span>. Your alert will repeat until you stop it.</p>
+            <div class="alarm-actions">
+              <button class="button button-alarm" id="stop-alarm-button" type="button">Stop alarm</button>
+              <button class="button button-secondary" id="add-time-button" type="button">Add 5 minutes</button>
             </div>
           </div>
         </div>
@@ -868,14 +1085,19 @@
         reason: document.getElementById('reason-panel'),
         action: document.getElementById('action-panel'),
         returned: document.getElementById('returned-panel'),
+        timeup: document.getElementById('timeup-panel'),
         summary: document.getElementById('summary-panel')
       };
       const appCard = document.getElementById('app-card');
       const statusCopy = document.getElementById('status-copy');
       const taskForm = document.getElementById('task-form');
       const taskInput = document.getElementById('task-input');
+      const durationInput = document.getElementById('duration-input');
+      const durationOutput = document.getElementById('duration-output');
       const focusTask = document.getElementById('focus-task');
       const focusTimer = document.getElementById('focus-timer');
+      const timerGoal = document.getElementById('timer-goal');
+      const timerProgressFill = document.getElementById('timer-progress-fill');
       const returnCount = document.getElementById('return-count');
       const reasonGrid = document.getElementById('reason-grid');
       const reasonAwayTimer = document.getElementById('reason-away-timer');
@@ -884,9 +1106,16 @@
       const actionCopy = document.getElementById('action-copy');
       const actionAwayTimer = document.getElementById('action-away-timer');
       const returnTime = document.getElementById('return-time');
+      const timeupDuration = document.getElementById('timeup-duration');
+      const timeupTask = document.getElementById('timeup-task');
+      const addTimeButton = document.getElementById('add-time-button');
       const liveRegion = document.getElementById('live-region');
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const pageTitle = document.title;
       let ticker = 0;
+      let audioContext = null;
+      let alarmInterval = 0;
+      let alarmActive = false;
       let session = readStorage(sessionKey, null);
       let history = readStorage(historyKey, []);
       let lastReturnDuration = 0;
@@ -949,6 +1178,107 @@
         }
       }
 
+      function clampMinutes(value) {
+        const minutes = Number.parseInt(value, 10);
+        return Math.min(120, Math.max(1, Number.isFinite(minutes) ? minutes : 25));
+      }
+
+      function formatDurationLabel(minutes) {
+        const safeMinutes = clampMinutes(minutes);
+        if (safeMinutes === 1) return '1 minute';
+        if (safeMinutes < 60) return safeMinutes + ' minutes';
+        if (safeMinutes === 60) return '1 hour';
+        if (safeMinutes === 120) return '2 hours';
+        const hours = Math.floor(safeMinutes / 60);
+        const remainder = safeMinutes % 60;
+        return hours + ' hr ' + remainder + ' min';
+      }
+
+      function renderDurationPicker() {
+        const minutes = clampMinutes(durationInput.value);
+        durationInput.value = String(minutes);
+        durationOutput.value = formatDurationLabel(minutes);
+        const fill = ((minutes - 1) / 119 * 100).toFixed(2) + '%';
+        durationInput.style.setProperty('--range-fill', fill);
+      }
+
+      function sessionDurationMs() {
+        if (!session) return 25 * 60 * 1000;
+        return Math.min(120 * 60 * 1000, Math.max(60 * 1000, Number(session.durationMs) || 25 * 60 * 1000));
+      }
+
+      function getAudioContext() {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return null;
+        if (!audioContext) audioContext = new AudioContextClass();
+        if (audioContext.state === 'suspended') {
+          audioContext.resume().catch(() => {});
+        }
+        return audioContext;
+      }
+
+      function playAlarmBurst() {
+        const context = getAudioContext();
+        if (!context || context.state !== 'running') return;
+        const start = context.currentTime + .015;
+
+        [0, .22, .44].forEach((offset, index) => {
+          const oscillator = context.createOscillator();
+          const gain = context.createGain();
+          oscillator.type = 'square';
+          oscillator.frequency.setValueAtTime(index === 1 ? 1175 : 880, start + offset);
+          gain.gain.setValueAtTime(.0001, start + offset);
+          gain.gain.exponentialRampToValueAtTime(.28, start + offset + .018);
+          gain.gain.setValueAtTime(.28, start + offset + .13);
+          gain.gain.exponentialRampToValueAtTime(.0001, start + offset + .19);
+          oscillator.connect(gain);
+          gain.connect(context.destination);
+          oscillator.start(start + offset);
+          oscillator.stop(start + offset + .2);
+        });
+      }
+
+      function stopAlarm() {
+        alarmActive = false;
+        window.clearInterval(alarmInterval);
+        alarmInterval = 0;
+        document.title = pageTitle;
+        if ('vibrate' in navigator) navigator.vibrate(0);
+      }
+
+      function startAlarm() {
+        stopAlarm();
+        alarmActive = true;
+        document.title = 'Time’s up — Return';
+        const context = getAudioContext();
+        const begin = () => {
+          if (!alarmActive) return;
+          playAlarmBurst();
+          alarmInterval = window.setInterval(playAlarmBurst, 1150);
+        };
+
+        if (context?.state === 'suspended') {
+          context.resume().then(begin).catch(() => {});
+        } else {
+          begin();
+        }
+
+        if ('vibrate' in navigator) navigator.vibrate([350, 120, 350, 120, 650]);
+      }
+
+      async function testAlert() {
+        const context = getAudioContext();
+        if (!context) {
+          liveRegion.textContent = 'Audio alerts are not supported in this browser.';
+          return;
+        }
+        if (context.state === 'suspended') {
+          await context.resume().catch(() => {});
+        }
+        playAlarmBurst();
+        liveRegion.textContent = 'Alert sound played.';
+      }
+
       function isValidSession(value) {
         return value && typeof value.task === 'string' && value.task.trim() && panels[value.state];
       }
@@ -1003,6 +1333,7 @@
           reason: 'Recovery timer running',
           action: 'One small move',
           returned: 'Return recorded',
+          timeup: 'Timer complete',
           summary: 'Session complete'
         };
         statusCopy.textContent = labels[state];
@@ -1018,6 +1349,8 @@
         ticker = 0;
         renderTimers();
 
+        if (session?.state !== state) return;
+
         if (state === 'focus' || state === 'reason' || state === 'action') {
           ticker = window.setInterval(renderTimers, 250);
         }
@@ -1028,10 +1361,54 @@
       }
 
       function renderTimers() {
-        focusTimer.textContent = formatClock(focusElapsed());
+        const now = Date.now();
+        const elapsed = focusElapsed(now);
+        const target = sessionDurationMs();
+        focusTimer.textContent = formatClock(Math.min(elapsed, target));
+        timerGoal.textContent = 'of ' + formatClock(target);
+        timerProgressFill.style.width = Math.min(100, elapsed / target * 100).toFixed(2) + '%';
         const awayCopy = 'Away for ' + formatClock(awayElapsed());
         reasonAwayTimer.textContent = awayCopy;
         actionAwayTimer.textContent = awayCopy;
+
+        if (session?.state === 'focus' && !session.timerExpired && elapsed >= target) {
+          expireTimer(target);
+        }
+      }
+
+      function renderTimeup() {
+        if (!session) return;
+        const minutes = Math.round(sessionDurationMs() / 60000);
+        timeupDuration.textContent = formatDurationLabel(minutes);
+        timeupTask.textContent = session.task;
+        addTimeButton.hidden = minutes > 115;
+      }
+
+      function expireTimer(target) {
+        if (!session || session.state !== 'focus' || session.timerExpired) return;
+        session.focusedMs = target;
+        session.focusAnchor = null;
+        session.timerExpired = true;
+        session.state = 'timeup';
+        saveSession();
+        renderTimeup();
+        showPanel('timeup', document.getElementById('stop-alarm-button'));
+        startAlarm();
+        liveRegion.textContent = 'Time is up. The alert will repeat until you stop it.';
+      }
+
+      function addFiveMinutes() {
+        if (!session || session.state !== 'timeup') return;
+        stopAlarm();
+        const currentMinutes = Math.round(sessionDurationMs() / 60000);
+        session.durationMs = Math.min(120, currentMinutes + 5) * 60 * 1000;
+        session.timerExpired = false;
+        session.state = 'focus';
+        session.focusAnchor = Date.now();
+        saveSession();
+        renderFocus();
+        showPanel('focus', document.getElementById('stuck-button'));
+        liveRegion.textContent = 'Five minutes added. Timer resumed.';
       }
 
       function renderFocus() {
@@ -1115,12 +1492,15 @@
         document.getElementById('summary-average').textContent = durations.length ? formatCompactDuration(average) : '—';
       }
 
-      function startSession(task) {
+      function startSession(task, durationMinutes) {
         const now = Date.now();
+        getAudioContext();
         session = {
           task,
           state: 'focus',
           sessionStartedAt: now,
+          durationMs: clampMinutes(durationMinutes) * 60 * 1000,
+          timerExpired: false,
           focusAnchor: now,
           focusedMs: 0,
           stuckStartedAt: null,
@@ -1131,7 +1511,7 @@
         saveSession();
         renderFocus();
         showPanel('focus', document.getElementById('stuck-button'));
-        liveRegion.textContent = 'Timer started for ' + task;
+        liveRegion.textContent = formatDurationLabel(durationMinutes) + ' timer started for ' + task;
       }
 
       function beginRecovery() {
@@ -1205,6 +1585,7 @@
 
       function finishSession() {
         if (!session) return;
+        stopAlarm();
         session.focusedMs = focusElapsed();
         session.focusAnchor = null;
         session.stuckStartedAt = null;
@@ -1217,10 +1598,13 @@
 
       function resetSession() {
         window.clearInterval(ticker);
+        stopAlarm();
         session = null;
         lastReturnDuration = 0;
         removeStorage(sessionKey);
         taskForm.reset();
+        durationInput.value = '25';
+        renderDurationPicker();
         showPanel('setup', taskInput);
       }
 
@@ -1232,8 +1616,11 @@
           return;
         }
 
+        session.durationMs = sessionDurationMs();
+        session.timerExpired = Boolean(session.timerExpired || session.state === 'timeup');
         renderFocus();
         if (session.state === 'action') renderAction();
+        if (session.state === 'timeup') renderTimeup();
         if (session.state === 'summary') renderSummary();
         if (session.state === 'returned') {
           const durations = session.returnDurations || [];
@@ -1241,6 +1628,7 @@
           returnTime.textContent = formatClock(lastReturnDuration);
         }
         showPanel(session.state);
+        if (session.state === 'timeup') startAlarm();
       }
 
       taskForm.addEventListener('submit', event => {
@@ -1250,8 +1638,11 @@
           taskInput.focus();
           return;
         }
-        startSession(task);
+        startSession(task, durationInput.value);
       });
+
+      durationInput.addEventListener('input', renderDurationPicker);
+      document.getElementById('sound-test-button').addEventListener('click', testAlert);
 
       document.getElementById('stuck-button').addEventListener('click', beginRecovery);
       document.getElementById('cancel-stuck-button').addEventListener('click', cancelRecovery);
@@ -1271,6 +1662,8 @@
       document.getElementById('finish-button').addEventListener('click', finishSession);
       document.getElementById('finish-after-return-button').addEventListener('click', finishSession);
       document.getElementById('new-session-button').addEventListener('click', resetSession);
+      document.getElementById('stop-alarm-button').addEventListener('click', finishSession);
+      addTimeButton.addEventListener('click', addFiveMinutes);
       document.getElementById('clear-history-button').addEventListener('click', () => {
         const currentDay = todayKey(Date.now());
         history = history.filter(item => todayKey(item.timestamp) !== currentDay);
@@ -1284,6 +1677,7 @@
       });
 
       renderReasons();
+      renderDurationPicker();
       renderHistory();
       restoreSession();
     })();
