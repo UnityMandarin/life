@@ -11,10 +11,10 @@
       'use strict';
       try {
         if (window.sessionStorage.getItem('life-access-granted') !== 'true') {
-          window.location.replace('security.html');
+          window.location.replace('security.html?next=menu.html');
         }
       } catch (error) {
-        window.location.replace('security.html');
+        window.location.replace('security.html?next=menu.html');
       }
     })();
   </script>
