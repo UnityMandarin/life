@@ -2171,6 +2171,9 @@
       const canvas = document.getElementById('motion-canvas');
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
       const accessKey = 'life-access-granted';
+      const allowedDestinations = new Set(['index.html', 'return.html', 'menu.html']);
+      const requestedDestination = new URLSearchParams(window.location.search).get('next');
+      const destination = allowedDestinations.has(requestedDestination) ? requestedDestination : 'index.html';
       let currentStage = 1;
       let transitioning = false;
       let pointerFrame = 0;
@@ -2510,7 +2513,7 @@
         setAccess(true);
         advance(4);
         const redirectDelay = reduceMotion.matches ? 160 : 1750;
-        window.setTimeout(() => window.location.replace('index.html'), redirectDelay);
+        window.setTimeout(() => window.location.replace(destination), redirectDelay);
       }
 
       phraseForm.addEventListener('submit', event => {
