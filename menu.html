@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f5f7">
+  <meta name="description" content="A private shelf of useful websites and creative tools.">
+  <title>Menu — Useful places</title>
+  <script>
+    (() => {
+      'use strict';
+      try {
+        if (window.sessionStorage.getItem('life-access-granted') !== 'true') {
+          window.location.replace('security.html');
+        }
+      } catch (error) {
+        window.location.replace('security.html');
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f5f5f7;
+      --surface: rgba(255, 255, 255, .88);
+      --surface-solid: #fff;
+      --text: #1d1d1f;
+      --secondary: #6e6e73;
+      --tertiary: #8e8e93;
+      --line: rgba(29, 29, 31, .1);
+      --blue: #0071e3;
+      --blue-soft: #eef6ff;
+      --shadow: 0 18px 45px rgba(0, 0, 0, .055), 0 2px 7px rgba(0, 0, 0, .025);
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      min-width: 320px;
+      min-height: 100%;
+      background: var(--page);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100svh;
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% -12rem, rgba(255, 255, 255, .98) 0 20rem, transparent 46rem),
+        var(--page);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      top: 12px;
+      left: 12px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      color: #fff;
+      background: var(--blue);
+      text-decoration: none;
+      transform: translateY(-160%);
+      transition: transform .2s ease;
+    }
+
+    .skip-link:focus { transform: none; }
+
+    .topbar {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      height: 64px;
+      padding: 0 max(22px, env(safe-area-inset-right)) 0 max(22px, env(safe-area-inset-left));
+      border-bottom: 1px solid var(--line);
+      background: rgba(245, 245, 247, .82);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      backdrop-filter: blur(22px) saturate(180%);
+    }
+
+    .topbar-inner {
+      width: min(1120px, 100%);
+      height: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 650;
+      letter-spacing: -.015em;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      color: #fff;
+      background: var(--text);
+      font-size: 13px;
+      font-weight: 760;
+    }
+
+    .brand-divider { width: 1px; height: 16px; background: rgba(29, 29, 31, .16); }
+    .brand-section { color: var(--secondary); font-weight: 500; }
+
+    .privacy-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--secondary);
+      font-size: 12px;
+      font-weight: 560;
+    }
+
+    .privacy-label::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #34c759;
+      box-shadow: 0 0 0 4px rgba(52, 199, 89, .1);
+      content: "";
+    }
+
+    main {
+      width: min(1120px, calc(100% - 44px));
+      margin: 0 auto;
+      padding: clamp(60px, 8vw, 96px) 0 80px;
+    }
+
+    .intro {
+      max-width: 760px;
+      margin-bottom: 38px;
+    }
+
+    .eyebrow {
+      margin: 0 0 15px;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(46px, 7vw, 76px);
+      line-height: .99;
+      letter-spacing: -.058em;
+      font-weight: 710;
+    }
+
+    .intro-copy {
+      max-width: 600px;
+      margin: 20px 0 0;
+      color: var(--secondary);
+      font-size: clamp(17px, 2vw, 21px);
+      line-height: 1.5;
+      letter-spacing: -.018em;
+    }
+
+    .controls {
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .search-wrap {
+      position: relative;
+      width: min(430px, 100%);
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      left: 16px;
+      color: var(--tertiary);
+      font-size: 17px;
+      transform: translateY(-51%);
+      pointer-events: none;
+    }
+
+    .search {
+      width: 100%;
+      min-height: 48px;
+      padding: 0 44px 0 44px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      outline: none;
+      color: var(--text);
+      background: rgba(255, 255, 255, .82);
+      box-shadow: 0 2px 7px rgba(0, 0, 0, .025);
+      font-size: 15px;
+      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .search::placeholder { color: var(--tertiary); }
+
+    .search:focus {
+      border-color: rgba(0, 113, 227, .48);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(0, 113, 227, .1);
+    }
+
+    .clear-search {
+      position: absolute;
+      top: 50%;
+      right: 11px;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      color: var(--secondary);
+      background: #e8e8ed;
+      cursor: pointer;
+      transform: translateY(-50%);
+    }
+
+    .clear-search[hidden] { display: none; }
+
+    .count {
+      color: var(--tertiary);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .section { margin-top: 42px; }
+
+    .section[hidden] { display: none; }
+
+    .section-head {
+      margin-bottom: 14px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.2;
+      letter-spacing: -.025em;
+      font-weight: 670;
+    }
+
+    .section-note {
+      margin: 0;
+      color: var(--tertiary);
+      font-size: 12px;
+    }
+
+    .bookmark-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .bookmark {
+      min-width: 0;
+      min-height: 150px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 21px;
+      display: flex;
+      flex-direction: column;
+      color: var(--text);
+      background: var(--surface);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .018);
+      text-decoration: none;
+      transition: transform .24s var(--ease), border-color .2s ease, box-shadow .24s var(--ease), background .2s ease;
+    }
+
+    .bookmark:hover {
+      border-color: rgba(29, 29, 31, .16);
+      background: var(--surface-solid);
+      box-shadow: var(--shadow);
+      transform: translateY(-3px);
+    }
+
+    .bookmark:focus-visible, .brand:focus-visible, .clear-search:focus-visible {
+      outline: 3px solid rgba(0, 113, 227, .28);
+      outline-offset: 3px;
+    }
+
+    .bookmark[hidden] { display: none; }
+
+    .bookmark-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .logo-box {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      border: 1px solid rgba(29, 29, 31, .08);
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: var(--secondary);
+      background: #fff;
+      font-size: 17px;
+      font-weight: 720;
+    }
+
+    .logo-box img {
+      position: relative;
+      z-index: 1;
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+    }
+
+    .open-mark {
+      color: #b2b2b7;
+      font-size: 17px;
+      line-height: 1;
+      transition: color .2s ease, transform .24s var(--ease);
+    }
+
+    .bookmark:hover .open-mark { color: var(--blue); transform: translate(2px, -2px); }
+
+    .bookmark h3 {
+      margin: 16px 0 5px;
+      font-size: 16px;
+      line-height: 1.2;
+      letter-spacing: -.019em;
+      font-weight: 660;
+    }
+
+    .bookmark p {
+      margin: 0;
+      color: var(--secondary);
+      font-size: 13px;
+      line-height: 1.46;
+    }
+
+    .empty {
+      padding: 62px 22px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      color: var(--secondary);
+      background: rgba(255, 255, 255, .58);
+      text-align: center;
+    }
+
+    .empty[hidden] { display: none; }
+    .empty strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 17px; }
+
+    .footer {
+      margin-top: 56px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: var(--tertiary);
+      font-size: 12px;
+    }
+
+    @media (max-width: 820px) {
+      .bookmark-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 560px) {
+      .topbar { height: 58px; padding-inline: 17px; }
+      .brand-section, .brand-divider { display: none; }
+      .privacy-label { font-size: 11px; }
+      main { width: min(100% - 30px, 1120px); padding-top: 46px; }
+      h1 { font-size: clamp(42px, 14vw, 58px); }
+      .controls { align-items: flex-start; flex-direction: column; }
+      .count { padding-left: 3px; }
+      .section { margin-top: 34px; }
+      .section-head { align-items: flex-start; flex-direction: column; gap: 4px; }
+      .bookmark-grid { grid-template-columns: 1fr; }
+      .bookmark { min-height: 132px; padding: 18px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#bookmarks">Skip to bookmarks</a>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html" aria-label="Life home">
+        <span class="brand-mark" aria-hidden="true">L</span>
+        <span>Life</span>
+        <span class="brand-divider" aria-hidden="true"></span>
+        <span class="brand-section">Menu</span>
+      </a>
+      <span class="privacy-label">Private shelf</span>
+    </div>
+  </header>
+
+  <main id="bookmarks">
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">A quiet corner of the internet</p>
+      <h1 id="page-title">Useful places.</h1>
+      <p class="intro-copy">A small shelf of dependable tools for making, fixing, learning, and getting things done.</p>
+    </section>
+
+    <div class="controls">
+      <div class="search-wrap">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <label class="visually-hidden" for="bookmark-search">Search bookmarks</label>
+        <input class="search" id="bookmark-search" type="search" placeholder="Search this shelf" autocomplete="off" spellcheck="false">
+        <button class="clear-search" id="clear-search" type="button" aria-label="Clear search" hidden>×</button>
+      </div>
+      <span class="count" id="bookmark-count" aria-live="polite">19 places</span>
+    </div>
+
+    <div id="bookmark-sections">
+      <section class="section" data-section>
+        <div class="section-head"><h2>Focus & everyday</h2><p class="section-note">Settle in, decide, and move</p></div>
+        <div class="bookmark-grid">
+          <a class="bookmark" href="https://mynoise.net/" target="_blank" rel="noopener noreferrer" data-search="myNoise focus ambient noise sound generator concentration sleep">
+            <div class="bookmark-top"><span class="logo-box">M<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fmynoise.net" alt="myNoise logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>myNoise</h3><p>Adjustable soundscapes for focus, calm, sleep, or masking distracting noise.</p>
+          </a>
+          <a class="bookmark" href="https://www.supercook.com/#/desktop" target="_blank" rel="noopener noreferrer" data-search="SuperCook food recipes ingredients cooking pantry">
+            <div class="bookmark-top"><span class="logo-box">S<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fwww.supercook.com" alt="SuperCook logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>SuperCook</h3><p>Find recipes you can make from ingredients already in your kitchen.</p>
+          </a>
+          <a class="bookmark" href="https://www.justwatch.com/" target="_blank" rel="noopener noreferrer" data-search="JustWatch streaming movies television shows sports watch">
+            <div class="bookmark-top"><span class="logo-box">J<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fwww.justwatch.com" alt="JustWatch logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>JustWatch</h3><p>Search streaming services to see where movies, shows, and sports are available.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="section" data-section>
+        <div class="section-head"><h2>Build & design</h2><p class="section-note">From idea to interface</p></div>
+        <div class="bookmark-grid">
+          <a class="bookmark" href="https://lovable.dev/" target="_blank" rel="noopener noreferrer" data-search="Lovable AI app website builder code prototype">
+            <div class="bookmark-top"><span class="logo-box">L<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Flovable.dev" alt="Lovable logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>Lovable</h3><p>Build working apps and websites by describing what you want to an AI.</p>
+          </a>
+          <a class="bookmark" href="https://design.penpot.app/#/dashboard/recent?team-id=6f06cb60-262a-804c-8008-6b44536768f8" target="_blank" rel="noopener noreferrer" data-search="Penpot workspace recent dashboard design team projects">
+            <div class="bookmark-top"><span class="logo-box">P<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fdesign.penpot.app" alt="Penpot logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>Penpot workspace</h3><p>Jump directly to your recent Penpot design projects and team workspace.</p>
+          </a>
+          <a class="bookmark" href="https://penpot.app/" target="_blank" rel="noopener noreferrer" data-search="Penpot open source design prototyping collaboration UI UX">
+            <div class="bookmark-top"><span class="logo-box">P<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fpenpot.app" alt="Penpot logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>Penpot</h3><p>An open-source platform for interface design, prototyping, and team collaboration.</p>
+          </a>
+          <a class="bookmark" href="https://app.diagrams.net/" target="_blank" rel="noopener noreferrer" data-search="draw.io diagrams.net flowchart diagram whiteboard architecture">
+            <div class="bookmark-top"><span class="logo-box">D<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fapp.diagrams.net" alt="draw.io logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>draw.io</h3><p>Create flowcharts, diagrams, maps, and technical visuals in the browser.</p>
+          </a>
+          <a class="bookmark" href="https://www.photopea.com/" target="_blank" rel="noopener noreferrer" data-search="Photopea image photo editor PSD Photoshop browser graphics">
+            <div class="bookmark-top"><span class="logo-box">P<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fwww.photopea.com" alt="Photopea logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>Photopea</h3><p>A capable browser image editor that works with PSD and many common formats.</p>
+          </a>
+          <a class="bookmark" href="https://inkscape.org/" target="_blank" rel="noopener noreferrer" data-search="Inkscape vector graphics SVG illustration open source design">
+            <div class="bookmark-top"><span class="logo-box">I<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Finkscape.org" alt="Inkscape logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>Inkscape</h3><p>A free, open-source vector graphics editor for SVG artwork and illustration.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="section" data-section>
+        <div class="section-head"><h2>Files & documents</h2><p class="section-note">Move, explain, and repair</p></div>
+        <div class="bookmark-grid">
+          <a class="bookmark" href="https://www.swisstransfer.com/en" target="_blank" rel="noopener noreferrer" data-search="SwissTransfer transfer send large files secure free">
+            <div class="bookmark-top"><span class="logo-box">S<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fwww.swisstransfer.com" alt="SwissTransfer logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>SwissTransfer</h3><p>Send large files through a simple, secure transfer link.</p>
+          </a>
+          <a class="bookmark" href="https://scribe.com/" target="_blank" rel="noopener noreferrer" data-search="Scribe workflow documentation how-to guide screenshots process">
+            <div class="bookmark-top"><span class="logo-box">S<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fscribe.com" alt="Scribe logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>Scribe</h3><p>Turn a process into a step-by-step guide with captured text and screenshots.</p>
+          </a>
+          <a class="bookmark" href="https://pdfcandy.com/" target="_blank" rel="noopener noreferrer" data-search="PDF Candy PDF convert merge split compress edit files documents">
+            <div class="bookmark-top"><span class="logo-box">P<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fpdfcandy.com" alt="PDF Candy logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>PDF Candy</h3><p>A collection of browser tools to convert, merge, split, compress, and edit PDFs.</p>
+          </a>
+          <a class="bookmark" href="https://www.libreoffice.org/" target="_blank" rel="noopener noreferrer" data-search="LibreOffice office suite Writer Calc Impress documents spreadsheet presentation open source">
+            <div class="bookmark-top"><span class="logo-box">L<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fwww.libreoffice.org" alt="LibreOffice logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>LibreOffice</h3><p>A free, open-source office suite for documents, spreadsheets, and presentations.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="section" data-section>
+        <div class="section-head"><h2>Media</h2><p class="section-note">Images, video, and sound</p></div>
+        <div class="bookmark-grid">
+          <a class="bookmark" href="https://squoosh.app/" target="_blank" rel="noopener noreferrer" data-search="Squoosh image compress resize convert optimize private local">
+            <div class="bookmark-top"><span class="logo-box">S<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fsquoosh.app" alt="Squoosh logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>Squoosh</h3><p>Compress and compare images locally in your browser without uploading them.</p>
+          </a>
+          <a class="bookmark" href="https://www.blackmagicdesign.com/products/davinciresolve" target="_blank" rel="noopener noreferrer" data-search="DaVinci Resolve video editing color correction visual effects audio post production">
+            <div class="bookmark-top"><span class="logo-box">D<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fwww.blackmagicdesign.com" alt="DaVinci Resolve logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>DaVinci Resolve</h3><p>Professional video editing, color, effects, motion graphics, and audio tools.</p>
+          </a>
+          <a class="bookmark" href="https://www.audacityteam.org/" target="_blank" rel="noopener noreferrer" data-search="Audacity audio editor recorder music podcast open source">
+            <div class="bookmark-top"><span class="logo-box">A<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fwww.audacityteam.org" alt="Audacity logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>Audacity</h3><p>A free audio recorder and editor for music, voice, podcasts, and cleanup.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="section" data-section>
+        <div class="section-head"><h2>Writing & web</h2><p class="section-note">Make things clearer and safer</p></div>
+        <div class="bookmark-grid">
+          <a class="bookmark" href="https://hemingwayapp.com/" target="_blank" rel="noopener noreferrer" data-search="Hemingway writing editor readability grammar clear concise">
+            <div class="bookmark-top"><span class="logo-box">H<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fhemingwayapp.com" alt="Hemingway Editor logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>Hemingway Editor</h3><p>Highlight hard-to-read writing and improve clarity, grammar, and tone.</p>
+          </a>
+          <a class="bookmark" href="https://www.virustotal.com/gui/home/search" target="_blank" rel="noopener noreferrer" data-search="VirusTotal security malware scan URL file hash suspicious website">
+            <div class="bookmark-top"><span class="logo-box">V<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fwww.virustotal.com" alt="VirusTotal logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>VirusTotal</h3><p>Check suspicious files, URLs, domains, or hashes across security scanners.</p>
+          </a>
+          <a class="bookmark" href="https://www.cookiebot.com/us/automate/" target="_blank" rel="noopener noreferrer" data-search="Cookiebot cookie consent website privacy compliance scanner CMP">
+            <div class="bookmark-top"><span class="logo-box">C<img src="https://www.google.com/s2/favicons?sz=128&amp;domain_url=https%3A%2F%2Fwww.cookiebot.com" alt="Cookiebot logo"></span><span class="open-mark" aria-hidden="true">↗</span></div>
+            <h3>Cookiebot</h3><p>Automate cookie scanning, consent collection, and website privacy compliance.</p>
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <div class="empty" id="empty-state" hidden>
+      <strong>No places found.</strong>
+      Try a shorter search or a different word.
+    </div>
+
+    <footer class="footer">19 carefully kept bookmarks · Opens links in a new tab</footer>
+  </main>
+
+  <script>
+    (() => {
+      'use strict';
+      const search = document.getElementById('bookmark-search');
+      const clearButton = document.getElementById('clear-search');
+      const count = document.getElementById('bookmark-count');
+      const emptyState = document.getElementById('empty-state');
+      const bookmarks = [...document.querySelectorAll('.bookmark')];
+      const sections = [...document.querySelectorAll('[data-section]')];
+
+      function filterBookmarks() {
+        const query = search.value.trim().toLocaleLowerCase();
+        let visibleCount = 0;
+
+        bookmarks.forEach(bookmark => {
+          const matches = !query || bookmark.dataset.search.toLocaleLowerCase().includes(query);
+          bookmark.hidden = !matches;
+          if (matches) visibleCount += 1;
+        });
+
+        sections.forEach(section => {
+          section.hidden = !section.querySelector('.bookmark:not([hidden])');
+        });
+
+        clearButton.hidden = !query;
+        emptyState.hidden = visibleCount !== 0;
+        count.textContent = visibleCount + (visibleCount === 1 ? ' place' : ' places');
+      }
+
+      search.addEventListener('input', filterBookmarks);
+      clearButton.addEventListener('click', () => {
+        search.value = '';
+        filterBookmarks();
+        search.focus();
+      });
+    })();
+  </script>
+</body>
+</html>
