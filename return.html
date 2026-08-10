@@ -226,7 +226,8 @@
     }
 
     .app-card[data-state="reason"] .status-dot,
-    .app-card[data-state="action"] .status-dot {
+    .app-card[data-state="action"] .status-dot,
+    .app-card[data-state="checkpoint"] .status-dot {
       background: var(--orange);
       box-shadow: 0 0 0 4px rgba(178, 80, 0, .1);
     }
@@ -436,6 +437,56 @@
       line-height: 1.4;
     }
 
+    .prepared-entry {
+      margin-top: 28px;
+      padding: 18px;
+      border: 1px solid rgba(0, 113, 227, .2);
+      border-radius: var(--radius-md);
+      background: var(--blue-soft);
+    }
+
+    .prepared-entry[hidden], .focus-entry[hidden], .summary-checkpoint[hidden] { display: none; }
+
+    .prepared-entry-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .prepared-entry-kicker {
+      margin: 0 0 6px;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .prepared-entry-task {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 650;
+      letter-spacing: -.02em;
+    }
+
+    .prepared-entry-action {
+      margin: 13px 0 0;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 590;
+      line-height: 1.45;
+    }
+
+    .prepared-entry-detail {
+      margin: 8px 0 0;
+      color: var(--secondary);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .prepared-entry .button { flex: 0 0 auto; }
+
     .button {
       min-height: 48px;
       padding: 0 21px;
@@ -495,6 +546,37 @@
       align-items: flex-start;
       justify-content: space-between;
       gap: 24px;
+    }
+
+    .focus-entry {
+      margin: -16px 0 30px;
+      padding: 15px 17px;
+      border-left: 3px solid var(--blue);
+      border-radius: 0 14px 14px 0;
+      background: var(--blue-soft);
+    }
+
+    .focus-entry-label {
+      margin: 0 0 5px;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .focus-entry-action {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 630;
+      line-height: 1.4;
+    }
+
+    .focus-entry-context {
+      margin: 6px 0 0;
+      color: var(--secondary);
+      font-size: 12px;
+      line-height: 1.4;
     }
 
     .current-task-label {
@@ -568,6 +650,75 @@
       background: var(--blue);
       transition: width .35s linear;
     }
+
+    .commitment-lock {
+      width: min(560px, 100%);
+      margin: -18px auto 28px;
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid rgba(178, 80, 0, .18);
+      border-radius: 16px;
+      background: var(--orange-soft);
+      transition: border-color .25s ease, background .25s ease, transform .25s var(--ease);
+    }
+
+    .commitment-lock[data-unlocked="true"] {
+      border-color: rgba(36, 138, 61, .16);
+      background: var(--green-soft);
+    }
+
+    .commitment-lock.is-return-nudge { animation: nudge-lock .5s var(--ease) both; }
+
+    @keyframes nudge-lock {
+      0%, 100% { transform: none; }
+      45% { transform: scale(1.018); }
+    }
+
+    .lock-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--orange);
+      background: rgba(178, 80, 0, .09);
+      font-size: 15px;
+    }
+
+    .commitment-lock[data-unlocked="true"] .lock-mark {
+      color: var(--green);
+      background: rgba(36, 138, 61, .09);
+    }
+
+    .lock-title { display: block; font-size: 12px; font-weight: 680; line-height: 1.35; }
+    .lock-copy { margin: 3px 0 0; color: var(--secondary); font-size: 11px; line-height: 1.4; }
+    .lock-countdown { color: var(--orange); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .commitment-lock[data-unlocked="true"] .lock-countdown { color: var(--green); }
+
+    .interruption-action {
+      width: 100%;
+      margin-top: 2px;
+      text-align: center;
+    }
+
+    .interruption-action[hidden] { display: none; }
+
+    .interruption-button {
+      min-height: 34px;
+      padding: 0;
+      border: 0;
+      color: var(--tertiary);
+      background: transparent;
+      cursor: pointer;
+      font-size: 11px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .interruption-button:hover { color: var(--text); }
 
     .focus-actions, .return-actions, .summary-actions {
       display: flex;
@@ -791,6 +942,69 @@
     .action-primary { width: min(100%, 390px); }
     .action-links { margin-top: 6px; }
 
+    .checkpoint-shell { max-width: 620px; margin: 0 auto; }
+
+    .checkpoint-intro { text-align: center; }
+    .checkpoint-intro h2 { font-size: clamp(34px, 5vw, 50px); }
+
+    .checkpoint-rule {
+      margin: 18px auto 0;
+      padding: 11px 14px;
+      border-radius: 14px;
+      color: var(--orange);
+      background: var(--orange-soft);
+      font-size: 12px;
+      font-weight: 620;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    .checkpoint-form { margin-top: 25px; display: grid; gap: 15px; }
+
+    .checkpoint-field { display: grid; gap: 7px; }
+
+    .checkpoint-field-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .checkpoint-number { color: var(--blue); font-size: 12px; font-weight: 720; }
+    .checkpoint-label { flex: 1; font-size: 13px; font-weight: 650; }
+    .checkpoint-hint { color: var(--tertiary); font-size: 10px; }
+
+    .checkpoint-input {
+      width: 100%;
+      min-height: 70px;
+      padding: 13px 15px;
+      resize: vertical;
+      border: 1px solid var(--line-strong);
+      border-radius: 14px;
+      outline: none;
+      color: var(--text);
+      background: var(--surface-muted);
+      font: inherit;
+      font-size: 14px;
+      line-height: 1.45;
+      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .checkpoint-input:focus {
+      border-color: rgba(0, 113, 227, .55);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(0, 113, 227, .1);
+    }
+
+    .checkpoint-actions {
+      margin-top: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     .return-shell, .summary-shell { max-width: 580px; margin: 0 auto; text-align: center; }
 
     .alarm-shell { max-width: 590px; margin: 0 auto; text-align: center; }
@@ -889,6 +1103,18 @@
       overflow: hidden;
       background: var(--surface-muted);
     }
+
+    .summary-checkpoint {
+      margin: 24px 0;
+      padding: 17px;
+      border: 1px solid rgba(0, 113, 227, .18);
+      border-radius: var(--radius-md);
+      background: var(--blue-soft);
+      text-align: left;
+    }
+
+    .summary-checkpoint strong { display: block; color: var(--blue); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+    .summary-checkpoint p { margin: 7px 0 0; font-size: 14px; font-weight: 620; line-height: 1.45; }
 
     .summary-stat { padding: 18px 12px; }
     .summary-stat + .summary-stat { border-left: 1px solid var(--line); }
@@ -1001,7 +1227,11 @@
       .app-card { min-height: 570px; padding: 24px 20px; border-radius: 24px; }
       .form-bottom { align-items: stretch; flex-direction: column; }
       .form-bottom .button { width: 100%; }
+      .prepared-entry-head { flex-direction: column; }
+      .prepared-entry .button { width: 100%; }
       .focus-head { margin-top: 20px; }
+      .commitment-lock { grid-template-columns: auto minmax(0, 1fr); }
+      .lock-countdown { grid-column: 2; }
       .flow-nav { margin-bottom: 10px; }
       .recovery-emoji { width: 86px; height: 86px; font-size: 42px; }
       .reason-grid { grid-template-columns: 1fr 1fr; }
@@ -1015,6 +1245,8 @@
       .summary-stat + .summary-stat { border-top: 1px solid var(--line); border-left: 0; }
       .button { min-height: 50px; }
       .focus-actions .button, .return-actions .button, .summary-actions .button, .alarm-actions .button { width: 100%; }
+      .checkpoint-actions { align-items: stretch; flex-direction: column-reverse; }
+      .checkpoint-actions .button { width: 100%; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1042,7 +1274,7 @@
     <header class="intro">
       <p class="eyebrow">A gentler focus timer</p>
       <h1>Find your way back.</h1>
-      <p class="intro-copy">Choose one thing and a focus time. When momentum breaks, get one tiny action—not a lecture—and measure the return.</p>
+      <p class="intro-copy">Choose one thing and a focus time. The first 10 minutes protect your commitment; if momentum breaks, recover in one tiny action, and if you switch later, leave a clean way back.</p>
     </header>
 
     <div class="workspace">
@@ -1056,6 +1288,17 @@
           <p class="panel-kicker">One thing only</p>
           <h2>What are you returning to?</h2>
           <p class="panel-copy">Keep it concrete enough that you can picture the first move.</p>
+          <section class="prepared-entry" id="prepared-entry" aria-labelledby="prepared-entry-task" hidden>
+            <div class="prepared-entry-head">
+              <div>
+                <p class="prepared-entry-kicker">Prepared entry point</p>
+                <h3 class="prepared-entry-task" id="prepared-entry-task"></h3>
+                <p class="prepared-entry-action" id="prepared-entry-action"></p>
+                <p class="prepared-entry-detail" id="prepared-entry-detail"></p>
+              </div>
+              <button class="button button-primary" id="resume-checkpoint-button" type="button">Resume this task</button>
+            </div>
+          </section>
           <form class="task-form" id="task-form">
             <label class="field-label" for="task-input">Your task</label>
             <input class="task-field" id="task-input" name="task" type="text" maxlength="120" autocomplete="off" placeholder="Finish the first draft" required>
@@ -1091,7 +1334,7 @@
               </div>
             </div>
             <div class="form-bottom">
-              <p class="form-hint">Counts upward while you work. Recovery time stays paused.</p>
+              <p class="form-hint">Focus time counts upward. Recovery pauses it, and switching stays locked for the first 10 minutes.</p>
               <button class="button button-primary" type="submit">Start timer</button>
             </div>
           </form>
@@ -1105,15 +1348,31 @@
             </div>
             <span class="return-count" id="return-count">No returns yet</span>
           </div>
+          <div class="focus-entry" id="focus-entry" hidden>
+            <p class="focus-entry-label">Start here — prepared by you</p>
+            <p class="focus-entry-action" id="focus-entry-action"></p>
+            <p class="focus-entry-context" id="focus-entry-context"></p>
+          </div>
           <div class="timer-wrap">
             <div class="timer-label">Time on task</div>
             <div class="timer-value" id="focus-timer">00:00</div>
             <div class="timer-goal" id="timer-goal">of 25:00</div>
             <div class="timer-progress" aria-hidden="true"><div class="timer-progress-fill" id="timer-progress-fill"></div></div>
           </div>
+          <div class="commitment-lock" id="commitment-lock" data-unlocked="false">
+            <span class="lock-mark" id="lock-mark" aria-hidden="true">🔒</span>
+            <div>
+              <strong class="lock-title" id="lock-title">First 10 minutes: stay with this task.</strong>
+              <p class="lock-copy" id="lock-copy">Work slowly, break it down, ask for help, or use “I’m stuck.” Switching is not available yet.</p>
+            </div>
+            <span class="lock-countdown" id="lock-countdown">10:00</span>
+          </div>
           <div class="focus-actions">
             <button class="button button-danger stuck-button" id="stuck-button" type="button">I’m stuck</button>
-            <button class="button button-link" id="finish-button" type="button">Finish session</button>
+            <button class="button button-link" id="finish-button" type="button" disabled>Switching locked</button>
+          </div>
+          <div class="interruption-action" id="interruption-action">
+            <button class="interruption-button" id="real-interruption-button" type="button">A real interruption happened</button>
           </div>
         </div>
 
@@ -1163,8 +1422,55 @@
             <p class="return-message" id="return-message">That return counts. Pick up with the smallest visible step.</p>
             <div class="return-actions">
               <button class="button button-primary" id="continue-button" type="button">Continue task</button>
-              <button class="button button-secondary" id="finish-after-return-button" type="button">Finish session</button>
+              <button class="button button-secondary" id="finish-after-return-button" type="button">Switch tasks</button>
             </div>
+            <p class="return-label" id="returned-lock-note" hidden>Switching stays locked until you have completed 10 minutes on the task.</p>
+          </div>
+        </div>
+
+        <div class="panel" id="checkpoint-panel" hidden>
+          <div class="flow-nav">
+            <button class="flow-back" id="cancel-checkpoint-button" type="button" aria-label="Return to task">←</button>
+            <span class="flow-name">Switch checkpoint</span>
+            <span class="flow-step">20–40 seconds</span>
+          </div>
+          <div class="checkpoint-shell">
+            <div class="checkpoint-intro">
+              <p class="panel-kicker">Switching is allowed</p>
+              <h2>Prepare your return.</h2>
+              <p class="panel-copy" style="margin-inline:auto">Leave your brain a clean entry point so this task does not become an abandoned tab in your head.</p>
+              <p class="checkpoint-rule" id="checkpoint-rule">Switching is cheap. Abandoning without a return point is expensive.</p>
+            </div>
+            <form class="checkpoint-form" id="checkpoint-form">
+              <label class="checkpoint-field">
+                <span class="checkpoint-field-head">
+                  <span class="checkpoint-number">1</span>
+                  <span class="checkpoint-label">Where I am</span>
+                  <span class="checkpoint-hint">Be concrete</span>
+                </span>
+                <textarea class="checkpoint-input" id="checkpoint-where" maxlength="240" placeholder="Finished Algebra 1 Unit 7 lesson 3." required></textarea>
+              </label>
+              <label class="checkpoint-field">
+                <span class="checkpoint-field-head">
+                  <span class="checkpoint-number">2</span>
+                  <span class="checkpoint-label">What is blocking me</span>
+                  <span class="checkpoint-hint">Name the friction</span>
+                </span>
+                <textarea class="checkpoint-input" id="checkpoint-blocking" maxlength="240" placeholder="I understand slope but keep making sign mistakes." required></textarea>
+              </label>
+              <label class="checkpoint-field">
+                <span class="checkpoint-field-head">
+                  <span class="checkpoint-number">3</span>
+                  <span class="checkpoint-label">Exact next action</span>
+                  <span class="checkpoint-hint">Verb + object</span>
+                </span>
+                <textarea class="checkpoint-input" id="checkpoint-next-action" maxlength="240" placeholder="Open exercise 7.4 and do problems 1–5 without notes." required></textarea>
+              </label>
+              <div class="checkpoint-actions">
+                <button class="button button-link" id="checkpoint-return-button" type="button">Keep working instead</button>
+                <button class="button button-primary" type="submit">Save checkpoint &amp; switch</button>
+              </div>
+            </form>
           </div>
         </div>
 
@@ -1185,12 +1491,16 @@
           <div class="summary-shell">
             <div class="success-mark" aria-hidden="true">✓</div>
             <p class="panel-kicker">Session complete</p>
-            <h2>Good work returning.</h2>
-            <p class="panel-copy" style="margin-inline:auto">Progress is not never getting stuck. It is learning how to come back.</p>
+            <h2 id="summary-title">Good work returning.</h2>
+            <p class="panel-copy" id="summary-copy" style="margin-inline:auto">Progress is not never getting stuck. It is learning how to come back.</p>
             <div class="summary-stats">
               <div class="summary-stat"><strong id="summary-focus">00:00</strong><span>On task</span></div>
               <div class="summary-stat"><strong id="summary-returns">0</strong><span>Returns</span></div>
               <div class="summary-stat"><strong id="summary-average">—</strong><span>Avg. return</span></div>
+            </div>
+            <div class="summary-checkpoint" id="summary-checkpoint" hidden>
+              <strong>Your prepared next action</strong>
+              <p id="summary-checkpoint-action"></p>
             </div>
             <div class="summary-actions">
               <button class="button button-primary" id="new-session-button" type="button">Start another task</button>
@@ -1226,12 +1536,15 @@
 
       const sessionKey = 'life-return-session-v1';
       const historyKey = 'life-return-history-v1';
+      const checkpointKey = 'life-return-checkpoints-v1';
+      const commitmentLockMs = 10 * 60 * 1000;
       const panels = {
         setup: document.getElementById('setup-panel'),
         focus: document.getElementById('focus-panel'),
         reason: document.getElementById('reason-panel'),
         action: document.getElementById('action-panel'),
         returned: document.getElementById('returned-panel'),
+        checkpoint: document.getElementById('checkpoint-panel'),
         timeup: document.getElementById('timeup-panel'),
         summary: document.getElementById('summary-panel')
       };
@@ -1247,6 +1560,16 @@
       const timerGoal = document.getElementById('timer-goal');
       const timerProgressFill = document.getElementById('timer-progress-fill');
       const returnCount = document.getElementById('return-count');
+      const focusEntry = document.getElementById('focus-entry');
+      const focusEntryAction = document.getElementById('focus-entry-action');
+      const focusEntryContext = document.getElementById('focus-entry-context');
+      const commitmentLock = document.getElementById('commitment-lock');
+      const lockMark = document.getElementById('lock-mark');
+      const lockTitle = document.getElementById('lock-title');
+      const lockCopy = document.getElementById('lock-copy');
+      const lockCountdown = document.getElementById('lock-countdown');
+      const finishButton = document.getElementById('finish-button');
+      const interruptionAction = document.getElementById('interruption-action');
       const reasonGrid = document.getElementById('reason-grid');
       const reasonHeroEmoji = document.getElementById('reason-hero-emoji');
       const reasonSupportCopy = document.getElementById('reason-support-copy');
@@ -1263,6 +1586,22 @@
       const timeupDuration = document.getElementById('timeup-duration');
       const timeupTask = document.getElementById('timeup-task');
       const addTimeButton = document.getElementById('add-time-button');
+      const checkpointForm = document.getElementById('checkpoint-form');
+      const checkpointWhere = document.getElementById('checkpoint-where');
+      const checkpointBlocking = document.getElementById('checkpoint-blocking');
+      const checkpointNextAction = document.getElementById('checkpoint-next-action');
+      const checkpointRule = document.getElementById('checkpoint-rule');
+      const preparedEntry = document.getElementById('prepared-entry');
+      const preparedEntryTask = document.getElementById('prepared-entry-task');
+      const preparedEntryAction = document.getElementById('prepared-entry-action');
+      const preparedEntryDetail = document.getElementById('prepared-entry-detail');
+      const returnedLockNote = document.getElementById('returned-lock-note');
+      const finishAfterReturnButton = document.getElementById('finish-after-return-button');
+      const summaryTitle = document.getElementById('summary-title');
+      const summaryCopy = document.getElementById('summary-copy');
+      const summaryCheckpoint = document.getElementById('summary-checkpoint');
+      const summaryCheckpointAction = document.getElementById('summary-checkpoint-action');
+      const newSessionButton = document.getElementById('new-session-button');
       const liveRegion = document.getElementById('live-region');
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
       const pageTitle = document.title;
@@ -1272,7 +1611,9 @@
       let alarmActive = false;
       let session = readStorage(sessionKey, null);
       let history = readStorage(historyKey, []);
+      let checkpoints = readStorage(checkpointKey, []);
       let lastReturnDuration = 0;
+      let leftDuringLock = false;
 
       const reasons = [
         {
@@ -1555,6 +1896,23 @@
         return Math.max(0, session.focusedMs || 0) + active;
       }
 
+      function switchingUnlocked(now = Date.now()) {
+        return focusElapsed(now) >= commitmentLockMs;
+      }
+
+      function validCheckpoint(item) {
+        return item
+          && typeof item.task === 'string'
+          && typeof item.where === 'string'
+          && typeof item.blocking === 'string'
+          && typeof item.nextAction === 'string';
+      }
+
+      function latestOpenCheckpoint() {
+        checkpoints = Array.isArray(checkpoints) ? checkpoints.filter(validCheckpoint) : [];
+        return checkpoints.find(item => item.status === 'open') || null;
+      }
+
       function awayElapsed(now = Date.now()) {
         if (!session || !session.stuckStartedAt) return 0;
         return Math.max(0, now - session.stuckStartedAt);
@@ -1575,6 +1933,7 @@
           reason: 'Recovery timer running',
           action: 'One small move',
           returned: 'Return recorded',
+          checkpoint: 'Preparing your return',
           timeup: 'Timer complete',
           summary: 'Session complete'
         };
@@ -1612,10 +1971,30 @@
         const awayCopy = 'Away for ' + formatClock(awayElapsed());
         reasonAwayTimer.textContent = awayCopy;
         actionAwayTimer.textContent = awayCopy;
+        renderCommitmentLock(elapsed);
 
         if (session?.state === 'focus' && !session.timerExpired && elapsed >= target) {
           expireTimer(target);
         }
+      }
+
+      function renderCommitmentLock(elapsed = focusElapsed()) {
+        const unlocked = elapsed >= commitmentLockMs;
+        const remaining = Math.max(0, commitmentLockMs - elapsed);
+        commitmentLock.dataset.unlocked = String(unlocked);
+        lockMark.textContent = unlocked ? '✓' : '🔒';
+        lockCountdown.textContent = unlocked ? 'Open' : formatClock(remaining);
+        lockTitle.textContent = unlocked
+          ? 'Switching is available—with a checkpoint.'
+          : 'First 10 minutes: stay with this task.';
+        lockCopy.textContent = unlocked
+          ? 'If you leave early, write where you are, what is blocking you, and the exact next action.'
+          : leftDuringLock
+            ? 'The urge to leave showed up. Stay here, work smaller, or use “I’m stuck” to recover.'
+            : 'Work slowly, break it down, ask for help, or use “I’m stuck.” Switching is not available yet.';
+        finishButton.disabled = !unlocked;
+        finishButton.textContent = unlocked ? 'Finish or switch' : 'Switching locked';
+        interruptionAction.hidden = unlocked;
       }
 
       function renderTimeup() {
@@ -1658,7 +2037,29 @@
         focusTask.textContent = session.task;
         const count = session.returns || 0;
         returnCount.textContent = count === 0 ? 'No returns yet' : count + (count === 1 ? ' return' : ' returns');
+        const entry = session.entryCheckpoint;
+        focusEntry.hidden = !entry;
+        if (entry) {
+          focusEntryAction.textContent = entry.nextAction;
+          focusEntryContext.textContent = 'You left here: ' + entry.where + ' · Blocker: ' + entry.blocking;
+        }
         renderTimers();
+      }
+
+      function renderPreparedEntry() {
+        const entry = latestOpenCheckpoint();
+        preparedEntry.hidden = !entry;
+        if (!entry) return;
+        preparedEntryTask.textContent = entry.task;
+        preparedEntryAction.textContent = 'Open with: ' + entry.nextAction;
+        preparedEntryDetail.textContent = 'You left here: ' + entry.where + ' · Blocker: ' + entry.blocking;
+      }
+
+      function renderReturnedExit() {
+        const unlocked = switchingUnlocked();
+        finishAfterReturnButton.disabled = !unlocked;
+        finishAfterReturnButton.textContent = unlocked ? 'Switch tasks' : 'Switching locked';
+        returnedLockNote.hidden = unlocked;
       }
 
       function renderReasons() {
@@ -1773,11 +2174,20 @@
         document.getElementById('summary-focus').textContent = formatClock(session.focusedMs || 0);
         document.getElementById('summary-returns').textContent = String(session.returns || 0);
         document.getElementById('summary-average').textContent = durations.length ? formatCompactDuration(average) : '—';
+        const switched = session.exitType === 'switch' && validCheckpoint(session.checkpoint);
+        summaryTitle.textContent = switched ? 'Your return is prepared.' : 'Good work returning.';
+        summaryCopy.textContent = switched
+          ? 'You can switch deliberately now. When you come back, the next move is already waiting.'
+          : 'Progress is not never getting stuck. It is learning how to come back.';
+        summaryCheckpoint.hidden = !switched;
+        if (switched) summaryCheckpointAction.textContent = session.checkpoint.nextAction;
+        newSessionButton.textContent = switched ? 'Switch to another task' : 'Start another task';
       }
 
-      function startSession(task, durationMinutes) {
+      function startSession(task, durationMinutes, entryCheckpoint = null) {
         const now = Date.now();
         getAudioContext();
+        leftDuringLock = false;
         session = {
           task,
           state: 'focus',
@@ -1789,12 +2199,37 @@
           stuckStartedAt: null,
           reasonId: null,
           returns: 0,
-          returnDurations: []
+          returnDurations: [],
+          entryCheckpoint: entryCheckpoint ? {
+            id: entryCheckpoint.id,
+            where: entryCheckpoint.where,
+            blocking: entryCheckpoint.blocking,
+            nextAction: entryCheckpoint.nextAction
+          } : null,
+          checkpointOverride: false,
+          exitType: null
         };
+        if (entryCheckpoint) {
+          checkpoints = checkpoints.map(item => item.id === entryCheckpoint.id
+            ? { ...item, status: 'resumed', resumedAt: now }
+            : item);
+          writeStorage(checkpointKey, checkpoints);
+        }
         saveSession();
+        renderPreparedEntry();
         renderFocus();
         showPanel('focus', document.getElementById('stuck-button'));
         liveRegion.textContent = formatDurationLabel(durationMinutes) + ' timer started for ' + task;
+      }
+
+      function resumeLatestCheckpoint() {
+        const entry = latestOpenCheckpoint();
+        if (!entry) {
+          renderPreparedEntry();
+          return;
+        }
+        startSession(entry.task, selectedDurationMinutes(), entry);
+        liveRegion.textContent = 'Checkpoint resumed. Start with: ' + entry.nextAction;
       }
 
       function beginRecovery() {
@@ -1863,6 +2298,7 @@
         returnTime.textContent = formatClock(duration);
         returnMessage.textContent = reason.returnCopy;
         renderHistory();
+        renderReturnedExit();
         showPanel('returned', document.getElementById('continue-button'));
         liveRegion.textContent = 'Return recorded in ' + formatCompactDuration(duration) + '.';
       }
@@ -1872,17 +2308,99 @@
         session.state = 'focus';
         session.focusAnchor = Date.now();
         session.reasonId = null;
+        session.checkpointOverride = false;
         saveSession();
         renderFocus();
         showPanel('focus', document.getElementById('stuck-button'));
       }
 
+      function beginCheckpoint(interruptionOverride = false) {
+        if (!session || !['focus', 'returned'].includes(session.state)) return;
+        const now = Date.now();
+        const elapsed = focusElapsed(now);
+        if (elapsed < commitmentLockMs && !interruptionOverride) {
+          liveRegion.textContent = 'Switching is locked for the first 10 minutes. Use the stuck flow or keep working.';
+          return;
+        }
+
+        session.focusedMs = elapsed;
+        session.focusAnchor = null;
+        session.stuckStartedAt = null;
+        session.checkpointOverride = Boolean(interruptionOverride);
+        session.state = 'checkpoint';
+        saveSession();
+        checkpointForm.reset();
+        checkpointRule.textContent = interruptionOverride
+          ? 'Real interruption noted. Leave a 20–40 second checkpoint before you go.'
+          : 'Switching is cheap. Abandoning without a return point is expensive.';
+        showPanel('checkpoint', checkpointWhere);
+        liveRegion.textContent = 'Before switching, write where you are, what is blocking you, and the exact next action.';
+      }
+
+      function cancelCheckpoint() {
+        if (!session || session.state !== 'checkpoint') return;
+        session.state = 'focus';
+        session.focusAnchor = Date.now();
+        session.checkpointOverride = false;
+        saveSession();
+        renderFocus();
+        showPanel('focus', document.getElementById('stuck-button'));
+        liveRegion.textContent = 'Checkpoint cancelled. Timer resumed.';
+      }
+
+      function saveCheckpointAndSwitch(event) {
+        event.preventDefault();
+        if (!session || session.state !== 'checkpoint') return;
+        const where = checkpointWhere.value.trim().replace(/\s+/g, ' ');
+        const blocking = checkpointBlocking.value.trim().replace(/\s+/g, ' ');
+        const nextAction = checkpointNextAction.value.trim().replace(/\s+/g, ' ');
+
+        if (!where || !blocking || !nextAction) {
+          const missing = !where ? checkpointWhere : !blocking ? checkpointBlocking : checkpointNextAction;
+          missing.focus();
+          liveRegion.textContent = 'Complete all three checkpoint fields before switching.';
+          return;
+        }
+
+        const now = Date.now();
+        const checkpoint = {
+          id: String(now) + '-' + Math.random().toString(36).slice(2, 8),
+          timestamp: now,
+          task: session.task,
+          where,
+          blocking,
+          nextAction,
+          focusedMs: session.focusedMs || 0,
+          usedInterruptionOverride: Boolean(session.checkpointOverride),
+          status: 'open'
+        };
+
+        checkpoints = [checkpoint, ...checkpoints.filter(validCheckpoint)].slice(0, 60);
+        writeStorage(checkpointKey, checkpoints);
+        stopAlarm();
+        session.checkpoint = checkpoint;
+        session.exitType = 'switch';
+        session.checkpointOverride = false;
+        session.state = 'summary';
+        saveSession();
+        renderPreparedEntry();
+        renderSummary();
+        showPanel('summary', newSessionButton);
+        liveRegion.textContent = 'Checkpoint saved. You can switch tasks now.';
+      }
+
       function finishSession() {
         if (!session) return;
+        if (session.state !== 'timeup' && focusElapsed() < sessionDurationMs()) {
+          beginCheckpoint(false);
+          return;
+        }
         stopAlarm();
         session.focusedMs = focusElapsed();
         session.focusAnchor = null;
         session.stuckStartedAt = null;
+        session.checkpoint = null;
+        session.exitType = 'complete';
         session.state = 'summary';
         saveSession();
         renderSummary();
@@ -1898,6 +2416,7 @@
         removeStorage(sessionKey);
         taskForm.reset();
         setDurationPicker(25);
+        renderPreparedEntry();
         showPanel('setup', taskInput);
       }
 
@@ -1905,6 +2424,7 @@
         if (!isValidSession(session)) {
           session = null;
           removeStorage(sessionKey);
+          renderPreparedEntry();
           showPanel('setup');
           return;
         }
@@ -1913,6 +2433,12 @@
         session.timerExpired = Boolean(session.timerExpired || session.state === 'timeup');
         renderFocus();
         if (session.state === 'action') renderAction();
+        if (session.state === 'checkpoint') {
+          checkpointForm.reset();
+          checkpointRule.textContent = session.checkpointOverride
+            ? 'Real interruption noted. Leave a 20–40 second checkpoint before you go.'
+            : 'Switching is cheap. Abandoning without a return point is expensive.';
+        }
         if (session.state === 'timeup') renderTimeup();
         if (session.state === 'summary') renderSummary();
         if (session.state === 'returned') {
@@ -1921,7 +2447,9 @@
           returnTime.textContent = formatClock(lastReturnDuration);
           const reason = selectedReason();
           if (reason) returnMessage.textContent = reason.returnCopy;
+          renderReturnedExit();
         }
+        renderPreparedEntry();
         showPanel(session.state);
         if (session.state === 'timeup') startAlarm();
       }
@@ -1957,8 +2485,13 @@
       });
       document.getElementById('back-button').addEventListener('click', recordReturn);
       document.getElementById('continue-button').addEventListener('click', continueTask);
-      document.getElementById('finish-button').addEventListener('click', finishSession);
-      document.getElementById('finish-after-return-button').addEventListener('click', finishSession);
+      finishButton.addEventListener('click', () => beginCheckpoint(false));
+      finishAfterReturnButton.addEventListener('click', () => beginCheckpoint(false));
+      document.getElementById('real-interruption-button').addEventListener('click', () => beginCheckpoint(true));
+      checkpointForm.addEventListener('submit', saveCheckpointAndSwitch);
+      document.getElementById('cancel-checkpoint-button').addEventListener('click', cancelCheckpoint);
+      document.getElementById('checkpoint-return-button').addEventListener('click', cancelCheckpoint);
+      document.getElementById('resume-checkpoint-button').addEventListener('click', resumeLatestCheckpoint);
       document.getElementById('new-session-button').addEventListener('click', resetSession);
       document.getElementById('stop-alarm-button').addEventListener('click', finishSession);
       addTimeButton.addEventListener('click', addFiveMinutes);
@@ -1971,13 +2504,34 @@
       });
 
       document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) renderTimers();
+        if (document.hidden && session?.state === 'focus' && !switchingUnlocked()) {
+          leftDuringLock = true;
+          return;
+        }
+        if (!document.hidden) {
+          renderTimers();
+          if (leftDuringLock && session?.state === 'focus' && !switchingUnlocked()) {
+            commitmentLock.classList.remove('is-return-nudge');
+            void commitmentLock.offsetWidth;
+            commitmentLock.classList.add('is-return-nudge');
+            liveRegion.textContent = 'The 10-minute lock is still active. Stay with the task or use the stuck flow.';
+          }
+        }
+      });
+
+      window.addEventListener('beforeunload', event => {
+        const activeStates = ['focus', 'reason', 'action', 'returned', 'checkpoint'];
+        if (session && activeStates.includes(session.state) && focusElapsed() < sessionDurationMs()) {
+          event.preventDefault();
+          event.returnValue = '';
+        }
       });
 
       renderReasons();
       buildDurationPicker();
       setDurationPicker(25);
       renderHistory();
+      renderPreparedEntry();
       restoreSession();
     })();
   </script>
