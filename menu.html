@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-life-page="menu">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -413,6 +413,8 @@
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
     }
   </style>
+  <link rel="stylesheet" href="life-premium.css?v=20260812c">
+  <script src="life-premium.js?v=20260812c" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#bookmarks">Skip to bookmarks</a>
@@ -425,6 +427,12 @@
         <span class="brand-divider" aria-hidden="true"></span>
         <span class="brand-section">Menu</span>
       </a>
+      <nav class="life-nav-links" aria-label="Life pages">
+        <a href="index.html">Routine</a>
+        <a href="return.html">Return</a>
+        <a href="menu.html">Menu</a>
+        <a href="security.html">Security</a>
+      </nav>
       <span class="privacy-label">Private shelf</span>
     </div>
   </header>
@@ -605,6 +613,7 @@
 
     <footer class="footer">27 carefully kept bookmarks · Opens links in a new tab</footer>
   </main>
+  <div class="life-legal" role="contentinfo"><span>© 2026 Life. All rights reserved.</span><span>Personal routine and focus data is stored locally in your browser.</span></div>
 
   <script>
     (() => {
