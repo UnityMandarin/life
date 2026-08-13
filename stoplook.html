@@ -1,0 +1,312 @@
+This version is more purpose-built: **instant command, almost nothing to read, no controls, no scrolling, no rewarding interaction, and it automatically dims after a few seconds**. If you touch/move the mouse or return to the tab, the warning briefly comes back.
+
+```html
+<!DOCTYPE html>
+<html lang="en" data-life-page="stoplook">
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="dark">
+
+  <title>LOOK AWAY</title>
+
+  <style>
+    :root {
+      color-scheme: dark;
+
+      --bg: #000000;
+      --text: #f5f5f7;
+      --muted: #77777c;
+      --faint: #38383c;
+      --warning: #ff453a;
+
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+    }
+
+    html {
+      overscroll-behavior: none;
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      min-height: 100dvh;
+
+      overflow: hidden;
+      overscroll-behavior: none;
+
+      background: var(--bg);
+      color: var(--text);
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+
+      user-select: none;
+      -webkit-user-select: none;
+
+      cursor: none;
+    }
+
+    main {
+      position: fixed;
+      inset: 0;
+
+      display: grid;
+      place-items: center;
+
+      min-height: 100vh;
+      min-height: 100dvh;
+
+      padding:
+        max(28px, env(safe-area-inset-top))
+        clamp(24px, 6vw, 90px)
+        max(28px, env(safe-area-inset-bottom));
+
+      background: #000;
+      text-align: center;
+    }
+
+    .message {
+      width: min(100%, 1100px);
+
+      opacity: 1;
+      transform: scale(1);
+
+      transition:
+        opacity 1.4s ease,
+        transform 1.4s var(--ease);
+    }
+
+    /*
+      After the user has had enough time to read the command,
+      the page stops competing for attention.
+    */
+    body.quiet .message {
+      opacity: .12;
+      transform: scale(.995);
+    }
+
+    .mode {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      margin: 0 0 clamp(24px, 5vh, 52px);
+
+      color: var(--warning);
+
+      font-size: clamp(11px, .85vw, 14px);
+      font-weight: 720;
+
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .mode::before {
+      content: "";
+
+      width: 7px;
+      height: 7px;
+
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    h1 {
+      margin: 0;
+
+      color: var(--text);
+
+      font-size: clamp(72px, 15vw, 210px);
+      font-weight: 850;
+
+      line-height: .82;
+      letter-spacing: -.075em;
+
+      text-wrap: balance;
+    }
+
+    .rule {
+      margin:
+        clamp(36px, 7vh, 70px)
+        auto
+        0;
+
+      max-width: 850px;
+
+      color: var(--muted);
+
+      font-size: clamp(17px, 2vw, 27px);
+      font-weight: 500;
+
+      line-height: 1.45;
+      letter-spacing: -.025em;
+
+      text-wrap: balance;
+    }
+
+    .rule strong {
+      color: var(--text);
+      font-weight: 680;
+    }
+
+    .return {
+      margin:
+        clamp(22px, 4vh, 36px)
+        auto
+        0;
+
+      color: var(--faint);
+
+      font-size: clamp(12px, 1vw, 15px);
+      font-weight: 500;
+
+      letter-spacing: .02em;
+    }
+
+    @media (max-height: 650px) {
+      .mode {
+        margin-bottom: 18px;
+      }
+
+      h1 {
+        font-size: clamp(64px, 17vh, 120px);
+      }
+
+      .rule {
+        margin-top: 24px;
+      }
+
+      .return {
+        margin-top: 14px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      h1 {
+        letter-spacing: -.065em;
+      }
+
+      .rule br {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .message {
+        transition: opacity .01ms linear;
+      }
+
+      body.quiet .message {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main aria-labelledby="stop-title">
+    <section class="message">
+      <p class="mode">
+        Screen off-limits
+      </p>
+
+      <h1 id="stop-title">
+        LOOK<br>
+        AWAY.
+      </h1>
+
+      <p class="rule">
+        This computer has exactly two jobs:
+        <br>
+        <strong>play music and sound the timer.</strong>
+      </p>
+
+      <p class="return">
+        Back to the physical task.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const QUIET_DELAY = 2800;
+
+      let quietTimer;
+
+      function wake() {
+        document.body.classList.remove("quiet");
+
+        clearTimeout(quietTimer);
+
+        quietTimer = setTimeout(() => {
+          document.body.classList.add("quiet");
+        }, QUIET_DELAY);
+      }
+
+      /*
+        If you accidentally interact with the computer,
+        the reminder becomes readable again briefly.
+
+        It then fades back into the background instead of
+        rewarding continued screen attention.
+      */
+      const wakeEvents = [
+        "pointermove",
+        "pointerdown",
+        "keydown",
+        "touchstart"
+      ];
+
+      wakeEvents.forEach(eventName => {
+        window.addEventListener(eventName, wake, {
+          passive: true
+        });
+      });
+
+      window.addEventListener("focus", wake);
+
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) {
+          wake();
+        }
+      });
+
+      wake();
+    })();
+  </script>
+</body>
+</html>
+```
