@@ -2000,10 +2000,12 @@
     }
 
   </style>
-  <link rel="stylesheet" href="life-premium.css?v=20260812c">
-  <script src="life-premium.js?v=20260812c" defer></script>
+  <link rel="stylesheet" href="life-premium.css?v=20260815a">
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"}}</script>
+  <script src="life-premium.js?v=20260815a" type="module"></script>
 </head>
 <body data-unlock-step="1">
+  <div class="life-scroll-progress" aria-hidden="true"></div>
 
   <div class="unlock-scene" aria-hidden="true">
     <svg viewBox="0 0 1000 520" role="presentation">
@@ -2102,7 +2104,12 @@
     <button class="lock-action" id="lock-button" type="button">Reset</button>
   </header>
 
-  <main>
+  <div class="life-product-stage" aria-hidden="true">
+    <canvas class="life-product-canvas" tabindex="-1"></canvas>
+    <div class="life-static-timepiece"></div>
+  </div>
+
+  <main data-life-scene data-life-progress-track>
     <section class="stage" id="stage-1" data-stage="1" aria-labelledby="stage-1-title">
       <div class="panel">
         <p class="step-label">Private access · 01</p>
@@ -2355,6 +2362,10 @@
       function showStage(stage) {
         stages.forEach(item => { item.hidden = Number(item.dataset.stage) !== stage; });
         currentStage = stage;
+        document.documentElement.dataset.lifeState = String(stage);
+        document.dispatchEvent(new CustomEvent('life:statechange', {
+          detail: { page: 'security', state: String(stage) }
+        }));
         document.documentElement.style.setProperty('--panel-rx', '0deg');
         document.documentElement.style.setProperty('--panel-ry', '0deg');
         setMarkers(stage);
