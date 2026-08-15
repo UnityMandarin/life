@@ -413,11 +413,13 @@
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
     }
   </style>
-  <link rel="stylesheet" href="life-premium.css?v=20260812c">
-  <script src="life-premium.js?v=20260812c" defer></script>
+  <link rel="stylesheet" href="life-premium.css?v=20260815a">
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"}}</script>
+  <script src="life-premium.js?v=20260815a" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#bookmarks">Skip to bookmarks</a>
+  <div class="life-scroll-progress" aria-hidden="true"></div>
 
   <header class="topbar">
     <div class="topbar-inner">
@@ -437,11 +439,18 @@
     </div>
   </header>
 
-  <main id="bookmarks">
-    <section class="intro" aria-labelledby="page-title">
+  <div class="life-product-stage" aria-hidden="true">
+    <canvas class="life-product-canvas" tabindex="-1"></canvas>
+    <div class="life-static-timepiece"></div>
+  </div>
+
+  <main id="bookmarks" data-life-scene>
+    <section class="intro life-story" data-life-progress-track aria-labelledby="page-title">
       <p class="eyebrow">A quiet corner of the internet</p>
       <h1 id="page-title">Useful places.</h1>
       <p class="intro-copy">A small shelf of dependable tools for making, fixing, learning, and getting things done.</p>
+      <p class="life-story-note" data-life-step data-life-story-note="1"><strong>Seven orbits. One shelf.</strong>Each category has a place on the dial, so the collection feels ordered before you search it.</p>
+      <p class="life-story-note" data-life-step data-life-story-note="2"><strong>Tools move into reach.</strong>The index turns with the page while every destination stays a normal, fast, accessible link.</p>
     </section>
 
     <div class="controls">

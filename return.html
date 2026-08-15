@@ -1254,11 +1254,13 @@
       *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     }
   </style>
-  <link rel="stylesheet" href="life-premium.css?v=20260812c">
-  <script src="life-premium.js?v=20260812c" defer></script>
+  <link rel="stylesheet" href="life-premium.css?v=20260815a">
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"}}</script>
+  <script src="life-premium.js?v=20260815a" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#return-app">Skip to focus timer</a>
+  <div class="life-scroll-progress" aria-hidden="true"></div>
 
   <nav class="topbar" aria-label="Primary navigation">
     <div class="topbar-inner">
@@ -1277,15 +1279,22 @@
     </div>
   </nav>
 
-  <main id="return-app">
-    <header class="intro">
+  <div class="life-product-stage" aria-hidden="true">
+    <canvas class="life-product-canvas" tabindex="-1"></canvas>
+    <div class="life-static-timepiece"></div>
+  </div>
+
+  <main id="return-app" data-life-scene>
+    <header class="intro life-story" data-life-progress-track>
       <p class="eyebrow">A gentler focus timer</p>
       <h1>Find your way back.</h1>
       <p class="intro-copy">Choose one thing and a focus time. The first 10 minutes protect your commitment; if momentum breaks, recover in one tiny action, and if you switch later, leave a clean way back.</p>
+      <p class="life-story-note" data-life-step data-life-story-note="1"><strong>A compass for attention.</strong>The instrument turns with your session—from commitment to recovery to a clean return.</p>
+      <p class="life-story-note" data-life-step data-life-story-note="2"><strong>Momentum stays visible.</strong>Every state advances the same rotor, so getting stuck becomes part of the route instead of the end.</p>
     </header>
 
     <div class="workspace">
-      <section class="app-card" id="app-card" data-state="setup" aria-label="Return focus session">
+      <section class="app-card life-spatial-card" id="app-card" data-state="setup" data-life-step aria-label="Return focus session">
         <div class="app-status" aria-live="polite">
           <span class="status-dot" aria-hidden="true"></span>
           <span id="status-copy">Ready when you are</span>
@@ -1516,7 +1525,7 @@
         </div>
       </section>
 
-      <aside class="history-card" aria-labelledby="history-title">
+      <aside class="history-card life-spatial-card" data-life-step aria-labelledby="history-title">
         <div class="history-head">
           <div>
             <h2 class="history-title" id="history-title">Today’s returns</h2>
@@ -1953,6 +1962,10 @@
           panel.hidden = name !== state;
         });
         appCard.dataset.state = state;
+        document.documentElement.dataset.lifeState = state;
+        document.dispatchEvent(new CustomEvent('life:statechange', {
+          detail: { page: 'return', state }
+        }));
         setStatus(state);
         window.clearInterval(ticker);
         ticker = 0;

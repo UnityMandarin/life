@@ -5737,24 +5737,13 @@
     }
 
   </style>
-  <link rel="stylesheet" href="life-premium.css?v=20260812c">
-  <script src="life-premium.js?v=20260812c" defer></script>
+  <link rel="stylesheet" href="life-premium.css?v=20260815a">
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"}}</script>
+  <script src="life-premium.js?v=20260815a" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to routine</a>
-  <div class="boot-curtain" aria-hidden="true"></div>
-  <div class="scroll-meter" aria-hidden="true"></div>
-  <div class="mode-transition" id="mode-transition" aria-hidden="true"></div>
-
-  <div class="ambient" aria-hidden="true">
-    <div class="mesh">
-      <div class="mesh-blob"></div>
-      <div class="mesh-blob"></div>
-      <div class="mesh-blob"></div>
-    </div>
-    <div class="pointer-aura"></div>
-    <div class="dust-field" id="dust-field"></div>
-  </div>
+  <div class="life-scroll-progress" aria-hidden="true"></div>
 
   <nav class="site-nav" aria-label="Primary navigation">
     <div class="nav-inner">
@@ -5776,8 +5765,14 @@
     </div>
   </nav>
 
-  <main id="main-content">
-    <section class="hero" aria-labelledby="hero-title">
+  <div class="life-product-stage" aria-hidden="true">
+    <canvas class="life-product-canvas" tabindex="-1"></canvas>
+    <div class="life-static-timepiece"></div>
+  </div>
+
+  <main id="main-content" data-life-scene>
+    <section class="hero life-story" data-life-progress-track aria-labelledby="hero-title">
+      <div class="life-hero-sticky">
       <div class="hero-text">
         <p class="eyebrow"><span class="eyebrow-dot"></span><span id="hero-eyebrow">Your morning, protected</span></p>
         <h1 id="hero-title">Own the first <span class="gradient-word">20 minutes.</span></h1>
@@ -5804,6 +5799,11 @@
           <button class="quiet-button" type="button" id="timer-reset">Reset</button>
         </div>
       </aside>
+      </div>
+
+      <p class="life-story-note" data-life-step data-life-story-note="1"><strong>Precision, not pressure.</strong>Twenty deliberate minutes, measured by one instrument that opens as the ritual unfolds.</p>
+      <p class="life-story-note" data-life-step data-life-story-note="2"><strong>Every layer has a purpose.</strong>Body, mind, recall, planning, and action separate into a sequence you can actually follow.</p>
+      <p class="life-story-note" data-life-step data-life-story-note="3"><strong>Then it becomes one day.</strong>The pieces return to a single clear first move—ready when you are.</p>
     </section>
 
     <section class="section" id="routine" aria-labelledby="routine-title">
@@ -5820,7 +5820,7 @@
 
       <div class="view" id="morning-view">
         <div class="routine-grid">
-          <article class="phase-card">
+          <article class="phase-card life-spatial-card" data-life-step data-life-phase="1">
             <div class="phase-index">Phase 01</div><span class="phase-time">00:00–00:04</span>
             <h3 class="phase-title">Body ignition</h3><p class="phase-subtitle">Wake the brain before you ask it to work.</p>
             <ul class="task-list">
@@ -5830,7 +5830,7 @@
             </ul>
           </article>
 
-          <article class="phase-card">
+          <article class="phase-card life-spatial-card" data-life-step data-life-phase="2">
             <div class="phase-index">Phase 02</div><span class="phase-time">00:04–00:08</span>
             <h3 class="phase-title">Mind activation</h3><p class="phase-subtitle">Focus before the day loads in.</p>
             <ul class="task-list">
@@ -5840,7 +5840,7 @@
             </ul>
           </article>
 
-          <article class="phase-card featured">
+          <article class="phase-card featured life-spatial-card" data-life-step data-life-phase="3">
             <div><div class="phase-index">Phase 03</div><span class="phase-time">00:08–00:12</span><h3 class="phase-title">Recall check</h3><p class="phase-subtitle">Verify what sleep actually consolidated.</p></div>
             <ul class="task-list">
               <li><label class="task"><input type="checkbox" data-task="morning-retained"><span><b>Retained:</b>&nbsp; name what you can explain cold.</span></label></li>
@@ -5850,7 +5850,7 @@
             </ul>
           </article>
 
-          <article class="phase-card">
+          <article class="phase-card life-spatial-card" data-life-step data-life-phase="4">
             <div class="phase-index">Phase 04</div><span class="phase-time">00:12–00:17</span>
             <h3 class="phase-title">Daily plan</h3><p class="phase-subtitle">Sharpen the plan you made last night.</p>
             <ul class="task-list">
@@ -5860,7 +5860,7 @@
             </ul>
           </article>
 
-          <article class="phase-card">
+          <article class="phase-card life-spatial-card" data-life-step data-life-phase="5">
             <div class="phase-index">Phase 05</div><span class="phase-time">00:17–00:20</span>
             <h3 class="phase-title">Mental ignition</h3><p class="phase-subtitle">Turn intention into a clear first action.</p>
             <ul class="task-list">
@@ -5873,7 +5873,7 @@
 
       <div class="view" id="night-view" hidden>
         <div class="routine-grid">
-          <article class="phase-card">
+          <article class="phase-card life-spatial-card" data-life-step data-life-phase="1">
             <div class="phase-index">Phase 01</div><span class="phase-time">00:00–00:03</span>
             <h3 class="phase-title">Wind down</h3><p class="phase-subtitle">Give reflection a quiet place to happen.</p>
             <ul class="task-list">
@@ -5883,7 +5883,7 @@
             </ul>
           </article>
 
-          <article class="phase-card">
+          <article class="phase-card life-spatial-card" data-life-step data-life-phase="2">
             <div class="phase-index">Phase 02</div><span class="phase-time">00:03–00:07</span>
             <h3 class="phase-title">Memory blurt</h3><p class="phase-subtitle">Retrieve today before reviewing it.</p>
             <ul class="task-list">
@@ -5893,7 +5893,7 @@
             </ul>
           </article>
 
-          <article class="phase-card featured">
+          <article class="phase-card featured life-spatial-card" data-life-step data-life-phase="3">
             <div><div class="phase-index">Phase 03</div><span class="phase-time">00:07–00:13</span><h3 class="phase-title">Keep · Improve<br>Start · Stop</h3><p class="phase-subtitle">Specific behaviors, not vague feelings.</p></div>
             <ul class="task-list">
               <li><label class="task"><input type="checkbox" data-task="night-keep"><span><b>Keep:</b>&nbsp; what moved the needle today?</span></label></li>
@@ -5903,7 +5903,7 @@
             </ul>
           </article>
 
-          <article class="phase-card">
+          <article class="phase-card life-spatial-card" data-life-step data-life-phase="4">
             <div class="phase-index">Phase 04</div><span class="phase-time">00:13–00:16</span>
             <h3 class="phase-title">Consolidate</h3><p class="phase-subtitle">Lock in the gaps before sleep.</p>
             <ul class="task-list">
@@ -5913,7 +5913,7 @@
             </ul>
           </article>
 
-          <article class="phase-card">
+          <article class="phase-card life-spatial-card" data-life-step data-life-phase="5">
             <div class="phase-index">Phase 05</div><span class="phase-time">00:16–00:19</span>
             <h3 class="phase-title">Tomorrow, clearly</h3><p class="phase-subtitle">One concrete goal. No vague intentions.</p>
             <ul class="task-list">
@@ -5923,7 +5923,7 @@
             </ul>
           </article>
 
-          <article class="phase-card featured">
+          <article class="phase-card featured life-spatial-card" data-life-step data-life-phase="6">
             <div><div class="phase-index">Phase 06</div><span class="phase-time">00:19–00:20</span><h3 class="phase-title">Sleep prep</h3><p class="phase-subtitle">The mechanism—not the reward.</p></div>
             <ul class="task-list">
               <li><label class="task"><input type="checkbox" data-task="night-still"><span>Close your eyes and sit completely still for one minute.</span></label></li>
@@ -5935,7 +5935,7 @@
     </section>
 
     <section class="section" aria-labelledby="reflection-title">
-      <div class="reflection-card">
+      <div class="reflection-card life-spatial-card" data-life-step>
         <div><p class="section-kicker" id="note-kicker">Set your intention</p><h3 id="reflection-title">One thought is enough.</h3><p id="note-copy">Write the first action you will take today. Keep it concrete, short, and easy to begin.</p></div>
         <div class="note-wrap"><label class="note-label" for="daily-note" id="note-label">Today's first action</label><textarea id="daily-note" placeholder="At 9:00, I will…"></textarea><div class="save-state" id="save-state" aria-live="polite">Saved automatically</div></div>
       </div>
@@ -6017,6 +6017,10 @@
         mode = nextMode;
         const current = copy[mode];
         root.dataset.mode = mode;
+        root.dataset.lifeState = mode;
+        document.dispatchEvent(new CustomEvent('life:statechange', {
+          detail: { page: 'home', state: mode, mode }
+        }));
         metaTheme.content = current.theme;
         morningView.hidden = mode !== 'morning';
         nightView.hidden = mode !== 'night';
@@ -6838,21 +6842,7 @@
         observeTimerState();
         observeSaveState();
         initializeKeyboardShortcuts();
-        renderScrollState();
         document.querySelector('.boot-curtain')?.remove();
-
-        window.addEventListener(
-          'scroll',
-          requestScrollRender,
-          { passive: true }
-        );
-
-        window.addEventListener(
-          'resize',
-          requestScrollRender,
-          { passive: true }
-        );
-
       }
 
       initializeExperience();
