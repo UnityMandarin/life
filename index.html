@@ -4,8 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f5f5f7">
-  <meta name="description" content="Life — a quiet twenty-minute ritual for intentional mornings and reflective nights.">
-  <title>Life — Morning &amp; Night</title>
+  <meta name="description" content="MasterClock Tech — a quiet twenty-minute ritual for intentional mornings and reflective nights.">
+  <title>MasterClock Tech — Morning &amp; Night</title>
+  <link rel="icon" href="masterclock-mark.svg" type="image/svg+xml">
   <script>
     (() => {
       'use strict';
@@ -329,9 +330,9 @@
 
     .task { position: relative; display: block; }
     .task input { position: absolute; opacity: 0; pointer-events: none; }
-    .task span { min-height: 58px; padding: 14px 14px 14px 46px; display: flex; align-items: center; border: 1px solid var(--line); border-radius: 14px; color: var(--secondary); background: rgba(var(--bg-rgb), .35); cursor: pointer; font-size: 13px; line-height: 1.42; transition: border-color .25s, color .25s, background .25s, transform .25s; }
-    .task span::before { content: ""; position: absolute; left: 15px; width: 20px; height: 20px; border: 1.5px solid var(--tertiary); border-radius: 50%; transition: all .3s var(--ease); }
-    .task span::after { content: ""; position: absolute; left: 22px; width: 5px; height: 9px; border: solid white; border-width: 0 2px 2px 0; opacity: 0; transform: rotate(45deg) scale(.3); transition: all .25s var(--ease); }
+    .task > span { min-height: 58px; padding: 14px 14px 14px 46px; display: flex; align-items: center; border: 1px solid var(--line); border-radius: 14px; color: var(--secondary); background: rgba(var(--bg-rgb), .35); cursor: pointer; font-size: 13px; line-height: 1.42; transition: border-color .25s, color .25s, background .25s, transform .25s; }
+    .task > span::before { content: ""; position: absolute; left: 15px; width: 20px; height: 20px; border: 1.5px solid var(--tertiary); border-radius: 50%; transition: all .3s var(--ease); }
+    .task > span::after { content: ""; position: absolute; left: 22px; width: 5px; height: 9px; border: solid white; border-width: 0 2px 2px 0; opacity: 0; transform: rotate(45deg) scale(.3); transition: all .25s var(--ease); }
     .task input:checked + span { color: var(--tertiary); background: var(--accent-soft); text-decoration: line-through; text-decoration-color: rgba(var(--accent-rgb), .4); }
     .task input:checked + span::before { border-color: var(--accent); background: var(--accent); transform: scale(1.05); }
     .task input:checked + span::after { opacity: 1; transform: rotate(45deg) scale(1); }
@@ -4075,7 +4076,7 @@
       transform: translateY(-2px);
     }
 
-    .task span {
+    .task > span {
       overflow: hidden;
       border-color:
         color-mix(
@@ -4096,7 +4097,7 @@
         box-shadow .32s ease;
     }
 
-    .task span::before {
+    .task > span::before {
       z-index: 2;
       background:
         rgba(var(--bg-rgb), .46);
@@ -4105,11 +4106,11 @@
         rgba(var(--accent-rgb), .22);
     }
 
-    .task span::after {
+    .task > span::after {
       z-index: 3;
     }
 
-    .task:hover span {
+    .task:hover > span {
       color: var(--text);
       border-color:
         rgba(var(--accent-rgb), .24);
@@ -4461,7 +4462,7 @@
       }
 
       .meta-chip:hover,
-      .task:hover span,
+      .task:hover > span,
       .primary-button:hover,
       .quiet-button:hover {
         transform: none;
@@ -5425,7 +5426,7 @@
     h2,
     .phase-title,
     .phase-subtitle,
-    .task span,
+    .task > span,
     .reflection-card,
     footer {
       overflow-wrap: break-word;
@@ -5435,7 +5436,7 @@
     .quiet-button,
     .mode-button,
     .security-link,
-    .task span {
+    .task > span {
       touch-action: manipulation;
     }
 
@@ -5552,7 +5553,7 @@
         margin-top: 22px;
       }
 
-      .task span {
+      .task > span {
         min-height: 56px;
         padding: 13px 12px 13px 44px;
       }
@@ -5646,16 +5647,16 @@
       margin: 28px 0 0;
     }
 
-    .task span {
+    .task > span {
       min-height: 62px;
       padding: 15px 18px 15px 52px;
     }
 
-    .task span::before {
+    .task > span::before {
       left: 18px;
     }
 
-    .task span::after {
+    .task > span::after {
       left: 25px;
     }
 
@@ -5715,16 +5716,16 @@
         margin-top: 24px;
       }
 
-      .task span {
+      .task > span {
         min-height: 58px;
         padding: 14px 14px 14px 48px;
       }
 
-      .task span::before {
+      .task > span::before {
         left: 15px;
       }
 
-      .task span::after {
+      .task > span::after {
         left: 22px;
       }
     }
@@ -5737,9 +5738,9 @@
     }
 
   </style>
-  <link rel="stylesheet" href="life-premium.css?v=20260815a">
+  <link rel="stylesheet" href="life-premium.css?v=20260816b">
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"}}</script>
-  <script src="life-premium.js?v=20260815a" type="module"></script>
+  <script src="life-premium.js?v=20260816b" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to routine</a>
@@ -5747,9 +5748,9 @@
 
   <nav class="site-nav" aria-label="Primary navigation">
     <div class="nav-inner">
-      <a class="brand" href="index.html" aria-label="Life routine home">
-        <span class="brand-mark" aria-hidden="true">L</span>
-        <span>Life</span>
+      <a class="brand" href="index.html" aria-label="MasterClock Tech routine home">
+        <span class="brand-mark" aria-hidden="true"><img src="masterclock-mark.svg" alt=""></span>
+        <span class="brand-name">MasterClock Tech</span>
       </a>
       <div class="nav-left">
         <time class="nav-date" id="nav-date"></time>
@@ -5816,6 +5817,8 @@
       <div class="progress-panel">
         <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progress-fill"></div></div>
         <div class="progress-copy" id="progress-copy">0 of 15 complete</div>
+        <button class="routine-reset" type="button" id="routine-reset">Reset Morning</button>
+        <span class="visually-hidden" id="routine-reset-status" role="status" aria-live="polite"></span>
       </div>
 
       <div class="view" id="morning-view">
@@ -5824,9 +5827,9 @@
             <div class="phase-index">Phase 01</div><span class="phase-time">00:00–00:04</span>
             <h3 class="phase-title">Body ignition</h3><p class="phase-subtitle">Wake the brain before you ask it to work.</p>
             <ul class="task-list">
-              <li><label class="task"><input type="checkbox" data-task="morning-sun"><span>Step outside or stand by a bright window for 2–5 minutes.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="morning-water"><span>Drink a full glass of water before anything else.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="morning-move"><span>Move for four minutes—even ninety seconds counts.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-sun"><span><span class="task-copy">Step outside or stand by a bright window for 2–5 minutes.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-water"><span><span class="task-copy">Drink a full glass of water before anything else.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-move"><span><span class="task-copy">Move for four minutes—even ninety seconds counts.</span></span></label></li>
             </ul>
           </article>
 
@@ -5834,19 +5837,19 @@
             <div class="phase-index">Phase 02</div><span class="phase-time">00:04–00:08</span>
             <h3 class="phase-title">Mind activation</h3><p class="phase-subtitle">Focus before the day loads in.</p>
             <ul class="task-list">
-              <li><label class="task"><input type="checkbox" data-task="morning-breathe"><span>Sit still and breathe for two quiet minutes.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="morning-recall"><span>Recall yesterday's key ideas before opening notes.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="morning-anki"><span>Complete the spaced-repetition cards that are due.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-breathe"><span><span class="task-copy">Sit still and breathe for two quiet minutes.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-recall"><span><span class="task-copy">Recall yesterday's key ideas before opening notes.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-anki"><span><span class="task-copy">Complete the spaced-repetition cards that are due.</span></span></label></li>
             </ul>
           </article>
 
           <article class="phase-card featured life-spatial-card" data-life-step data-life-phase="3">
             <div><div class="phase-index">Phase 03</div><span class="phase-time">00:08–00:12</span><h3 class="phase-title">Recall check</h3><p class="phase-subtitle">Verify what sleep actually consolidated.</p></div>
             <ul class="task-list">
-              <li><label class="task"><input type="checkbox" data-task="morning-retained"><span><b>Retained:</b>&nbsp; name what you can explain cold.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="morning-degraded"><span><b>Degraded:</b>&nbsp; mark what became fuzzy overnight.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="morning-connected"><span><b>Connected:</b>&nbsp; capture any new link that appeared.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="morning-gap"><span><b>Gap:</b>&nbsp; name what you still do not understand.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-retained"><span><span class="task-copy"><b>Retained:</b> name what you can explain cold.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-degraded"><span><span class="task-copy"><b>Degraded:</b> mark what became fuzzy overnight.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-connected"><span><span class="task-copy"><b>Connected:</b> capture any new link that appeared.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-gap"><span><span class="task-copy"><b>Gap:</b> name what you still do not understand.</span></span></label></li>
             </ul>
           </article>
 
@@ -5854,9 +5857,9 @@
             <div class="phase-index">Phase 04</div><span class="phase-time">00:12–00:17</span>
             <h3 class="phase-title">Daily plan</h3><p class="phase-subtitle">Sharpen the plan you made last night.</p>
             <ul class="task-list">
-              <li><label class="task"><input type="checkbox" data-task="morning-frog"><span>Circle the hardest, highest-value task. Do it first.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="morning-block"><span>Give each task a time block and leave a buffer.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="morning-scope"><span>Confirm today's work maps to what actually matters.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-frog"><span><span class="task-copy">Circle the hardest, highest-value task. Do it first.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-block"><span><span class="task-copy">Give each task a time block and leave a buffer.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-scope"><span><span class="task-copy">Confirm today's work maps to what actually matters.</span></span></label></li>
             </ul>
           </article>
 
@@ -5864,8 +5867,8 @@
             <div class="phase-index">Phase 05</div><span class="phase-time">00:17–00:20</span>
             <h3 class="phase-title">Mental ignition</h3><p class="phase-subtitle">Turn intention into a clear first action.</p>
             <ul class="task-list">
-              <li><label class="task"><input type="checkbox" data-task="morning-contract"><span>Say: “At [time], I will [action] for [duration].”</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="morning-visualize"><span>Picture the feeling of finishing today's frog task.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-contract"><span><span class="task-copy">Say: “At [time], I will [action] for [duration].”</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-visualize"><span><span class="task-copy">Picture the feeling of finishing today's frog task.</span></span></label></li>
             </ul>
           </article>
         </div>
@@ -5877,9 +5880,9 @@
             <div class="phase-index">Phase 01</div><span class="phase-time">00:00–00:03</span>
             <h3 class="phase-title">Wind down</h3><p class="phase-subtitle">Give reflection a quiet place to happen.</p>
             <ul class="task-list">
-              <li><label class="task"><input type="checkbox" data-task="night-light"><span>Dim the lights and switch to warmer color.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="night-phone"><span>Put the phone face-down—or in another room.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="night-breathe"><span>Box breathe once: in, hold, out, hold.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-light"><span><span class="task-copy">Dim the lights and switch to warmer color.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-phone"><span><span class="task-copy">Put the phone face-down—or in another room.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-breathe"><span><span class="task-copy">Box breathe once: in, hold, out, hold.</span></span></label></li>
             </ul>
           </article>
 
@@ -5887,19 +5890,19 @@
             <div class="phase-index">Phase 02</div><span class="phase-time">00:03–00:07</span>
             <h3 class="phase-title">Memory blurt</h3><p class="phase-subtitle">Retrieve today before reviewing it.</p>
             <ul class="task-list">
-              <li><label class="task"><input type="checkbox" data-task="night-blurt"><span>Write everything you remember. No notes. Two minutes.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="night-compare"><span>Open your notes and circle what your blurt missed.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="night-feynman"><span>Explain the hardest idea in plain language.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-blurt"><span><span class="task-copy">Write everything you remember. No notes. Two minutes.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-compare"><span><span class="task-copy">Open your notes and circle what your blurt missed.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-feynman"><span><span class="task-copy">Explain the hardest idea in plain language.</span></span></label></li>
             </ul>
           </article>
 
           <article class="phase-card featured life-spatial-card" data-life-step data-life-phase="3">
             <div><div class="phase-index">Phase 03</div><span class="phase-time">00:07–00:13</span><h3 class="phase-title">Keep · Improve<br>Start · Stop</h3><p class="phase-subtitle">Specific behaviors, not vague feelings.</p></div>
             <ul class="task-list">
-              <li><label class="task"><input type="checkbox" data-task="night-keep"><span><b>Keep:</b>&nbsp; what moved the needle today?</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="night-improve"><span><b>Improve:</b>&nbsp; what deserves a better approach?</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="night-start"><span><b>Start:</b>&nbsp; what useful behavior will you add?</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="night-stop"><span><b>Stop:</b>&nbsp; what stole focus or time?</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-keep"><span><span class="task-copy"><b>Keep:</b> what moved the needle today?</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-improve"><span><span class="task-copy"><b>Improve:</b> what deserves a better approach?</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-start"><span><span class="task-copy"><b>Start:</b> what useful behavior will you add?</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-stop"><span><span class="task-copy"><b>Stop:</b> what stole focus or time?</span></span></label></li>
             </ul>
           </article>
 
@@ -5907,9 +5910,9 @@
             <div class="phase-index">Phase 04</div><span class="phase-time">00:13–00:16</span>
             <h3 class="phase-title">Consolidate</h3><p class="phase-subtitle">Lock in the gaps before sleep.</p>
             <ul class="task-list">
-              <li><label class="task"><input type="checkbox" data-task="night-cards"><span>Turn today's gaps into spaced-repetition cards.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="night-schedule"><span>Schedule reviews for tomorrow, +3 days, and +1 week.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="night-insight"><span>Write today's most important insight in one sentence.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-cards"><span><span class="task-copy">Turn today's gaps into spaced-repetition cards.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-schedule"><span><span class="task-copy">Schedule reviews for tomorrow, +3 days, and +1 week.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-insight"><span><span class="task-copy">Write today's most important insight in one sentence.</span></span></label></li>
             </ul>
           </article>
 
@@ -5917,17 +5920,17 @@
             <div class="phase-index">Phase 05</div><span class="phase-time">00:16–00:19</span>
             <h3 class="phase-title">Tomorrow, clearly</h3><p class="phase-subtitle">One concrete goal. No vague intentions.</p>
             <ul class="task-list">
-              <li><label class="task"><input type="checkbox" data-task="night-goal"><span>Write one specific, measurable, time-bound goal.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="night-list"><span>Make tomorrow's list—five items or fewer.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="night-why"><span>Write one honest sentence about why it matters.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-goal"><span><span class="task-copy">Write one specific, measurable, time-bound goal.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-list"><span><span class="task-copy">Make tomorrow's list—five items or fewer.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-why"><span><span class="task-copy">Write one honest sentence about why it matters.</span></span></label></li>
             </ul>
           </article>
 
           <article class="phase-card featured life-spatial-card" data-life-step data-life-phase="6">
             <div><div class="phase-index">Phase 06</div><span class="phase-time">00:19–00:20</span><h3 class="phase-title">Sleep prep</h3><p class="phase-subtitle">The mechanism—not the reward.</p></div>
             <ul class="task-list">
-              <li><label class="task"><input type="checkbox" data-task="night-still"><span>Close your eyes and sit completely still for one minute.</span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="night-sleep"><span>Protect 7–9 hours for memory, energy, and tomorrow.</span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-still"><span><span class="task-copy">Close your eyes and sit completely still for one minute.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-sleep"><span><span class="task-copy">Protect 7–9 hours for memory, energy, and tomorrow.</span></span></label></li>
             </ul>
           </article>
         </div>
@@ -5942,8 +5945,8 @@
     </section>
   </main>
 
-  <footer><span>Life, one deliberate day at a time.</span><span>Morning light. Night reflection.</span></footer>
-  <div class="life-legal" role="contentinfo"><span>© 2026 Life. All rights reserved.</span><span>Personal routine and focus data is stored locally in your browser.</span></div>
+  <footer><span>MasterClock Tech, one deliberate day at a time.</span><span>Morning light. Night reflection.</span></footer>
+  <div class="life-legal" role="contentinfo"><span>© 2026 MasterClock Tech. All rights reserved.</span><span>Personal routine and focus data is stored locally in your browser.</span></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
@@ -5958,6 +5961,8 @@
       const timerValue = document.getElementById('timer-value');
       const timerToggle = document.getElementById('timer-toggle');
       const timerReset = document.getElementById('timer-reset');
+      const routineReset = document.getElementById('routine-reset');
+      const routineResetStatus = document.getElementById('routine-reset-status');
       const ring = document.getElementById('ring-progress');
       const totalSeconds = 20 * 60;
       const circumference = 2 * Math.PI * 110;
@@ -6039,6 +6044,7 @@
         setText('note-label', current.noteLabel);
         document.getElementById('daily-note').placeholder = current.placeholder;
         document.getElementById('daily-note').value = localStorage.getItem(`life-note-${mode}`) || '';
+        routineReset.textContent = `Reset ${mode === 'morning' ? 'Morning' : 'Night'}`;
         if (persist) localStorage.setItem('life-mode', mode);
         updateProgress();
         resetTimer();
@@ -6065,7 +6071,7 @@
         document.getElementById('timer-phase').textContent = remaining === totalSeconds ? 'Ready when you are' : currentPhase(elapsed);
         ring.style.strokeDasharray = circumference;
         ring.style.strokeDashoffset = circumference * (elapsed / totalSeconds);
-        document.title = running ? `${formatTime(remaining)} — Life` : 'Life — Morning & Night';
+        document.title = running ? `${formatTime(remaining)} — MasterClock Tech` : 'MasterClock Tech — Morning & Night';
       }
 
       function stopTimer() {
@@ -6120,9 +6126,20 @@
         });
       }
 
+      function resetCurrentRoutine() {
+        const tasks = visibleTasks();
+        tasks.forEach(task => {
+          task.checked = false;
+          localStorage.removeItem(`life-task-${task.dataset.task}`);
+        });
+        updateProgress();
+        routineResetStatus.textContent = `${mode === 'morning' ? 'Morning' : 'Night'} routine reset.`;
+      }
+
       modeButtons.forEach(button => button.addEventListener('click', () => setMode(button.dataset.setMode)));
       timerToggle.addEventListener('click', toggleTimer);
       timerReset.addEventListener('click', resetTimer);
+      routineReset.addEventListener('click', resetCurrentRoutine);
 
       const note = document.getElementById('daily-note');
       let saveMessageTimer;
