@@ -203,7 +203,7 @@
       return;
     }
     try {
-      const { createLifeScene } = await import('./life-scene.js?v=20260816b');
+      const { createLifeScene } = await import('./life-scene.js?v=20260816c');
       sceneController = createLifeScene({
         canvas: sceneCanvas,
         page,
