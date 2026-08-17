@@ -203,7 +203,7 @@
       return;
     }
     try {
-      const { createLifeScene } = await import('./life-scene.js?v=20260815a');
+      const { createLifeScene } = await import('./life-scene.js?v=20260816b');
       sceneController = createLifeScene({
         canvas: sceneCanvas,
         page,
@@ -219,7 +219,7 @@
     } catch (error) {
       root.classList.remove('has-life-webgl');
       root.classList.add('no-life-webgl');
-      console.warn('Life 3D scene unavailable; using the static presentation.', error);
+      console.warn('MasterClock Tech 3D scene unavailable; using the static presentation.', error);
     }
   }
 

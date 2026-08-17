@@ -190,8 +190,9 @@ function createTimepiece(materials) {
   parts.pin.position.z = .76;
   root.add(parts.pin);
 
-  parts.glass = createDisc(2.28, .08, materials.glass);
-  parts.glass.position.z = .82;
+  parts.glass = createDisc(2.24, .04, materials.glass);
+  parts.glass.position.z = .79;
+  parts.glass.renderOrder = 12;
   root.add(parts.glass);
 
   parts.orbitGroup = new THREE.Group();
@@ -200,6 +201,7 @@ function createTimepiece(materials) {
     const node = new THREE.Mesh(orbitGeometry, index % 2 ? materials.accent : materials.secondary);
     const angle = index / 7 * Math.PI * 2;
     node.position.set(Math.cos(angle) * 3.3, Math.sin(angle) * 3.3, Math.sin(angle * 2) * .42);
+    node.userData.baseZ = node.position.z;
     parts.orbitGroup.add(node);
   }
   parts.orbitGroup.visible = false;
@@ -261,6 +263,8 @@ export function createLifeScene({ canvas, page = 'home', mode = 'morning', reduc
     dirty: true,
     running: true,
     reducedMotion,
+    mobile: false,
+    lastRenderTime: 0,
     frame: 0
   };
 
@@ -312,6 +316,7 @@ export function createLifeScene({ canvas, page = 'home', mode = 'morning', reduc
     const width = Math.max(1, Math.round(bounds.width));
     const height = Math.max(1, Math.round(bounds.height));
     const mobile = width < 720;
+    state.mobile = mobile;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.5));
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
@@ -328,7 +333,7 @@ export function createLifeScene({ canvas, page = 'home', mode = 'morning', reduc
     });
   }
 
-  function compose() {
+  function compose(time = 0) {
     const progress = state.progress;
     const intro = ease(progress / .24);
     const explodeIn = ease((progress - .16) / .36);
@@ -338,10 +343,17 @@ export function createLifeScene({ canvas, page = 'home', mode = 'morning', reduc
     const cameraPass = pass * (1 - reassemble);
     const pointerScale = state.reducedMotion ? 0 : 1;
     const pageScale = state.page === 'security' ? .9 : state.page === 'menu' ? .82 : 1;
+    const motionTime = state.reducedMotion ? 0 : time;
+    const pageOffset = state.mobile ? 0 : state.page === 'security' ? 2.08 : state.page === 'menu' ? 2.34 : 2.26;
+    const driftX = Math.sin(motionTime * .31) * .1;
+    const driftY = Math.sin(motionTime * .43 + .8) * .1;
+    const pulse = .5 + Math.sin(motionTime * 1.18) * .5;
 
-    world.rotation.x = mix(.5, .15, intro) + state.pointerY * .09 * pointerScale;
-    world.rotation.y = mix(-.62, .2, intro) + state.pointerX * .13 * pointerScale + progress * .3;
-    world.rotation.z = mix(-.18, .02, intro);
+    world.position.x = pageOffset + driftX;
+    world.position.y = driftY;
+    world.rotation.x = mix(.5, .15, intro) + state.pointerY * .09 * pointerScale + Math.sin(motionTime * .37) * .045;
+    world.rotation.y = mix(-.62, .2, intro) + state.pointerX * .13 * pointerScale + progress * .3 + Math.sin(motionTime * .29 + .6) * .09;
+    world.rotation.z = mix(-.18, .02, intro) + Math.sin(motionTime * .24) * .025;
     world.scale.setScalar(pageScale * mix(.84, 1, intro) * mix(1, .9, cameraPass) * mix(1, .8, reassemble));
 
     const { parts } = timepiece;
@@ -357,24 +369,30 @@ export function createLifeScene({ canvas, page = 'home', mode = 'morning', reduc
     parts.minuteHand.position.z = .62 + separation * 1.56;
     parts.phaseHand.position.z = .66 + separation * 1.68;
     parts.pin.position.z = .76 + separation * 1.8;
-    parts.glass.position.z = .82 + separation * 2.15;
+    parts.glass.position.z = .79 + separation * 1.81;
 
-    parts.outerBezel.rotation.z = progress * .46 + state.flowIndex * .11;
-    parts.accentBezel.rotation.z = -progress * .8;
-    parts.phaseGroup.rotation.z = progress * .54 + state.flowIndex * .22;
-    parts.innerRing.rotation.z = -progress * 1.2;
-    parts.coreHalo.rotation.z = progress * 1.6;
-    parts.minuteHand.rotation.z = -.72 + progress * Math.PI * 2.2;
-    parts.phaseHand.rotation.z = 1.86 + state.activePhase / 6 * Math.PI * 2 + progress * .3;
+    parts.outerBezel.rotation.z = progress * .46 + state.flowIndex * .11 + motionTime * .055;
+    parts.accentBezel.rotation.z = -progress * .8 - motionTime * .09;
+    parts.phaseGroup.rotation.z = progress * .54 + state.flowIndex * .22 + motionTime * .026 + Math.sin(motionTime * .35) * .06;
+    parts.innerRing.rotation.z = -progress * 1.2 + motionTime * .13;
+    parts.coreHalo.rotation.z = progress * 1.6 - motionTime * .21;
+    parts.minuteHand.rotation.z = -.72 + progress * Math.PI * 2.2 + motionTime * .15;
+    parts.phaseHand.rotation.z = 1.86 + state.activePhase / 6 * Math.PI * 2 + progress * .3 + motionTime * .045;
+    parts.core.scale.setScalar(1 + pulse * .045);
+    parts.core.material.emissiveIntensity = 1.08 + pulse * .42;
 
     parts.orbitGroup.visible = state.page === 'menu';
-    parts.orbitGroup.rotation.z = progress * 1.22;
+    parts.orbitGroup.rotation.z = progress * 1.22 + motionTime * .17;
     parts.orbitGroup.rotation.x = .38 + separation * .28;
     parts.orbitGroup.scale.setScalar(mix(.7, 1.06, intro));
+    parts.orbitGroup.children.forEach((node, index) => {
+      node.position.z = node.userData.baseZ + Math.sin(motionTime * .72 + index * .9) * .13;
+      node.scale.setScalar(.9 + (.5 + Math.sin(motionTime * .9 + index) * .5) * .24);
+    });
 
     if (state.page === 'return') {
       world.rotation.z += state.flowIndex * -.34;
-      parts.phaseHand.rotation.z = state.flowIndex * -.58;
+      parts.phaseHand.rotation.z = state.flowIndex * -.58 + motionTime * .05;
     }
 
     if (state.page === 'security') {
@@ -382,9 +400,13 @@ export function createLifeScene({ canvas, page = 'home', mode = 'morning', reduc
       parts.outerBezel.rotation.z += unlocked * Math.PI * .5;
       parts.accentBezel.rotation.z -= unlocked * Math.PI * .75;
       parts.innerRing.rotation.z += unlocked * Math.PI;
-      parts.glass.position.z += unlocked * .52;
-      parts.core.material.emissiveIntensity = .72 + unlocked * 1.25;
+      parts.core.material.emissiveIntensity = .84 + unlocked * 1.18 + pulse * .28;
     }
+
+    keyLight.intensity = 3.8 + pulse * .75;
+    rimLight.position.x = 4 + Math.sin(motionTime * .42) * .75;
+    rimLight.position.y = -2 + Math.cos(motionTime * .34) * .52;
+    fillLight.position.x = -4 + Math.cos(motionTime * .3) * .55;
 
     camera.position.z = mix(9.2, 7.05, cameraPass) + reassemble * .8;
     camera.position.x = state.pointerX * .2 * pointerScale;
@@ -393,20 +415,25 @@ export function createLifeScene({ canvas, page = 'home', mode = 'morning', reduc
     updatePhaseMaterials();
   }
 
-  function draw() {
+  function draw(timestamp = 0) {
     state.frame = 0;
     if (!state.running || !state.visible) return;
+    if (!state.reducedMotion && state.mobile && timestamp - state.lastRenderTime < 32) {
+      requestFrame();
+      return;
+    }
+    state.lastRenderTime = timestamp;
     const progressDelta = state.targetProgress - state.progress;
     const pointerDeltaX = state.targetPointerX - state.pointerX;
     const pointerDeltaY = state.targetPointerY - state.pointerY;
     state.progress += progressDelta * (state.reducedMotion ? 1 : .11);
     state.pointerX += pointerDeltaX * .1;
     state.pointerY += pointerDeltaY * .1;
-    compose();
+    compose(timestamp * .001);
     renderer.render(scene, camera);
     const moving = Math.abs(progressDelta) > .0004 || Math.abs(pointerDeltaX) > .001 || Math.abs(pointerDeltaY) > .001;
     state.dirty = false;
-    if (moving) requestFrame();
+    if (!state.reducedMotion || moving) requestFrame();
   }
 
   function requestFrame() {

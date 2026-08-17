@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">MasterClock Tech dial mark</title>
+  <desc id="desc">A polished clock dial whose hands form an abstract letter M.</desc>
+  <defs>
+    <linearGradient id="case" x1="8" y1="5" x2="54" y2="59" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f8fbff"/>
+      <stop offset=".28" stop-color="#aebed0"/>
+      <stop offset=".58" stop-color="#253244"/>
+      <stop offset="1" stop-color="#070a0f"/>
+    </linearGradient>
+    <radialGradient id="face" cx="0" cy="0" r="1" gradientTransform="translate(23 17) rotate(48) scale(44)">
+      <stop stop-color="#35486a"/>
+      <stop offset=".48" stop-color="#151a27"/>
+      <stop offset="1" stop-color="#07090e"/>
+    </radialGradient>
+    <linearGradient id="accent" x1="16" y1="17" x2="49" y2="47" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#65ddff"/>
+      <stop offset=".48" stop-color="#298cff"/>
+      <stop offset="1" stop-color="#9b6dff"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <circle cx="32" cy="32" r="30" fill="url(#case)"/>
+  <circle cx="32" cy="32" r="26" fill="url(#face)" stroke="#8cdfff" stroke-opacity=".45"/>
+  <g fill="#d9e9f8" opacity=".8">
+    <rect x="31" y="8" width="2" height="5" rx="1"/>
+    <rect x="31" y="51" width="2" height="5" rx="1"/>
+    <rect x="51" y="30" width="5" height="2" rx="1"/>
+    <rect x="8" y="30" width="5" height="2" rx="1"/>
+  </g>
+  <g fill="#8fa4bd" opacity=".65" transform="translate(32 32)">
+    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(30)"/>
+    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(60)"/>
+    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(120)"/>
+    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(150)"/>
+    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(210)"/>
+    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(240)"/>
+    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(300)"/>
+    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(330)"/>
+  </g>
+  <path d="M17.5 42V22.5L32 36l14.5-13.5V42" fill="none" stroke="url(#accent)" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+  <circle cx="32" cy="36" r="3.2" fill="#e9f8ff" stroke="#3ba8ff"/>
+  <ellipse cx="25" cy="17" rx="11" ry="5" fill="#fff" opacity=".1" transform="rotate(-18 25 17)"/>
+</svg>
