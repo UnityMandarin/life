@@ -7,18 +7,6 @@
   <meta name="description" content="MasterClock Tech Return — a quiet focus timer with tiny recovery actions for the moments when you get stuck.">
   <title>MasterClock Tech — Return</title>
   <link rel="icon" href="masterclock-mark.svg" type="image/svg+xml">
-  <script>
-    (() => {
-      'use strict';
-      try {
-        if (window.sessionStorage.getItem('life-access-granted') !== 'true') {
-          window.location.replace('security.html');
-        }
-      } catch (error) {
-        window.location.replace('security.html');
-      }
-    })();
-  </script>
   <style>
     :root {
       color-scheme: light;
@@ -1255,9 +1243,10 @@
       *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     }
   </style>
-  <link rel="stylesheet" href="life-premium.css?v=20260816b">
+  <link rel="stylesheet" href="life-premium.css?v=20260822a">
+  <link rel="stylesheet" href="guided-experience.css?v=20260822a">
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"}}</script>
-  <script src="life-premium.js?v=20260816c" type="module"></script>
+  <script src="life-premium.js?v=20260822a" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#return-app">Skip to focus timer</a>
@@ -1274,8 +1263,8 @@
       <nav class="life-nav-links" aria-label="MasterClock Tech pages">
         <a href="index.html">Routine</a>
         <a href="return.html">Return</a>
-        <a href="menu.html">Menu</a>
-        <a href="security.html">Security</a>
+        <a href="menu.html">Tools</a>
+        <a href="security.html">Vault</a>
       </nav>
     </div>
   </nav>
@@ -1547,6 +1536,10 @@
 
   <div class="life-legal" role="contentinfo"><span>© 2026 MasterClock Tech. All rights reserved.</span><span>Personal routine and focus data is stored locally in your browser.</span></div>
   <p class="live-region" id="live-region" aria-live="polite"></p>
+  <aside class="return-mini-player" id="return-mini-player" hidden aria-label="Current focus session">
+    <button class="dock-main" id="return-mini-jump" type="button"><span id="return-mini-label">Stay with this</span><strong id="return-mini-task"></strong></button>
+    <time id="return-mini-time">00:00</time>
+  </aside>
 
   <script>
     (() => {
@@ -2557,5 +2550,6 @@
       restoreSession();
     })();
   </script>
+  <script src="guided-return.js?v=20260822a"></script>
 </body>
 </html>
