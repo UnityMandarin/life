@@ -203,7 +203,7 @@
       return;
     }
     try {
-      const { createLifeScene } = await import('./life-scene.js?v=20260816c');
+      const { createLifeScene } = await import('./life-scene.js?v=20260822a');
       sceneController = createLifeScene({
         canvas: sceneCanvas,
         page,
@@ -239,6 +239,13 @@
   if (page === 'security') attributeObserver.observe(body, { attributes: true, attributeFilter: ['data-unlock-step'] });
 
   document.addEventListener('life:statechange', event => syncState(event.detail || {}));
+  document.addEventListener('life:timerchange', event => {
+    const detail = event.detail || {};
+    const phase = Math.max(0, Number(detail.phaseIndex) || 0);
+    root.dataset.lifeActivePhase = String(phase + 1);
+    sceneController?.setActivePhase(phase);
+    sceneController?.setFlowState(detail.status === 'running' ? 'focus' : detail.status);
+  });
   document.addEventListener('visibilitychange', handleVisibility, { passive: true });
   window.addEventListener('scroll', requestScrollRender, { passive: true });
   window.addEventListener('resize', requestResizeRender, { passive: true });

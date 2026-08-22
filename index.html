@@ -7,30 +7,6 @@
   <meta name="description" content="MasterClock Tech — a quiet twenty-minute ritual for intentional mornings and reflective nights.">
   <title>MasterClock Tech — Morning &amp; Night</title>
   <link rel="icon" href="masterclock-mark.svg" type="image/svg+xml">
-  <script>
-    (() => {
-      'use strict';
-      const accessKey = 'life-access-granted';
-
-      function hasAccess() {
-        try {
-          return window.sessionStorage.getItem(accessKey) === 'true';
-        } catch (error) {
-          return false;
-        }
-      }
-
-      if (!hasAccess()) {
-        window.location.replace('security.html');
-      }
-
-      window.addEventListener('pageshow', event => {
-        if (event.persisted && !hasAccess()) {
-          window.location.replace('security.html');
-        }
-      });
-    })();
-  </script>
   <style>
     :root {
       color-scheme: light;
@@ -5738,9 +5714,10 @@
     }
 
   </style>
-  <link rel="stylesheet" href="life-premium.css?v=20260816b">
+  <link rel="stylesheet" href="life-premium.css?v=20260822a">
+  <link rel="stylesheet" href="guided-experience.css?v=20260822a">
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"}}</script>
-  <script src="life-premium.js?v=20260816c" type="module"></script>
+  <script src="life-premium.js?v=20260822a" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to routine</a>
@@ -5755,8 +5732,8 @@
       <div class="nav-left">
         <time class="nav-date" id="nav-date"></time>
         <a class="security-link" href="return.html">Return</a>
-        <a class="security-link" href="menu.html">Menu</a>
-        <a class="security-link" href="security.html">Security</a>
+        <a class="security-link" href="menu.html">Tools</a>
+        <a class="security-link" href="security.html">Vault</a>
       </div>
       <div class="mode-switch" role="group" aria-label="Choose your routine">
         <span class="switch-pill" aria-hidden="true"></span>
@@ -5783,11 +5760,15 @@
           <span class="meta-chip" id="phase-count">5 intentional phases</span>
           <span class="meta-chip">Saved on this device</span>
         </div>
-        <a class="scroll-cue" href="#routine">Explore the ritual</a>
+        <a class="scroll-cue" href="#guided-player">Start your ritual</a>
       </div>
 
-      <aside class="timer-card" aria-label="Twenty minute ritual timer">
+      <aside class="timer-card" id="guided-player" aria-label="Twenty minute guided ritual timer">
         <div class="timer-label" id="timer-label">Morning ritual</div>
+        <div class="lens-switch" role="group" aria-label="Choose guidance lens">
+          <button type="button" data-set-lens="general" aria-pressed="true">General</button>
+          <button type="button" data-set-lens="learning" aria-pressed="false">Learning</button>
+        </div>
         <div class="timer-ring">
           <svg viewBox="0 0 240 240" aria-hidden="true">
             <circle class="ring-track" cx="120" cy="120" r="110"></circle>
@@ -5795,10 +5776,18 @@
           </svg>
           <div><div class="timer-value" id="timer-value" role="timer" aria-live="off">20:00</div><div class="timer-phase" id="timer-phase">Ready when you are</div></div>
         </div>
-        <div class="timer-actions">
-          <button class="primary-button" type="button" id="timer-toggle">Start</button>
-          <button class="quiet-button" type="button" id="timer-reset">Reset</button>
+        <div class="phase-rail" id="phase-rail" aria-label="Ritual phases"></div>
+        <div class="guidance-card" id="guidance-card">
+          <span class="guidance-kicker" id="guidance-kicker">Your first move</span>
+          <strong id="guidance-action">Start when you are ready. We will guide each step.</strong>
+          <span id="guidance-next">Next: body ignition</span>
         </div>
+        <div class="timer-actions">
+          <button class="primary-button" type="button" id="timer-toggle">Start 20-minute ritual</button>
+          <button class="quiet-button" type="button" id="timer-jump">Take me there</button>
+          <button class="quiet-button" type="button" id="timer-reset">Restart</button>
+        </div>
+        <button class="cue-toggle" type="button" id="cue-toggle" aria-pressed="false"><span aria-hidden="true">♪</span> Gentle phase cues off</button>
       </aside>
       </div>
 
@@ -5819,6 +5808,12 @@
         <div class="progress-copy" id="progress-copy">0 of 15 complete</div>
         <button class="routine-reset" type="button" id="routine-reset">Reset Morning</button>
         <span class="visually-hidden" id="routine-reset-status" role="status" aria-live="polite"></span>
+      </div>
+
+      <div class="momentum-grid" aria-label="Your local momentum">
+        <div><strong id="momentum-rituals">0</strong><span>rituals completed</span></div>
+        <div><strong id="momentum-minutes">0</strong><span>minutes protected</span></div>
+        <div><strong id="momentum-returns">0</strong><span>returns after friction</span></div>
       </div>
 
       <div class="view" id="morning-view">
@@ -5943,13 +5938,41 @@
         <div class="note-wrap"><label class="note-label" for="daily-note" id="note-label">Today's first action</label><textarea id="daily-note" placeholder="At 9:00, I will…"></textarea><div class="save-state" id="save-state" aria-live="polite">Saved automatically</div></div>
       </div>
     </section>
+
+    <section class="section completion-section" id="ritual-complete" hidden aria-labelledby="completion-title">
+      <div class="completion-card">
+        <div class="completion-mark" aria-hidden="true">✓</div>
+        <p class="section-kicker">Twenty minutes protected</p>
+        <h2 id="completion-title">You built a clear beginning.</h2>
+        <p id="completion-summary">Your ritual is complete. Carry the smallest useful action forward.</p>
+        <div class="completion-stats">
+          <div><strong id="completion-phases">5</strong><span>phases</span></div>
+          <div><strong id="completion-tasks">0</strong><span>actions checked</span></div>
+          <div><strong>20</strong><span>minutes</span></div>
+        </div>
+        <div class="completion-actions">
+          <a class="primary-button completion-link" id="start-the-work" href="return.html">Start the work</a>
+          <button class="quiet-button" id="completion-close" type="button">Review the ritual</button>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <aside class="ritual-dock" id="ritual-dock" hidden aria-label="Active ritual">
+    <button class="dock-main" id="dock-jump" type="button">
+      <span class="dock-phase" id="dock-phase">Ready</span>
+      <strong id="dock-action">Start your ritual</strong>
+    </button>
+    <span class="dock-time"><b id="dock-phase-time">04:00</b><small>phase</small></span>
+    <span class="dock-time dock-total"><b id="dock-total-time">20:00</b><small>total</small></span>
+    <button class="dock-toggle" id="dock-toggle" type="button" aria-label="Pause ritual">Ⅱ</button>
+  </aside>
 
   <footer><span>MasterClock Tech, one deliberate day at a time.</span><span>Morning light. Night reflection.</span></footer>
   <div class="life-legal" role="contentinfo"><span>© 2026 MasterClock Tech. All rights reserved.</span><span>Personal routine and focus data is stored locally in your browser.</span></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script>
+  <script type="text/plain" id="legacy-routine-engine">
     (() => {
       'use strict';
 
@@ -6157,6 +6180,8 @@
       setMode(mode, false);
     })();
   </script>
+
+  <script src="guided-ritual.js?v=20260822a"></script>
 
   <script>
     (() => {

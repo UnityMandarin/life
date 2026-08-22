@@ -4,21 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f5f5f7">
-  <meta name="description" content="MasterClock Tech Menu — a private shelf of useful websites and creative tools.">
-  <title>MasterClock Tech — Menu</title>
+  <meta name="description" content="MasterClock Tech Tools — a useful, searchable shelf for focused work and learning.">
+  <title>MasterClock Tech — Tools</title>
   <link rel="icon" href="masterclock-mark.svg" type="image/svg+xml">
-  <script>
-    (() => {
-      'use strict';
-      try {
-        if (window.sessionStorage.getItem('life-access-granted') !== 'true') {
-          window.location.replace('security.html?next=menu.html');
-        }
-      } catch (error) {
-        window.location.replace('security.html?next=menu.html');
-      }
-    })();
-  </script>
   <style>
     :root {
       color-scheme: light;
@@ -414,9 +402,10 @@
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
     }
   </style>
-  <link rel="stylesheet" href="life-premium.css?v=20260816b">
+  <link rel="stylesheet" href="life-premium.css?v=20260822a">
+  <link rel="stylesheet" href="guided-experience.css?v=20260822a">
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"}}</script>
-  <script src="life-premium.js?v=20260816c" type="module"></script>
+  <script src="life-premium.js?v=20260822a" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#bookmarks">Skip to bookmarks</a>
@@ -428,15 +417,15 @@
         <span class="brand-mark" aria-hidden="true"><img src="masterclock-mark.svg" alt=""></span>
         <span class="brand-name">MasterClock Tech</span>
         <span class="brand-divider" aria-hidden="true"></span>
-        <span class="brand-section">Menu</span>
+        <span class="brand-section">Tools</span>
       </a>
       <nav class="life-nav-links" aria-label="MasterClock Tech pages">
         <a href="index.html">Routine</a>
         <a href="return.html">Return</a>
-        <a href="menu.html">Menu</a>
-        <a href="security.html">Security</a>
+        <a href="menu.html">Tools</a>
+        <a href="security.html">Vault</a>
       </nav>
-      <span class="privacy-label">Private shelf</span>
+      <span class="privacy-label">Saved locally</span>
     </div>
   </header>
 
@@ -625,6 +614,7 @@
   </main>
   <div class="life-legal" role="contentinfo"><span>© 2026 MasterClock Tech. All rights reserved.</span><span>Personal routine and focus data is stored locally in your browser.</span></div>
 
+  <script src="guided-tools.js?v=20260822a"></script>
   <script>
     (() => {
       'use strict';
