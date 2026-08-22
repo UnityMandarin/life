@@ -1,47 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
-  <title id="title">MasterClock Tech dial mark</title>
-  <desc id="desc">A polished clock dial whose hands form an abstract letter M.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="masterclock-title masterclock-desc">
+  <title id="masterclock-title">MasterClock Tech</title>
+  <desc id="masterclock-desc">A precision dial with a twenty-minute arc and hands forming an abstract letter M.</desc>
   <defs>
-    <linearGradient id="case" x1="8" y1="5" x2="54" y2="59" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#f8fbff"/>
-      <stop offset=".28" stop-color="#aebed0"/>
-      <stop offset=".58" stop-color="#253244"/>
-      <stop offset="1" stop-color="#070a0f"/>
+    <linearGradient id="mc-case" x1="15" y1="8" x2="80" y2="90" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff"/><stop offset=".2" stop-color="#b9c9d8"/><stop offset=".43" stop-color="#4d6074"/><stop offset=".7" stop-color="#172231"/><stop offset="1" stop-color="#d9e5ee"/>
     </linearGradient>
-    <radialGradient id="face" cx="0" cy="0" r="1" gradientTransform="translate(23 17) rotate(48) scale(44)">
-      <stop stop-color="#35486a"/>
-      <stop offset=".48" stop-color="#151a27"/>
-      <stop offset="1" stop-color="#07090e"/>
+    <radialGradient id="mc-dial" cx="0" cy="0" r="1" gradientTransform="translate(34 27) rotate(52) scale(66)">
+      <stop stop-color="#263a57"/><stop offset=".48" stop-color="#101925"/><stop offset="1" stop-color="#05090f"/>
     </radialGradient>
-    <linearGradient id="accent" x1="16" y1="17" x2="49" y2="47" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#65ddff"/>
-      <stop offset=".48" stop-color="#298cff"/>
-      <stop offset="1" stop-color="#9b6dff"/>
+    <linearGradient id="mc-spectrum" x1="19" y1="20" x2="77" y2="77" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#74edff"/><stop offset=".45" stop-color="#2e9bff"/><stop offset="1" stop-color="#a875ff"/>
     </linearGradient>
-    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="1.5" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
+    <linearGradient id="mc-hand" x1="48" y1="20" x2="48" y2="66" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff"/><stop offset=".55" stop-color="#d9f3ff"/><stop offset="1" stop-color="#6ecfff"/>
+    </linearGradient>
+    <linearGradient id="mc-glass" x1="24" y1="13" x2="60" y2="67" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff" stop-opacity=".34"/><stop offset=".5" stop-color="#d4edff" stop-opacity=".04"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="mc-glow" x="-35%" y="-35%" width="170%" height="170%"><feGaussianBlur stdDeviation="2.3"/></filter>
+    <rect id="mc-tick" x="47" y="15.5" width="2" height="5.5" rx="1"/>
   </defs>
-  <circle cx="32" cy="32" r="30" fill="url(#case)"/>
-  <circle cx="32" cy="32" r="26" fill="url(#face)" stroke="#8cdfff" stroke-opacity=".45"/>
-  <g fill="#d9e9f8" opacity=".8">
-    <rect x="31" y="8" width="2" height="5" rx="1"/>
-    <rect x="31" y="51" width="2" height="5" rx="1"/>
-    <rect x="51" y="30" width="5" height="2" rx="1"/>
-    <rect x="8" y="30" width="5" height="2" rx="1"/>
+  <circle cx="48" cy="48" r="46" fill="#060a10"/>
+  <circle cx="48" cy="48" r="44.5" fill="none" stroke="url(#mc-case)" stroke-width="3"/>
+  <circle cx="48" cy="48" r="40.5" fill="url(#mc-dial)" stroke="#92b4cf" stroke-opacity=".38"/>
+  <circle cx="48" cy="48" r="36.5" fill="none" stroke="#a8c7de" stroke-opacity=".12"/>
+  <g fill="#d8e8f4" opacity=".68">
+    <use href="#mc-tick"/><use href="#mc-tick" transform="rotate(30 48 48)" opacity=".62"/><use href="#mc-tick" transform="rotate(60 48 48)" opacity=".62"/><use href="#mc-tick" transform="rotate(90 48 48)"/><use href="#mc-tick" transform="rotate(120 48 48)" opacity=".62"/><use href="#mc-tick" transform="rotate(150 48 48)" opacity=".62"/><use href="#mc-tick" transform="rotate(180 48 48)"/><use href="#mc-tick" transform="rotate(210 48 48)" opacity=".62"/><use href="#mc-tick" transform="rotate(240 48 48)" opacity=".62"/><use href="#mc-tick" transform="rotate(270 48 48)"/><use href="#mc-tick" transform="rotate(300 48 48)" opacity=".62"/><use href="#mc-tick" transform="rotate(330 48 48)" opacity=".62"/>
   </g>
-  <g fill="#8fa4bd" opacity=".65" transform="translate(32 32)">
-    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(30)"/>
-    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(60)"/>
-    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(120)"/>
-    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(150)"/>
-    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(210)"/>
-    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(240)"/>
-    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(300)"/>
-    <rect x="-.7" y="-23" width="1.4" height="3.5" rx=".7" transform="rotate(330)"/>
-  </g>
-  <path d="M17.5 42V22.5L32 36l14.5-13.5V42" fill="none" stroke="url(#accent)" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
-  <circle cx="32" cy="36" r="3.2" fill="#e9f8ff" stroke="#3ba8ff"/>
-  <ellipse cx="25" cy="17" rx="11" ry="5" fill="#fff" opacity=".1" transform="rotate(-18 25 17)"/>
+  <circle cx="48" cy="48" r="33.2" fill="none" stroke="#369eff" stroke-opacity=".24" stroke-width="6" stroke-linecap="round" stroke-dasharray="69.5 139" transform="rotate(-90 48 48)" filter="url(#mc-glow)"/>
+  <circle cx="48" cy="48" r="33.2" fill="none" stroke="url(#mc-spectrum)" stroke-width="3.8" stroke-linecap="round" stroke-dasharray="69.5 139" transform="rotate(-90 48 48)"/>
+  <path d="M25.5 68V36L48 59L70.5 36V68" fill="none" stroke="#349dff" stroke-opacity=".3" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" filter="url(#mc-glow)"/>
+  <path d="M25.5 68V36L48 59L70.5 36V68" fill="none" stroke="url(#mc-spectrum)" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M48 58.5V23.5" fill="none" stroke="#07101a" stroke-opacity=".6" stroke-width="5.2" stroke-linecap="round"/>
+  <path d="M48 58.5V23.5" fill="none" stroke="url(#mc-hand)" stroke-width="2.8" stroke-linecap="round"/>
+  <circle cx="48" cy="59" r="5.4" fill="#08111b" stroke="#72d7ff" stroke-width="1.5"/>
+  <circle cx="48" cy="59" r="2.2" fill="#f3fbff"/>
+  <path d="M19 42C22 25 33 15 49 12C37 13 27 18 20 29C17 34 16 38 16 43Z" fill="url(#mc-glass)"/>
+  <circle cx="48" cy="48" r="43" fill="none" stroke="#ffffff" stroke-opacity=".18"/>
 </svg>
