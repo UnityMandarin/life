@@ -5714,10 +5714,10 @@
     }
 
   </style>
-  <link rel="stylesheet" href="life-premium.css?v=20260822a">
-  <link rel="stylesheet" href="guided-experience.css?v=20260822a">
+  <link rel="stylesheet" href="life-premium.css?v=20260911b">
+  <link rel="stylesheet" href="guided-experience.css?v=20260911b">
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"}}</script>
-  <script src="life-premium.js?v=20260822a" type="module"></script>
+  <script src="life-premium.js?v=20260911b" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to routine</a>
@@ -5769,7 +5769,7 @@
           <button type="button" data-set-lens="general" aria-pressed="true">General</button>
           <button type="button" data-set-lens="learning" aria-pressed="false">Learning</button>
         </div>
-        <div class="timer-ring">
+        <div class="lens-switch pace-switch" role="group" aria-label="Ritual length"><button type="button" data-pace="quick" aria-pressed="false">2 min · minimum</button><button type="button" data-pace="standard" aria-pressed="true">Essential</button><button type="button" data-pace="deep" aria-pressed="false">20 min · deep</button></div><p class="pace-hint">Low energy? Two minutes counts. No catching up required.</p><div class="timer-ring">
           <svg viewBox="0 0 240 240" aria-hidden="true">
             <circle class="ring-track" cx="120" cy="120" r="110"></circle>
             <circle class="ring-progress" id="ring-progress" cx="120" cy="120" r="110"></circle>
@@ -5780,7 +5780,7 @@
         <div class="guidance-card" id="guidance-card">
           <span class="guidance-kicker" id="guidance-kicker">Your first move</span>
           <strong id="guidance-action">Start when you are ready. We will guide each step.</strong>
-          <span id="guidance-next">Next: body ignition</span>
+          <span id="guidance-next">Next: body ignition</span><button type="button" class="quiet-button" id="check-current">Check current action ✓</button>
         </div>
         <div class="timer-actions">
           <button class="primary-button" type="button" id="timer-toggle">Start 20-minute ritual</button>
@@ -5791,7 +5791,7 @@
       </aside>
       </div>
 
-      <p class="life-story-note" data-life-step data-life-story-note="1"><strong>Precision, not pressure.</strong>Twenty deliberate minutes, measured by one instrument that opens as the ritual unfolds.</p>
+      <p class="life-story-note" data-life-step data-life-story-note="1"><strong>Precision, not pressure.</strong>A few deliberate minutes, measured by one instrument that opens as the ritual unfolds.</p>
       <p class="life-story-note" data-life-step data-life-story-note="2"><strong>Every layer has a purpose.</strong>Body, mind, recall, planning, and action separate into a sequence you can actually follow.</p>
       <p class="life-story-note" data-life-step data-life-story-note="3"><strong>Then it becomes one day.</strong>The pieces return to a single clear first move—ready when you are.</p>
     </section>
@@ -5834,12 +5834,12 @@
             <ul class="task-list">
               <li><label class="task"><input type="checkbox" data-task="morning-breathe"><span><span class="task-copy">Sit still and breathe for two quiet minutes.</span></span></label></li>
               <li><label class="task"><input type="checkbox" data-task="morning-recall"><span><span class="task-copy">Recall yesterday's key ideas before opening notes.</span></span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="morning-anki"><span><span class="task-copy">Complete the spaced-repetition cards that are due.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="morning-anki"><span><span class="task-copy">Review a few due cards within this phase; leave the rest for study time.</span></span></label></li>
             </ul>
           </article>
 
           <article class="phase-card featured life-spatial-card" data-life-step data-life-phase="3">
-            <div><div class="phase-index">Phase 03</div><span class="phase-time">00:08–00:12</span><h3 class="phase-title">Recall check</h3><p class="phase-subtitle">Verify what sleep actually consolidated.</p></div>
+            <div><div class="phase-index">Phase 03</div><span class="phase-time">00:08–00:12</span><h3 class="phase-title">Recall check</h3><p class="phase-subtitle">Find one useful gap without judging yourself.</p></div>
             <ul class="task-list">
               <li><label class="task"><input type="checkbox" data-task="morning-retained"><span><span class="task-copy"><b>Retained:</b> name what you can explain cold.</span></span></label></li>
               <li><label class="task"><input type="checkbox" data-task="morning-degraded"><span><span class="task-copy"><b>Degraded:</b> mark what became fuzzy overnight.</span></span></label></li>
@@ -5906,7 +5906,7 @@
             <h3 class="phase-title">Consolidate</h3><p class="phase-subtitle">Lock in the gaps before sleep.</p>
             <ul class="task-list">
               <li><label class="task"><input type="checkbox" data-task="night-cards"><span><span class="task-copy">Turn today's gaps into spaced-repetition cards.</span></span></label></li>
-              <li><label class="task"><input type="checkbox" data-task="night-schedule"><span><span class="task-copy">Schedule reviews for tomorrow, +3 days, and +1 week.</span></span></label></li>
+              <li><label class="task"><input type="checkbox" data-task="night-schedule"><span><span class="task-copy">Choose one gap to revisit in your next study session.</span></span></label></li>
               <li><label class="task"><input type="checkbox" data-task="night-insight"><span><span class="task-copy">Write today's most important insight in one sentence.</span></span></label></li>
             </ul>
           </article>
@@ -5932,7 +5932,7 @@
       </div>
     </section>
 
-    <section class="section" aria-labelledby="reflection-title">
+    <section class="section" aria-labelledby="plan-title"><div class="reflection-card"><div><p class="section-kicker">Tonight → tomorrow</p><h3 id="plan-title">Leave yourself a runway.</h3><p>One first move. A clear finish line. If you get stuck, make the first step smaller.</p></div><div class="note-wrap"><label class="note-label" for="next-action">When I start, I will…</label><textarea id="next-action" maxlength="2000" placeholder="After breakfast, solve one practice problem. Done = answer checked."></textarea><p id="next-action-status" role="status"></p></div></div></section><section class="section" aria-labelledby="reflection-title">
       <div class="reflection-card life-spatial-card" data-life-step>
         <div><p class="section-kicker" id="note-kicker">Set your intention</p><h3 id="reflection-title">One thought is enough.</h3><p id="note-copy">Write the first action you will take today. Keep it concrete, short, and easy to begin.</p></div>
         <div class="note-wrap"><label class="note-label" for="daily-note" id="note-label">Today's first action</label><textarea id="daily-note" placeholder="At 9:00, I will…"></textarea><div class="save-state" id="save-state" aria-live="polite">Saved automatically</div></div>
@@ -5942,13 +5942,13 @@
     <section class="section completion-section" id="ritual-complete" hidden aria-labelledby="completion-title">
       <div class="completion-card">
         <div class="completion-mark" aria-hidden="true">✓</div>
-        <p class="section-kicker">Twenty minutes protected</p>
+        <p class="section-kicker">Time protected</p>
         <h2 id="completion-title">You built a clear beginning.</h2>
         <p id="completion-summary">Your ritual is complete. Carry the smallest useful action forward.</p>
         <div class="completion-stats">
           <div><strong id="completion-phases">5</strong><span>phases</span></div>
           <div><strong id="completion-tasks">0</strong><span>actions checked</span></div>
-          <div><strong>20</strong><span>minutes</span></div>
+          <div><strong id="completion-minutes">0</strong><span>minutes</span></div>
         </div>
         <div class="completion-actions">
           <a class="primary-button completion-link" id="start-the-work" href="return.html">Start the work</a>
@@ -5972,216 +5972,9 @@
   <div class="life-legal" role="contentinfo"><span>© 2026 MasterClock Tech. All rights reserved.</span><span>Personal routine and focus data is stored locally in your browser.</span></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script type="text/plain" id="legacy-routine-engine">
-    (() => {
-      'use strict';
 
-      const root = document.documentElement;
-      const metaTheme = document.querySelector('meta[name="theme-color"]');
-      const modeButtons = [...document.querySelectorAll('[data-set-mode]')];
-      const morningView = document.getElementById('morning-view');
-      const nightView = document.getElementById('night-view');
-      const timerValue = document.getElementById('timer-value');
-      const timerToggle = document.getElementById('timer-toggle');
-      const timerReset = document.getElementById('timer-reset');
-      const routineReset = document.getElementById('routine-reset');
-      const routineResetStatus = document.getElementById('routine-reset-status');
-      const ring = document.getElementById('ring-progress');
-      const totalSeconds = 20 * 60;
-      const circumference = 2 * Math.PI * 110;
 
-      const copy = {
-        morning: {
-          eyebrow: 'Your morning, protected',
-          title: 'Own the first <span class="gradient-word">20 minutes.</span>',
-          hero: 'Before messages, feeds, and everyone else\'s priorities—wake your body, focus your mind, and choose the day you want to have.',
-          phases: '5 intentional phases',
-          timer: 'Morning ritual',
-          kicker: 'Begin deliberately',
-          routineTitle: 'A small ritual.<br>A different day.',
-          routineIntro: 'Move from body to mind to plan. Check off each action as you go—your progress stays here for today.',
-          noteKicker: 'Set your intention',
-          noteTitle: 'One thought is enough.',
-          noteCopy: 'Write the first action you will take today. Keep it concrete, short, and easy to begin.',
-          noteLabel: 'Today\'s first action',
-          placeholder: 'At 9:00, I will…',
-          theme: '#f5f5f7'
-        },
-        night: {
-          eyebrow: 'Your evening, reclaimed',
-          title: 'Close today.<span class="gradient-word">Clear tomorrow.</span>',
-          hero: 'Dim the noise. Retrieve what mattered, learn from what happened, and let tomorrow begin before you fall asleep.',
-          phases: '6 reflective phases',
-          timer: 'Night review',
-          kicker: 'End with intention',
-          routineTitle: 'Keep the lesson.<br>Release the day.',
-          routineIntro: 'Reflect, consolidate, and make tomorrow obvious. Honest notes beat perfect notes—one line is enough.',
-          noteKicker: 'Leave a clear signal',
-          noteTitle: 'Tomorrow starts here.',
-          noteCopy: 'Capture the most important lesson from today or the first task waiting for you tomorrow.',
-          noteLabel: 'Tonight\'s closing thought',
-          placeholder: 'Today I learned…',
-          theme: '#000000'
-        }
-      };
-
-      let mode = localStorage.getItem('life-mode');
-      if (!mode) {
-        const hour = new Date().getHours();
-        mode = hour >= 5 && hour < 18 ? 'morning' : 'night';
-      }
-
-      let remaining = totalSeconds;
-      let interval = null;
-      let running = false;
-
-      function setText(id, value, html = false) {
-        const element = document.getElementById(id);
-        if (html) element.innerHTML = value;
-        else element.textContent = value;
-      }
-
-      function setMode(nextMode, persist = true) {
-        mode = nextMode;
-        const current = copy[mode];
-        root.dataset.mode = mode;
-        root.dataset.lifeState = mode;
-        document.dispatchEvent(new CustomEvent('life:statechange', {
-          detail: { page: 'home', state: mode, mode }
-        }));
-        metaTheme.content = current.theme;
-        morningView.hidden = mode !== 'morning';
-        nightView.hidden = mode !== 'night';
-        modeButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.setMode === mode)));
-        setText('hero-eyebrow', current.eyebrow);
-        setText('hero-title', current.title, true);
-        setText('hero-copy', current.hero);
-        setText('phase-count', current.phases);
-        setText('timer-label', current.timer);
-        setText('routine-kicker', current.kicker);
-        setText('routine-title', current.routineTitle, true);
-        setText('routine-intro', current.routineIntro);
-        setText('note-kicker', current.noteKicker);
-        setText('reflection-title', current.noteTitle);
-        setText('note-copy', current.noteCopy);
-        setText('note-label', current.noteLabel);
-        document.getElementById('daily-note').placeholder = current.placeholder;
-        document.getElementById('daily-note').value = localStorage.getItem(`life-note-${mode}`) || '';
-        routineReset.textContent = `Reset ${mode === 'morning' ? 'Morning' : 'Night'}`;
-        if (persist) localStorage.setItem('life-mode', mode);
-        updateProgress();
-        resetTimer();
-      }
-
-      function formatTime(seconds) {
-        const minutes = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-      }
-
-      function currentPhase(elapsedSeconds) {
-        const minute = elapsedSeconds / 60;
-        const phases = mode === 'morning'
-          ? [[4, 'Body ignition'], [8, 'Mind activation'], [12, 'Recall check'], [17, 'Daily plan'], [20, 'Mental ignition']]
-          : [[3, 'Wind down'], [7, 'Memory blurt'], [13, 'Keep · Improve · Start · Stop'], [16, 'Consolidate'], [19, 'Tomorrow, clearly'], [20, 'Sleep prep']];
-        return phases.find(([end]) => minute < end)?.[1] || 'Complete';
-      }
-
-      function renderTimer() {
-        const elapsed = totalSeconds - remaining;
-        timerValue.textContent = formatTime(remaining);
-        timerValue.setAttribute('aria-label', `${Math.floor(remaining / 60)} minutes ${remaining % 60} seconds remaining`);
-        document.getElementById('timer-phase').textContent = remaining === totalSeconds ? 'Ready when you are' : currentPhase(elapsed);
-        ring.style.strokeDasharray = circumference;
-        ring.style.strokeDashoffset = circumference * (elapsed / totalSeconds);
-        document.title = running ? `${formatTime(remaining)} — MasterClock Tech` : 'MasterClock Tech — Morning & Night';
-      }
-
-      function stopTimer() {
-        window.clearInterval(interval);
-        interval = null;
-        running = false;
-        timerToggle.textContent = remaining < totalSeconds && remaining > 0 ? 'Resume' : 'Start';
-      }
-
-      function resetTimer() {
-        stopTimer();
-        remaining = totalSeconds;
-        timerToggle.textContent = 'Start';
-        renderTimer();
-      }
-
-      function toggleTimer() {
-        if (running) { stopTimer(); return; }
-        if (remaining <= 0) remaining = totalSeconds;
-        running = true;
-        timerToggle.textContent = 'Pause';
-        interval = window.setInterval(() => {
-          remaining -= 1;
-          renderTimer();
-          if (remaining <= 0) {
-            stopTimer();
-            timerToggle.textContent = 'Again';
-            document.getElementById('timer-phase').textContent = 'Ritual complete';
-          }
-        }, 1000);
-      }
-
-      function visibleTasks() {
-        return [...document.querySelectorAll(`#${mode}-view input[data-task]`)];
-      }
-
-      function updateProgress() {
-        const tasks = visibleTasks();
-        const done = tasks.filter(task => task.checked).length;
-        const percent = tasks.length ? (done / tasks.length) * 100 : 0;
-        document.getElementById('progress-fill').style.width = `${percent}%`;
-        document.getElementById('progress-copy').textContent = `${done} of ${tasks.length} complete`;
-      }
-
-      function restoreTasks() {
-        document.querySelectorAll('input[data-task]').forEach(task => {
-          task.checked = localStorage.getItem(`life-task-${task.dataset.task}`) === 'true';
-          task.addEventListener('change', () => {
-            localStorage.setItem(`life-task-${task.dataset.task}`, String(task.checked));
-            updateProgress();
-          });
-        });
-      }
-
-      function resetCurrentRoutine() {
-        const tasks = visibleTasks();
-        tasks.forEach(task => {
-          task.checked = false;
-          localStorage.removeItem(`life-task-${task.dataset.task}`);
-        });
-        updateProgress();
-        routineResetStatus.textContent = `${mode === 'morning' ? 'Morning' : 'Night'} routine reset.`;
-      }
-
-      modeButtons.forEach(button => button.addEventListener('click', () => setMode(button.dataset.setMode)));
-      timerToggle.addEventListener('click', toggleTimer);
-      timerReset.addEventListener('click', resetTimer);
-      routineReset.addEventListener('click', resetCurrentRoutine);
-
-      const note = document.getElementById('daily-note');
-      let saveMessageTimer;
-      note.addEventListener('input', () => {
-        localStorage.setItem(`life-note-${mode}`, note.value);
-        setText('save-state', 'Saving…');
-        window.clearTimeout(saveMessageTimer);
-        saveMessageTimer = window.setTimeout(() => setText('save-state', 'Saved automatically'), 450);
-      });
-
-      const dateFormatter = new Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
-      document.getElementById('nav-date').textContent = dateFormatter.format(new Date());
-      ring.style.strokeDasharray = circumference;
-      restoreTasks();
-      setMode(mode, false);
-    })();
-  </script>
-
-  <script src="guided-ritual.js?v=20260822a"></script>
+  <script src="guided-ritual.js?v=20260911b"></script>
 
   <script>
     (() => {

@@ -336,3 +336,15 @@
 .return-mini-player span { display:block; overflow:hidden; color:#78c4ff; font-size:10px; font-weight:800; text-transform:uppercase; text-overflow:ellipsis; white-space:nowrap; }
 .return-mini-player strong { display:block; overflow:hidden; margin-top:3px; font-size:12px; text-overflow:ellipsis; white-space:nowrap; }
 .return-mini-player time { font-size:20px; font-weight:800; font-variant-numeric:tabular-nums; }
+
+/* Small, responsive feedback without another animation loop. */
+.pace-hint{font-size:12px;line-height:1.5;opacity:.75;margin:8px 0}
+.pace-switch{flex-wrap:wrap}.pace-switch button{min-height:44px}
+.task-list li[hidden]{display:none!important}
+#next-action{width:100%;min-height:110px;resize:vertical;font:inherit;color:inherit;background:transparent;border:1px solid currentColor;border-radius:14px;padding:16px}
+#next-action-status{font-size:12px;margin-top:8px}
+.task:has(input:checked){opacity:.65;transition:opacity .2s}
+.task:has(input:checked) .task-copy{animation:ritual-check .25s ease-out}
+@keyframes ritual-check{50%{transform:translateX(3px)}}
+button:focus-visible,a:focus-visible,textarea:focus-visible{outline:3px solid #648fff;outline-offset:4px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const TOTAL_MS = 20 * 60 * 1000;
+  let TOTAL_MS = 6 * 60 * 1000;
   const SESSION_KEY = 'life-routine-session-v2';
   const DAYS_KEY = 'life-routine-days-v1';
   const PREFERENCES_KEY = 'life-routine-preferences-v1';
@@ -64,7 +64,7 @@
   const pageCopy = {
     morning: {
       eyebrow: 'Your morning, protected',
-      title: 'Own the first <span class="gradient-word">20 minutes.</span>',
+      title: 'A small start.<span class="gradient-word">A clearer day.</span>',
       hero: 'Before messages, feeds, and everyone else\'s priorities—wake your body, focus your mind, and choose the day you want to have.',
       timer: 'Morning guided ritual', kicker: 'Begin deliberately',
       routineTitle: 'A small ritual.<br>A different day.',
@@ -87,7 +87,7 @@
   };
 
   const generalCopy = {
-    'morning-sun': 'Step into daylight or stand at a bright window for two minutes.',
+    'morning-sun': 'Put distractions aside. Open the curtains; take a comfortable stretch.',
     'morning-water': 'Drink a full glass of water before opening messages.',
     'morning-move': 'Move your body gently enough to feel more awake.',
     'morning-breathe': 'Take six slow breaths and let your attention settle.',
@@ -105,21 +105,21 @@
     'night-light': 'Lower the lights and make the room feel quieter.',
     'night-phone': 'Put the phone out of reach for the rest of this ritual.',
     'night-breathe': 'Take one slow box breath: in, hold, out, hold.',
-    'night-blurt': 'Write what is still occupying your mind. Do not organize it yet.',
+    'night-blurt': 'Capture one win and one unfinished thought. A phrase each is enough.',
     'night-compare': 'Circle the one open loop that matters most.',
     'night-feynman': 'Explain today\'s hardest moment in plain, neutral language.',
-    'night-keep': '<b>Keep:</b> what moved the needle today?',
+    'night-keep': 'Choose just one lens: keep, improve, start, or stop. Name one behavior for tomorrow.',
     'night-improve': '<b>Improve:</b> what deserves a better approach?',
     'night-start': '<b>Start:</b> what useful behavior will you add?',
     'night-stop': '<b>Stop:</b> what stole focus or time?',
     'night-cards': 'Turn one lesson into a short rule you can reuse.',
     'night-schedule': 'Choose when you will revisit the open loop.',
     'night-insight': 'Write today\'s most important insight in one sentence.',
-    'night-goal': 'Write one specific result that would make tomorrow meaningful.',
+    'night-goal': 'Save tomorrow’s first action below: when, what, and what counts as done.',
     'night-list': 'Choose no more than three supporting actions.',
     'night-why': 'Write one honest sentence about why the result matters.',
     'night-still': 'Close your eyes and sit completely still for one minute.',
-    'night-sleep': 'Protect enough sleep for memory, energy, and tomorrow.'
+    'night-sleep': 'Set out what you need tomorrow. Close this page and let the day end.'
   };
 
   const originalCopy = new Map();
@@ -127,9 +127,11 @@
     originalCopy.set(input.dataset.task, input.closest('.task').querySelector('.task-copy').innerHTML);
   });
 
-  let preferences = read(PREFERENCES_KEY, { lens: 'general', cues: false });
+  let preferences = read(PREFERENCES_KEY, null) || { lens: 'general', cues: false };
   let days = read(DAYS_KEY, { version: 1, days: [] });
   let session = read(SESSION_KEY, null);
+  if (session && (!Number.isFinite(session.elapsedMs) || (session.status === 'running' && !Number.isFinite(session.startedAt)))) session = null;
+  let pace = ['quick', 'standard', 'deep'].includes(session?.pace) ? session.pace : 'standard';
   let mode = validMode(session?.mode) ? session.mode : validMode(readText('life-mode')) ? readText('life-mode') : defaultMode();
   let lens = session?.lens === 'learning' || session?.lens === 'general' ? session.lens : preferences.lens === 'learning' ? 'learning' : 'general';
   let frame = 0;
@@ -152,8 +154,8 @@
   }
 
   function write(key, value) {
-    try { localStorage.setItem(key, JSON.stringify(value)); }
-    catch (error) { /* Local-only features degrade to the current tab. */ }
+    try { localStorage.setItem(key, JSON.stringify(value)); return true; }
+    catch (error) { return false; }
   }
 
   function writeText(key, value) {
@@ -192,14 +194,7 @@
     const day = currentDay();
     day.modes[targetMode] ||= {};
     if (!day.modes[targetMode][targetLens]) {
-      const prefix = targetLens === 'learning' ? 'life-task-' : 'life-task-general-';
-      const ids = [...document.querySelectorAll(`#${targetMode}-view input[data-task]`)]
-        .map(input => input.dataset.task)
-        .filter(id => readText(prefix + id) === 'true');
-      day.modes[targetMode][targetLens] = {
-        tasks: ids,
-        note: readText(`life-note-${targetMode}`) || ''
-      };
+      day.modes[targetMode][targetLens] = { tasks: [], note: '' };
       write(DAYS_KEY, days);
     }
     return day.modes[targetMode][targetLens];
@@ -232,14 +227,14 @@
     return `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
   }
 
-  function visibleTasks() { return [...document.querySelectorAll(`#${mode}-view input[data-task]`)]; }
+  function visibleTasks() { return [...document.querySelectorAll(`#${mode}-view input[data-task]`)].filter(input => !input.closest('li').hidden); }
 
   function phaseCard(index) {
     return document.querySelector(`#${mode}-view [data-life-phase="${index + 1}"]`);
   }
 
   function phaseTasks(index) {
-    return [...(phaseCard(index)?.querySelectorAll('input[data-task]') || [])];
+    return [...(phaseCard(index)?.querySelectorAll('input[data-task]') || [])].filter(input => !input.closest('li').hidden);
   }
 
   function currentInstruction(index) {
@@ -253,6 +248,10 @@
     document.querySelectorAll('input[data-task]').forEach(input => {
       const copy = input.closest('.task').querySelector('.task-copy');
       copy.innerHTML = lens === 'general' ? (generalCopy[input.dataset.task] || originalCopy.get(input.dataset.task)) : originalCopy.get(input.dataset.task);
+      if (pace !== 'deep' && essential.has(input.dataset.task)) {
+        const shortLearning = { 'morning-sun': generalCopy['morning-sun'], 'morning-recall': 'Recall one idea without notes. A phrase is enough.', 'morning-gap': 'Check that idea against your notes; name one gap.', 'morning-frog': 'Choose one useful task, using the saved plan below.', 'morning-contract': 'Open the first task. Commit to working for just two minutes.', 'night-blurt': 'Recall one useful thing you learned today without notes.', 'night-keep': generalCopy['night-keep'], 'night-insight': 'Check your recall. Write one correction or insight.', 'night-goal': generalCopy['night-goal'], 'night-sleep': generalCopy['night-sleep'] };
+        copy.textContent = shortLearning[input.dataset.task] || generalCopy[input.dataset.task];
+      }
     });
   }
 
@@ -286,15 +285,33 @@
     document.getElementById('progress-fill').style.width = `${percent}%`;
   }
 
+  const essential = new Set(['morning-sun', 'morning-recall', 'morning-gap', 'morning-frog', 'morning-contract', 'night-light', 'night-blurt', 'night-keep', 'night-insight', 'night-goal', 'night-sleep']);
+  const budgets = { quick: { morning: [20, 40, 60, 90, 120], night: [10, 30, 50, 70, 110, 120] }, standard: { morning: [60, 120, 180, 270, 360], night: [30, 120, 210, 270, 390, 420] }, deep: { morning: [240, 480, 720, 1020, 1200], night: [180, 420, 780, 960, 1140, 1200] } };
+  function configurePace() {
+    const ends = budgets[pace][mode];
+    TOTAL_MS = ends.at(-1) * 1000;
+    phases[mode].forEach((phase, i) => {
+      phase.end = ends[i];
+      phaseCard(i).querySelector('.phase-time').textContent = `${format(phaseStart(i))}–${format(phase.end * 1000)}`;
+    });
+    document.querySelectorAll('input[data-task]').forEach(input => input.closest('li').hidden = pace !== 'deep' && !essential.has(input.dataset.task));
+    document.querySelectorAll('[data-pace]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.pace === pace)));
+    document.querySelector('.hero-meta .meta-chip').textContent = `${TOTAL_MS / 60000} minutes · ${pace === 'quick' ? 'smallest useful version' : pace}`;
+    elements.timerCard.setAttribute('aria-label', `${TOTAL_MS / 60000} minute guided ritual timer`);
+    updateTaskCopy();
+    updateProgress();
+  }
+
   function applyMode(nextMode, persist = true) {
     mode = nextMode;
+    if (session && !activeSession()) { session.mode = mode; write(SESSION_KEY, session); }
     const copy = pageCopy[mode];
     root.dataset.mode = mode;
     root.dataset.lifeState = mode;
     elements.metaTheme.content = copy.theme;
     elements.morningView.hidden = mode !== 'morning';
     elements.nightView.hidden = mode !== 'night';
-    document.querySelectorAll('[data-set-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.setMode === mode)));
+  document.querySelectorAll('[data-set-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.setMode === mode)));
     setText('hero-eyebrow', copy.eyebrow);
     setText('hero-title', copy.title, true);
     setText('hero-copy', copy.hero);
@@ -312,6 +329,7 @@
     if (persist) writeText('life-mode', mode);
     updateTaskCopy();
     restoreTasks();
+    configurePace();
     buildRail();
     document.dispatchEvent(new CustomEvent('life:statechange', { detail: { page: 'home', state: mode, mode } }));
     render(true);
@@ -326,6 +344,7 @@
 
   function applyLens(nextLens, persist = true) {
     lens = nextLens;
+    if (session && !activeSession()) { session.lens = lens; write(SESSION_KEY, session); }
     preferences.lens = lens;
     if (persist) write(PREFERENCES_KEY, preferences);
     document.querySelectorAll('[data-set-lens]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.setLens === lens)));
@@ -403,7 +422,7 @@
         : next
           ? `Next: ${next.title}`
           : 'Next: commit to the first visible move';
-    elements.timerToggle.textContent = session?.status === 'running' ? 'Pause' : session?.status === 'paused' ? 'Resume ritual' : complete ? 'Start another ritual' : 'Start 20-minute ritual';
+    elements.timerToggle.textContent = session?.status === 'running' ? 'Pause' : session?.status === 'paused' ? 'Resume ritual' : complete ? 'Start another ritual' : `Start ${TOTAL_MS / 60000}-minute ritual`;
     elements.dockToggle.textContent = session?.status === 'running' ? 'Ⅱ' : '▶';
     elements.dockToggle.setAttribute('aria-label', session?.status === 'running' ? 'Pause ritual' : 'Resume ritual');
     elements.dockPhase.textContent = complete ? 'Ritual complete' : phase.title;
@@ -430,15 +449,16 @@
   function loop() {
     frame = 0;
     if (session?.status !== 'running' || document.hidden) return;
+    checkPhaseChange();
     render();
-    frame = requestAnimationFrame(loop);
+    frame = setTimeout(loop, 250);
   }
 
   function startLoop() {
-    cancelAnimationFrame(frame);
+    clearTimeout(frame);
     frame = 0;
     render(true);
-    if (session?.status === 'running' && !document.hidden) frame = requestAnimationFrame(loop);
+    if (session?.status === 'running' && !document.hidden) frame = setTimeout(loop, 250);
   }
 
   async function requestWakeLock() {
@@ -480,7 +500,7 @@
     if (document.hidden && 'Notification' in window && Notification.permission === 'granted') {
       const index = phaseIndex(elapsed());
       new Notification(kind === 'complete' ? 'Ritual complete' : phases[mode][index].title, {
-        body: kind === 'complete' ? 'Twenty intentional minutes are complete.' : currentInstruction(index),
+        body: kind === 'complete' ? 'Your ritual timer has finished.' : currentInstruction(index),
         icon: 'masterclock-mark.svg', tag: 'masterclock-ritual'
       });
     }
@@ -493,7 +513,7 @@
 
   function startSession() {
     elements.completion.hidden = true;
-    session = { version: 2, mode, lens, status: 'running', startedAt: Date.now(), elapsedMs: 0, lastPhase: 0, completedAt: null };
+    session = { version: 2, mode, lens, pace, status: 'running', startedAt: Date.now(), elapsedMs: 0, lastPhase: 0, completedAt: null };
     write(SESSION_KEY, session);
     ensureAudio();
     requestWakeLock();
@@ -523,10 +543,10 @@
   }
 
   function resetSession(ask = true) {
-    if (ask && elapsed() > 10000 && !window.confirm('Restart this ritual from 20:00? Your checked actions will stay saved.')) return false;
+    if (ask && elapsed() > 10000 && !window.confirm(`Restart this ritual from ${format(TOTAL_MS)}? Your checked actions will stay saved.`)) return false;
     releaseWakeLock();
-    cancelAnimationFrame(frame);
-    session = { version: 2, mode, lens, status: 'idle', startedAt: null, elapsedMs: 0, lastPhase: 0, completedAt: null };
+    clearTimeout(frame);
+    session = { version: 2, mode, lens, pace, status: 'idle', startedAt: null, elapsedMs: 0, lastPhase: 0, completedAt: null };
     write(SESSION_KEY, session);
     elements.completion.hidden = true;
     if (ask) announce('Timer restarted. Your checked actions are still here.');
@@ -550,17 +570,18 @@
     write(SESSION_KEY, session);
     const day = currentDay();
     day.completions ||= [];
-    day.completions.push({ timestamp: session.completedAt, mode, lens, minutes: 20 });
+    day.completions.push({ timestamp: session.completedAt, mode, lens, minutes: TOTAL_MS / 60000 });
     write(DAYS_KEY, days);
     const done = visibleTasks().filter(task => task.checked).length;
+    document.getElementById('completion-minutes').textContent = String(TOTAL_MS / 60000);
     elements.completionPhases.textContent = String(phases[mode].length);
     elements.completionTasks.textContent = String(done);
     elements.completionSummary.textContent = done
       ? `You completed ${done} actions and protected a clear next move.`
-      : 'You protected the full twenty minutes. Carry one clear next move forward.';
+      : 'Your timer finished; no actions were checked. Carry one clear next move forward.';
     elements.completion.hidden = false;
     cue('complete');
-    announce('Ritual complete. Twenty intentional minutes protected.');
+    announce('Ritual complete. Your time is protected.');
     updateMomentum();
     render(true);
   }
@@ -619,12 +640,32 @@
   }
 
   function prepareHandoff() {
-    const note = elements.note.value.trim();
+    const note = document.getElementById('next-action').value.trim() || elements.note.value.trim();
     const index = Math.min(phases[mode].length - 1, phaseIndex(elapsed()));
     const task = note || currentInstruction(index);
     write(HANDOFF_KEY, { task, source: `${mode} ${lens} ritual`, createdAt: Date.now() });
   }
 
+    document.querySelectorAll('[data-pace]').forEach(button => button.addEventListener('click', () => {
+    if (pace === button.dataset.pace) return;
+    if (activeSession() && !confirm('Change duration and restart the timer? Your notes and checks stay saved.')) return;
+    pace = button.dataset.pace;
+    resetSession(false);
+    configurePace(); buildRail(); render(true);
+  }));
+  const nextAction = document.getElementById('next-action');
+  const nextSaved = document.getElementById('next-action-status');
+  const plan = read('life-next-action-v1', null);
+  nextAction.value = typeof plan?.text === 'string' ? plan.text : '';
+  nextSaved.textContent = plan?.date ? `Plan from ${plan.date}. Keep it or adjust it.` : 'Write once tonight. Ready here tomorrow.';
+  nextAction.addEventListener('input', () => {
+    nextSaved.textContent = write('life-next-action-v1', { text: nextAction.value, date: dateKey() }) ? 'Saved on this device · ready for morning' : 'Storage unavailable — copy your plan before leaving';
+  });
+  document.getElementById('check-current').addEventListener('click', () => {
+    const input = phaseTasks(phaseIndex(elapsed())).find(task => !task.checked);
+    if (input) { input.checked = true; persistTask(input); }
+    else jumpToCurrent();
+  });
   document.querySelectorAll('[data-set-mode]').forEach(button => button.addEventListener('click', () => changeMode(button.dataset.setMode)));
   document.querySelectorAll('[data-set-lens]').forEach(button => button.addEventListener('click', () => changeLens(button.dataset.setLens)));
   document.querySelectorAll('input[data-task]').forEach(input => input.addEventListener('change', () => persistTask(input)));
@@ -640,11 +681,10 @@
   elements.note.addEventListener('input', () => {
     const slot = currentSlot();
     slot.note = elements.note.value;
-    write(DAYS_KEY, days);
-    writeText(`life-note-${mode}`, elements.note.value);
+    const saved = write(DAYS_KEY, days);
     elements.saveState.textContent = 'Saving…';
     clearTimeout(saveMessageTimer);
-    saveMessageTimer = setTimeout(() => { elements.saveState.textContent = 'Saved automatically'; }, 450);
+    saveMessageTimer = setTimeout(() => { elements.saveState.textContent = saved ? 'Saved on this device' : 'Storage unavailable — copy your note before leaving'; }, 450);
   });
 
   if ('IntersectionObserver' in window) {
@@ -656,14 +696,14 @@
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
-      cancelAnimationFrame(frame); frame = 0; releaseWakeLock();
+      clearTimeout(frame); frame = 0; releaseWakeLock();
     } else {
       if (session?.status === 'running') requestWakeLock();
       startLoop();
     }
   });
 
-  window.setInterval(checkPhaseChange, 500);
+
   document.getElementById('nav-date').textContent = new Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'long', day: 'numeric' }).format(new Date());
   elements.cueToggle.setAttribute('aria-pressed', String(Boolean(preferences.cues)));
   elements.cueToggle.lastChild.textContent = preferences.cues ? ' Gentle phase cues on' : ' Gentle phase cues off';

@@ -580,7 +580,7 @@ export function createLifeScene({ canvas, page = 'home', mode = 'morning', reduc
     canvas,
     alpha: true,
     antialias: true,
-    powerPreference: 'high-performance'
+    powerPreference: 'low-power'
   });
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -673,7 +673,7 @@ export function createLifeScene({ canvas, page = 'home', mode = 'morning', reduc
     const mobile = width < 720;
     state.mobile = mobile;
     state.compact = width < 900;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.5));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1 : 1.25));
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
@@ -793,7 +793,7 @@ export function createLifeScene({ canvas, page = 'home', mode = 'morning', reduc
   function draw(timestamp = 0) {
     state.frame = 0;
     if (!state.running || !state.visible) return;
-    if (!state.reducedMotion && state.mobile && timestamp - state.lastRenderTime < 32) {
+    if (!state.reducedMotion && timestamp - state.lastRenderTime < 32) {
       requestFrame();
       return;
     }
