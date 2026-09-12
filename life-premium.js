@@ -198,12 +198,12 @@
   }
 
   async function initializeScene() {
-    if (!sceneCanvas) {
+    if (!sceneCanvas || reducedMotion.matches || navigator.connection?.saveData) {
       root.classList.add('no-life-webgl');
       return;
     }
     try {
-      const { createLifeScene } = await import('./life-scene.js?v=20260822a');
+      const { createLifeScene } = await import('./life-scene.js?v=20260911b');
       sceneController = createLifeScene({
         canvas: sceneCanvas,
         page,
