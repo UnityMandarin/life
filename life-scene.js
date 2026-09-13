@@ -670,10 +670,15 @@ export function createLifeScene({ canvas, page = 'home', mode = 'morning', reduc
     const bounds = canvas.getBoundingClientRect();
     const width = Math.max(1, Math.round(bounds.width));
     const height = Math.max(1, Math.round(bounds.height));
-    const mobile = width < 720;
+    // The home scene can live in a narrow visual lane on larger screens.  Use
+    // the viewport for responsive behavior so that lane is not mistaken for a
+    // phone-sized canvas.
+    const mobile = window.innerWidth < 720;
     state.mobile = mobile;
-    state.compact = width < 900;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1 : 1.25));
+    state.compact = window.innerWidth < 900;
+    // A constrained scene occupies far fewer pixels than the former full-page
+    // canvas, leaving room for a sharper cap without increasing rendering cost.
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.5));
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
@@ -703,7 +708,7 @@ export function createLifeScene({ canvas, page = 'home', mode = 'morning', reduc
     const inspectionScale = state.mobile ? .48 : state.compact ? .47 : state.page === 'home' ? .65 : .72;
     const assemblySpread = state.mobile ? .58 : state.compact ? .7 : 1;
     const motionTime = state.reducedMotion ? 0 : time;
-    const pageOffset = state.compact ? 0 : state.page === 'security' ? 2.08 : state.page === 'menu' ? 2.34 : 2.26;
+    const pageOffset = state.compact ? 0 : state.page === 'security' ? 2.08 : state.page === 'menu' ? 2.34 : state.page === 'home' ? 0 : 2.26;
     const driftX = Math.sin(motionTime * .31) * .085;
     const driftY = Math.sin(motionTime * .43 + .8) * .085;
     const pulse = .5 + Math.sin(motionTime * 1.18) * .5;

@@ -1094,3 +1094,259 @@ html[data-life-page="security"] .life-legal span:last-child { display: none; }
   html[data-life-page="home"] .timer-card { opacity: 1; transform: none; }
   .life-story-note { position: relative; top: auto !important; left: auto; margin: 14px 0; }
 }
+
+/* Home: keep the instrument, the message, and the controls in separate lanes.
+   This intentionally comes after the legacy presentation rules above. */
+html[data-life-page="home"] .life-product-stage {
+  right: 0;
+  left: auto;
+  width: min(37vw, 530px);
+  min-width: 400px;
+  height: 100svh;
+}
+
+html[data-life-page="home"] .life-product-stage::before {
+  inset: 14% 4% 16%;
+  filter: blur(30px);
+}
+
+html[data-life-page="home"] .life-static-timepiece {
+  left: 50%;
+  width: min(37vw, 470px);
+}
+
+  html[data-life-page="home"] .life-hero-sticky {
+  display: block;
+  min-height: 100svh;
+  box-sizing: border-box;
+  padding: clamp(90px, 13vh, 126px) 0 54px;
+}
+
+html[data-life-page="home"] .hero-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(310px, .95fr);
+  align-items: center;
+  gap: clamp(26px, 3.2vw, 46px);
+  width: min(790px, calc(100vw - 505px));
+  min-width: 0;
+}
+
+html[data-life-page="home"] .hero-text {
+  max-width: 430px;
+  transform: translate3d(0, calc(var(--life-story-progress) * -42px), 0);
+}
+
+html[data-life-page="home"] .hero h1 {
+  max-width: 450px;
+  margin-top: 16px;
+  font-size: clamp(48px, 5.35vw, 74px);
+  line-height: .93;
+  letter-spacing: -.065em;
+}
+
+html[data-life-page="home"] .hero-copy {
+  max-width: 42ch;
+  margin-top: 18px;
+  font-size: clamp(16px, 1.45vw, 19px);
+  line-height: 1.48;
+  letter-spacing: -.018em;
+}
+
+html[data-life-page="home"] .hero-meta {
+  margin-top: 20px;
+  gap: 7px;
+}
+
+html[data-life-page="home"] .meta-chip {
+  padding: 6px 9px;
+  font-size: 10.5px;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-life-page="home"] .scroll-cue { margin-top: 18px; }
+
+html[data-life-page="home"] .timer-card {
+  width: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 8px;
+  padding: 20px;
+  border-radius: 26px;
+  background: rgba(250, 251, 253, .9);
+  box-shadow: 0 20px 54px rgba(25, 36, 59, .14);
+  -webkit-backdrop-filter: saturate(120%) blur(10px);
+  backdrop-filter: saturate(120%) blur(10px);
+}
+
+html[data-life-page="home"] .timer-card > .timer-label,
+html[data-life-page="home"] .timer-card > .phase-rail,
+html[data-life-page="home"] .timer-card > .timer-actions,
+html[data-life-page="home"] .timer-card > .cue-toggle { grid-column: 1 / -1; }
+
+html[data-life-page="home"] .timer-label {
+  margin: 0;
+  padding: 0;
+  justify-self: start;
+  color: #5b6472;
+  font-size: 10px;
+  letter-spacing: .1em;
+}
+
+html[data-life-page="home"] .timer-card .lens-switch {
+  min-width: 0;
+  margin: 0;
+  padding: 3px;
+}
+
+html[data-life-page="home"] .timer-card .lens-switch button {
+  min-height: 31px;
+  padding-inline: 4px;
+  font-size: 11px;
+}
+
+html[data-life-page="home"] .timer-card .pace-switch {
+  grid-template-columns: 1fr;
+  gap: 2px;
+}
+
+html[data-life-page="home"] .timer-card .pace-switch button {
+  min-height: 22px;
+  text-align: left;
+  font-size: 10px;
+  padding-inline: 10px;
+}
+
+html[data-life-page="home"] .pace-hint {
+  display: none;
+}
+
+html[data-life-page="home"] .timer-ring {
+  grid-column: 1;
+  grid-row: 3 / span 2;
+  width: min(172px, 100%);
+  height: auto;
+  aspect-ratio: 1;
+  justify-self: center;
+}
+
+html[data-life-page="home"] .timer-value { font-size: clamp(38px, 4vw, 48px); }
+html[data-life-page="home"] .timer-phase { margin-top: 3px; font-size: 11px; }
+
+html[data-life-page="home"] .phase-rail { margin: 2px 0 0; }
+html[data-life-page="home"] .phase-rail span { height: 5px; }
+
+html[data-life-page="home"] .guidance-card {
+  grid-column: 2;
+  grid-row: 3 / span 2;
+  align-self: stretch;
+  padding: 11px;
+  border-radius: 15px;
+}
+
+html[data-life-page="home"] .guidance-card strong { font-size: 12px; }
+html[data-life-page="home"] .guidance-card > span:last-child { font-size: 10px; }
+html[data-life-page="home"] .guidance-kicker { font-size: 8px; }
+html[data-life-page="home"] .guidance-card .quiet-button {
+  min-width: 0;
+  min-height: 31px;
+  padding-inline: 9px;
+  font-size: 10px;
+}
+
+html[data-life-page="home"] .timer-card .timer-actions {
+  margin-top: 0;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 6px;
+}
+
+html[data-life-page="home"] .timer-card .timer-actions button {
+  min-width: 0;
+  min-height: 37px;
+  padding-inline: 10px;
+  font-size: 10px;
+}
+
+html[data-life-page="home"] .cue-toggle {
+  margin-top: -2px;
+  padding: 2px;
+  font-size: 9px;
+}
+
+html[data-life-page="home"][data-mode="night"] .timer-card {
+  background: rgba(20, 21, 28, .92);
+  box-shadow: 0 20px 54px rgba(0, 0, 0, .34);
+}
+
+@media (max-width: 1040px) {
+  html[data-life-page="home"] .life-product-stage {
+    width: 35vw;
+    min-width: 0;
+  }
+  html[data-life-page="home"] .hero-content { width: min(720px, 65vw); }
+}
+
+@media (max-width: 760px) {
+  html[data-life-page="home"] .life-product-stage {
+    position: absolute;
+    top: 62px;
+    left: 0;
+    width: 100vw;
+    height: 35svh;
+    min-width: 0;
+    opacity: .72;
+  }
+
+  html[data-life-page="home"] body .life-hero-sticky {
+    position: relative;
+    min-height: auto;
+    padding: calc(35svh + 64px) 0 54px;
+  }
+
+  html[data-life-page="home"] .hero.life-story { min-height: auto; }
+  html[data-life-page="home"] .life-static-timepiece { left: 50%; width: min(31svh, 68vw); }
+  html[data-life-page="home"] .hero-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    gap: 28px;
+  }
+  html[data-life-page="home"] .hero-text,
+  html[data-life-page="home"] .hero-copy,
+  html[data-life-page="home"] .hero-meta,
+  html[data-life-page="home"] .timer-card {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  html[data-life-page="home"] .hero-text { max-width: 36rem; }
+  html[data-life-page="home"] .hero h1 { max-width: 10ch; font-size: clamp(44px, 13vw, 58px); }
+  html[data-life-page="home"] .hero-copy { font-size: 16px; overflow-wrap: anywhere; }
+  html[data-life-page="home"] .hero-meta { width: 100%; }
+  html[data-life-page="home"] .meta-chip { max-width: 100%; }
+  html[data-life-page="home"] .life-story-note { position: relative; top: auto; left: auto; margin: 14px 0; }
+  html[data-life-page="home"] .timer-card {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    row-gap: 10px;
+  }
+  html[data-life-page="home"] .timer-card > .timer-label,
+  html[data-life-page="home"] .timer-card > .phase-rail,
+  html[data-life-page="home"] .timer-card > .timer-actions,
+  html[data-life-page="home"] .timer-card > .cue-toggle,
+  html[data-life-page="home"] .timer-card .lens-switch,
+  html[data-life-page="home"] .timer-ring,
+  html[data-life-page="home"] .guidance-card { grid-column: auto; grid-row: auto; }
+  html[data-life-page="home"] .timer-card .pace-switch { grid-template-columns: repeat(3, 1fr); }
+  html[data-life-page="home"] .timer-card .pace-switch button { min-height: 34px; padding-inline: 4px; text-align: center; }
+  html[data-life-page="home"] .timer-ring { width: min(194px, 60vw); }
+  html[data-life-page="home"] .guidance-card { min-height: 0; }
+  html[data-life-page="home"] .timer-card .timer-actions { grid-template-columns: 1fr 1fr; }
+  html[data-life-page="home"] .timer-card .timer-actions .primary-button { grid-column: 1 / -1; }
+}
