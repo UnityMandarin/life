@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="320" viewBox="0 0 420 320" role="img" aria-labelledby="title desc">
+  <title id="title">A cheerful sprout in a pot</title>
+  <desc id="desc">A sculptural green plant rises from a cream pot beneath a small coral sun.</desc>
+  <rect width="420" height="320" rx="28" fill="#FFF8EA"/>
+  <circle cx="327" cy="74" r="28" fill="#F27D67"/>
+  <path d="M327 31v-10M327 117v10M284 74h-10M370 74h10M297 44l-8-8M357 104l8 8M357 44l8-8M297 104l-8 8" stroke="#F27D67" stroke-width="6" stroke-linecap="round"/>
+  <ellipse cx="210" cy="280" rx="108" ry="14" fill="#D9D0B7"/>
+  <path d="M143 190h134l-11 77c-2 13-13 22-26 22h-60c-13 0-24-9-26-22z" fill="#F2DFC1"/>
+  <path d="M137 188c0-8 7-14 15-14h116c8 0 15 6 15 14v12c0 7-7 13-15 13H152c-8 0-15-6-15-13z" fill="#FFF2D9"/>
+  <path d="M190 188c0-46-5-74-26-99" fill="none" stroke="#527B3D" stroke-width="13" stroke-linecap="round"/>
+  <path d="M208 188c-1-40 9-69 37-96" fill="none" stroke="#527B3D" stroke-width="13" stroke-linecap="round"/>
+  <path d="M194 145c-39 2-58-18-54-53 33-5 58 13 54 53z" fill="#6D994D"/>
+  <path d="M224 119c0-40 22-62 58-62 6 34-14 60-58 62z" fill="#83AA59"/>
+  <path d="M185 113c-30-13-37-38-26-63 30 4 43 27 26 63z" fill="#527B3D"/>
+  <circle cx="179" cy="204" r="5" fill="#E6CDA6"/>
+  <circle cx="239" cy="204" r="5" fill="#E6CDA6"/>
+</svg>
