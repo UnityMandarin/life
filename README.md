@@ -1,36 +1,48 @@
-# Life
+# Life / Return
 
-A small daily workspace combining Life's opening/closing rituals with Signal's focus, recovery, and reflection.
+Return is the homepage: one task, a concrete finish condition, a focus block, a fast recovery path, and real rest. There are no accounts, runtime dependencies, remote fonts, analytics, or external requests in the primary experience.
 
-## Use
+## The loop
 
-Open the site, choose one task, and begin. Prepare and Close are optional two-minute checklists. One completed action is enough to save a routine. Focus supports pause, recovery, finishing early, and five-minute extensions. Energy is subjective; low energy suggests five minutes. Challenge suggestions adjust after your reflection and always remain editable.
+1. Name one task and an observable finish condition. Choose focus and rest minutes.
+2. During focus, the task, finish condition, and remaining time stay visible.
+3. **I'm stuck** pauses the focus clock. Choose a reason, do one small recovery action, and return directly. Recovery time does not count as focus time.
+4. A completed focus block leaves the task unfinished. **Start rest** starts the full earned break when you choose it; an app suspension does not consume a break you never started.
+5. Rest is a separate screen. When it ends, the same unfinished task and finish condition return. The next focus block requires your click.
+6. **Task finished** asks you to confirm the finish condition. Only that confirmation closes the task. Completing early grants rest but does not count an uncompleted focus block.
 
-## Deployment
+A real interruption can pause the block and save where to pick up. There is no new-task button while an unfinished task is active.
 
-Static HTML, CSS, JavaScript, and original SVG artwork. No install, API key, build, analytics, remote fonts, or runtime dependencies. On GitHub: Settings → Pages → deploy from branch → main → / (root). The entry point is index.html. Keep life.css, life.js, and assets/ beside it.
+## Timer and persistence
 
-For a local preview, run a static server from this folder, such as `python3 -m http.server 8765`, then open http://localhost:8765.
+The primary source is `index.html`, `return.css`, and `return.js`. `return.html` forwards to the same homepage, so both entry points share one state, stored under `life-return-v2` on the current browser origin.
 
-## Data
+The countdown uses a timestamp deadline, not accumulated interval ticks. Returning from a hidden tab, reload, or ordinary suspension reconciles the actual remaining time. Only one visible focus/rest countdown is scheduled. Recovery and interruption time are excluded. Rest does not automatically start a new focus block. Timer updates do not write storage or render the entire view.
 
-Stored in `life-daily-v1` in this browser. Existing Life routine completions and next action are read on first use. Original storage keys are never deleted. Signal v3 history on the same origin is read automatically; for the original file-based Signal website, export there, then import the JSON in Life Settings.
+Switching to another tab or app may be legitimate work. Return keeps the allotted focus clock running and offers a short return cue; it cannot tell which external app or website you used, verify attention, or block external software. Its completed-block records mean elapsed self-tracked blocks, not proof of focused attention.
 
-Settings exports a JSON backup. Import merges completed sessions by ID, routine history, and missing plans without replacing current work. An in-progress timer is kept in the current browser and is deliberately not activated from imported files. Site data is origin-specific, not synced across devices. Export regularly; clearing browser storage removes local records. Storage failures show an explicit warning.
+State changes and drafts are saved locally; another open Return tab receives changes. Storage failures show a persistent warning. Tools provides backup export and conservative import. Imported backups never replace a current active task or silently start an imported timer. Browser data is not synced across devices. Export before clearing browser data or switching devices.
 
-The main page keeps no decorative animation loop, WebGL, or wall clock. The session timer refreshes once per second only while running and visible; elapsed time uses timestamps, so a hidden tab or reload does not reset it. Pauses and recovery time do not count as focus; a session stops at its planned duration until explicitly extended. Time is self-tracked, not proof of attention.
+Existing unfinished Return and daily-planner sessions are migrated conservatively. Missing finish conditions must be supplied before work resumes. Original storage keys and older records remain intact. A legacy session summary is not treated as proof of task completion.
 
-Previous tools remain in Settings, including the original homepage at classic.html. Those legacy pages retain their original behavior and heavier rendering.
+## Other pages
 
-## Design decisions and sources
+- `menu.html`: the existing 27 bookmarks, search, and saved favorites with a lightweight layout. Favorite/recents storage keys are retained; third-party favicon requests and 3D rendering are removed.
+- `stoplook.html`: a quiet reminder to return to physical work.
+- `daily.html`: the previous daily planner, using the unchanged `life.js` and `life.css`.
+- `classic.html`: earlier morning/night rituals and their saved state.
+- `security.html`: the legacy optional puzzle. It does not protect or encrypt local data. Its automatic 3D startup is removed.
 
-- [Duolingo: improving the streak](https://blog.duolingo.com/improving-the-streak/): a small daily completion can reduce the barrier to returning. Life adapts this into a weekly trail, without penalties for missed days. This does not prove Life's effectiveness.
-- [Duolingo design](https://design.duolingo.com/illustration/duo): simple recognizable illustration inspired the original geometric plant, sunrise, and moon. No Duolingo characters or assets are reused.
-- [Apple layout guidance](https://developer.apple.com/design/human-interface-guidelines/layout): a clear hierarchy and familiar controls informed the restrained interface.
-- [The Learning Scientists: retrieval practice](https://www.learningscientists.org/blog/2016/6/23-1): recall prompts in the routines encourage remembering before rereading.
+Archived daily/ritual tools retain their earlier behavior and can be opened deliberately from Tools.
 
-Energy is a self-report, not a dopamine baseline. The app cannot measure neurotransmitters, diagnose attention problems, or guarantee motivation. Progress means recorded activity, not a medical or learning-outcome score.
+## Preview and deployment
+
+This is a buildless static site. Serve the directory with `python3 -m http.server 8765 --bind 127.0.0.1`, then open `http://127.0.0.1:8765/`.
+
+GitHub Pages uses `main` at the repository root. Keep all source and assets beside `index.html`.
 
 ## Verification
 
-Behavioral browser checks are in tests/life.spec.cjs. They use Playwright and an existing local static server; set NODE_PATH to your Playwright installation if needed. No test dependencies ship to visitors. Layout checked at desktop and mobile widths; no external requests are needed for the new homepage.
+Run `node tests/life.spec.cjs` with Playwright available via `NODE_PATH` or `PLAYWRIGHT_MODULE`, and the local server running. `LIFE_URL` can point the Return suite at a different served root. `tests/daily.spec.cjs` separately checks the preserved daily planner.
+
+The main suite covers focus accuracy, recovery/reload, focus-versus-task completion, full rest, same-task return, navigation/suspension, completion at a deadline, migration, multiple tabs, narrow layouts, secondary tools, and unavailable storage. Human use is still needed to judge how well this interrupts the user's real abandonment pattern.
